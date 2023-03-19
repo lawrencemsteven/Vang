@@ -5,7 +5,6 @@ add_library(Vang STATIC ${Vang_FILES})
 target_compile_features(Vang PUBLIC cxx_std_20)
 
 source_group("Vang" FILES ${Vang_Vang})
-source_group("Vang/Application" FILES ${Vang_APPLICATION})
 source_group("Vang/Utility/Logging" FILES ${Vang_UTILITY_LOGGING})
 
 target_compile_definitions(Vang

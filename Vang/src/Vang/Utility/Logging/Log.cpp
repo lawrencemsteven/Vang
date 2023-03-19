@@ -1,5 +1,4 @@
 #include "Log.h"
-#include <VangPCH.h>
 
 namespace Vang {
 
