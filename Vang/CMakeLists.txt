@@ -6,11 +6,15 @@ target_compile_features(Vang PUBLIC cxx_std_20)
 
 source_group("Vang" FILES ${Vang_Vang})
 source_group("Vang/Utility/Logging" FILES ${Vang_UTILITY_LOGGING})
+source_group("Vang/Window" FILES ${Vang_WINDOW})
+source_group("Vang/Window/WindowGLFW" FILES ${Vang_WINDOW_WINDOWGLFW})
+source_group("Vang/GraphicsAPI" FILES ${Vang_GRAPHICSAPI})
+source_group("Vang/GraphicsAPI/GraphicsVulkan" FILES ${Vang_GRAPHICSAPI_GRAPHICS_VULKAN})
 
 target_compile_definitions(Vang
 	PRIVATE
-		VANG_DEBUG
-		GLFW_INCLUDE_NONE
+		VANG_WINDOW_GLFW
+		VANG_GRAPHICSAPI_VULKAN
 )
 
 target_link_libraries(Vang

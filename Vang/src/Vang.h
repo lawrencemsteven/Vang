@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Vang/Utility/Logging/Log.h"
+#include "Vang/Window/Window.h"
+#include "Vang/GraphicsAPI/GraphicsAPI.h"
 
 class VangInst {
 public:
@@ -14,7 +15,10 @@ public:
 private:
 	std::string_view m_applicationName;
 
-	VangInst() = delete;
+	std::shared_ptr<Vang::Window> m_window;
+	std::shared_ptr<Vang::GraphicsAPI> m_graphicsAPI;
+
+	VangInst();
 	VangInst(std::string_view applicationName);
 	void operator=(const VangInst&) = delete;
 };
