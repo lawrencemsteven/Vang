@@ -11,10 +11,19 @@ source_group("Vang/Window/WindowGLFW" FILES ${Vang_WINDOW_WINDOWGLFW})
 source_group("Vang/GraphicsAPI" FILES ${Vang_GRAPHICSAPI})
 source_group("Vang/GraphicsAPI/GraphicsVulkan" FILES ${Vang_GRAPHICSAPI_GRAPHICS_VULKAN})
 
+# WINDOW API'S:
+#   VANG_WINDOW_GLFW
+
+# GRAPHICS API'S:
+#   VANG_GRAPHICSAPI_VULKAN
+
+# OTHER:
+#   VANG_DEBUG - Log warning, info, and debug
 target_compile_definitions(Vang
 	PRIVATE
 		VANG_WINDOW_GLFW
 		VANG_GRAPHICSAPI_VULKAN
+		VANG_DEBUG
 )
 
 target_link_libraries(Vang

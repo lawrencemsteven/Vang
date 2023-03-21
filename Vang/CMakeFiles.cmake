@@ -11,6 +11,7 @@ set(Vang_UTILITY_LOGGING
 
 set(Vang_WINDOW
     "./src/Vang/Window/Window.h"
+    "./src/Vang/Window/Window.cpp"
 )
 
 set(Vang_WINDOW_WINDOWGLFW
