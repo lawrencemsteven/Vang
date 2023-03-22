@@ -30,7 +30,7 @@ namespace Vang {
 	inline void Log::Print(std::string_view color, std::string_view message,
 						   std::source_location location, bool throw_error) {
 		std::string output =
-			std::format("{}File: {}({}:{}) `{}`: {}\033[0m\n", color, location.file_name(),
+			std::format("{}File: {}({}:{}) `{}`: {}\033[0m \n", color, location.file_name(),
 						location.line(), location.column(), location.function_name(), message);
 
 		std::cout << output;

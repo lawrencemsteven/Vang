@@ -7,7 +7,6 @@ int main() {
 	bool running  = true;
 	while (running) {
 		vangInst.beginFrame();
-
 		vangInst.endFrame();
 		if (vangInst.getToClose()) running = false;
 	}

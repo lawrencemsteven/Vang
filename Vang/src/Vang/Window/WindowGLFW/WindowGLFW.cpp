@@ -3,31 +3,30 @@
 
 namespace Vang {
 
-	WindowGLFW::WindowGLFW()
-		: Window() {
+	WindowGLFW::WindowGLFW(VangInst& vangInst)
+		: Window(vangInst) {
 		initializeWindow();
 	}
 
-	WindowGLFW::WindowGLFW(std::string_view title)
-		: Window(title) {
+	WindowGLFW::WindowGLFW(VangInst& vangInst, std::string_view title)
+		: Window(vangInst, title) {
 		initializeWindow();
 	}
 
-	WindowGLFW::WindowGLFW(uint32_t width, uint32_t height)
-		: Window(width, height) {
+	WindowGLFW::WindowGLFW(VangInst& vangInst, uint32_t width, uint32_t height)
+		: Window(vangInst, width, height) {
 		initializeWindow();
 	}
 
-	WindowGLFW::WindowGLFW(std::string_view title, uint32_t width, uint32_t height)
-		: Window(title, width, height) {
+	WindowGLFW::WindowGLFW(VangInst& vangInst, std::string_view title, uint32_t width, uint32_t height)
+		: Window(vangInst, title, width, height) {
 		initializeWindow();
 	}
 
-	WindowGLFW::~WindowGLFW() { close();
-	}
+	WindowGLFW::~WindowGLFW() { close(); }
 
 	void WindowGLFW::beginFrame() {
-		if (glfwWindowShouldClose(m_window)) VangInst::Get().toClose();
+		if (glfwWindowShouldClose(m_window)) m_vangInst.toClose();
 
 		glfwPollEvents();
 	}
@@ -39,6 +38,10 @@ namespace Vang {
 			glfwDestroyWindow(m_window);
 			glfwTerminate();
 		}
+	}
+
+	const char** WindowGLFW::getGraphicsAPIInstanceExtensions(uint32_t* count) {
+		return glfwGetRequiredInstanceExtensions(count);
 	}
 
 	void WindowGLFW::setTitle(std::string_view title) { VANG_FATAL("NOT YET IMPLEMENTED!"); }

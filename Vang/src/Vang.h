@@ -9,6 +9,11 @@ public:
 
 	std::string_view getApplicationName();
 
+	Vang::Window& getWindow();
+	const Vang::Window& getWindow() const;
+	Vang::GraphicsAPI& getGraphicsAPI();
+	const Vang::GraphicsAPI& getGraphicsAPI() const;
+
 	void beginFrame();
 	void endFrame();
 
@@ -21,11 +26,13 @@ private:
 	std::string_view m_applicationName;
 	bool m_toClose;
 
-	std::shared_ptr<Vang::Window> m_window;
-	std::shared_ptr<Vang::GraphicsAPI> m_graphicsAPI;
+	std::unique_ptr<Vang::Window> m_window;
+	std::unique_ptr<Vang::GraphicsAPI> m_graphicsAPI;
 
-	VangInst();
-	VangInst(std::string_view applicationName);
+	VangInst(std::string_view applicationName = "");
+	~VangInst() = default;
 	VangInst(const VangInst&)		= delete;
-	void operator=(const VangInst&) = delete;
+	VangInst(VangInst&&)			= delete;
+	VangInst& operator=(const VangInst&) = delete;
+	VangInst& operator=(VangInst&&)		= delete;
 };

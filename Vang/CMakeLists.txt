@@ -9,20 +9,24 @@ source_group("Vang/Utility/Logging" FILES ${Vang_UTILITY_LOGGING})
 source_group("Vang/Window" FILES ${Vang_WINDOW})
 source_group("Vang/Window/WindowGLFW" FILES ${Vang_WINDOW_WINDOWGLFW})
 source_group("Vang/GraphicsAPI" FILES ${Vang_GRAPHICSAPI})
-source_group("Vang/GraphicsAPI/GraphicsVulkan" FILES ${Vang_GRAPHICSAPI_GRAPHICS_VULKAN})
+source_group("Vang/GraphicsAPI/GraphicsVulkan" FILES ${Vang_GRAPHICSAPI_GRAPHICSVULKAN})
+source_group("Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers" FILES ${Vang_GRAPHICSAPI_GRAPHICSVULKAN_VULKANHELPERS})
+source_group("Vang/GraphicsAPI/GraphicsOpenGL" FILES ${Vang_GRAPHICSAPI_GRAPHICSOPENGL})
 
 # WINDOW API'S:
 #   VANG_WINDOW_GLFW
 
 # GRAPHICS API'S:
 #   VANG_GRAPHICSAPI_VULKAN
+#     VANG_GRAPHICSAPI_VULKAN_VALIDATION_LAYERS
+#   VANG_GRAPHICSAPI_OPENGL
 
 # OTHER:
 #   VANG_DEBUG - Log warning, info, and debug
 target_compile_definitions(Vang
 	PRIVATE
 		VANG_WINDOW_GLFW
-		VANG_GRAPHICSAPI_VULKAN
+		VANG_GRAPHICSAPI_OPENGL
 		VANG_DEBUG
 )
 

@@ -21,11 +21,22 @@ set(Vang_WINDOW_WINDOWGLFW
 
 set(Vang_GRAPHICSAPI
     "./src/Vang/GraphicsAPI/GraphicsAPI.h"
+    "./src/Vang/GraphicsAPI/GraphicsAPI.cpp"
 )
 
-set(Vang_GRAPHICSAPI_GRAPHICS_VULKAN
+set(Vang_GRAPHICSAPI_GRAPHICSVULKAN
     "./src/Vang/GraphicsAPI/GraphicsVulkan/GraphicsVulkan.h"
     "./src/Vang/GraphicsAPI/GraphicsVulkan/GraphicsVulkan.cpp"
+)
+
+set(Vang_GRAPHICSAPI_GRAPHICSVULKAN_VULKANHELPERS
+    "./src/Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers/VulkanInstance.h"
+    "./src/Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers/VulkanInstance.cpp"
+)
+
+set(Vang_GRAPHICSAPI_GRAPHICSOPENGL
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/GraphicsOpenGL.h"
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/GraphicsOpenGL.cpp"
 )
 
 set(Vang_FILES
@@ -34,5 +45,7 @@ set(Vang_FILES
     ${Vang_WINDOW}
     ${Vang_WINDOW_WINDOWGLFW}
     ${Vang_GRAPHICSAPI}
-    ${Vang_GRAPHICSAPI_GRAPHICS_VULKAN}
+    ${Vang_GRAPHICSAPI_GRAPHICSVULKAN}
+    ${Vang_GRAPHICSAPI_GRAPHICSVULKAN_VULKANHELPERS}
+    ${Vang_GRAPHICSAPI_GRAPHICSOPENGL}
 )

@@ -8,6 +8,9 @@
 #ifdef VANG_GRAPHICSAPI_VULKAN
 #	include "Vang/GraphicsAPI/GraphicsVulkan/GraphicsVulkan.h"
 #	define VANG_CURRENT_GRAPHICSAPI Vang::GraphicsVulkan
+#elif VANG_GRAPHICSAPI_OPENGL
+#	include "Vang/GraphicsAPI/GraphicsOpenGL/GraphicsOpenGL.h"
+#	define VANG_CURRENT_GRAPHICSAPI Vang::GraphicsOpenGL
 #endif
 
 VangInst& VangInst::Get(std::string_view applicationName) {
@@ -17,11 +20,19 @@ VangInst& VangInst::Get(std::string_view applicationName) {
 
 std::string_view VangInst::getApplicationName() { return m_applicationName; }
 
+Vang::Window& VangInst::getWindow() { return *m_window; }
+const Vang::Window& VangInst::getWindow() const { return *m_window; }
+
+Vang::GraphicsAPI& VangInst::getGraphicsAPI() { return *m_graphicsAPI; }
+const Vang::GraphicsAPI& VangInst::getGraphicsAPI() const { return *m_graphicsAPI; }
+
 void VangInst::beginFrame() {
 	m_window->beginFrame();
+	m_graphicsAPI->beginFrame();
 }
 
 void VangInst::endFrame() {
+
 	if (m_toClose) cleanup();
 }
 
@@ -31,11 +42,10 @@ void VangInst::toClose() {
 }
 bool VangInst::getToClose() { return m_toClose; }
 
-void VangInst::cleanup() {
-	m_window->close();
-}
+void VangInst::cleanup() { m_window->close(); }
 
 VangInst::VangInst(std::string_view applicationName)
 	: m_applicationName{applicationName},
-	  m_window{std::make_shared<VANG_CURRENT_WINDOW>(m_applicationName)},
-	  m_graphicsAPI{std::make_shared<VANG_CURRENT_GRAPHICSAPI>()} {}
+	  m_toClose{false},
+	  m_window{std::make_unique<VANG_CURRENT_WINDOW>(*this, m_applicationName)},
+	  m_graphicsAPI{std::make_unique<VANG_CURRENT_GRAPHICSAPI>(*this, m_applicationName)} {}
