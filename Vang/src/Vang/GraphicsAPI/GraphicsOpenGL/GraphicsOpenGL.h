@@ -19,6 +19,8 @@ namespace Vang {
 
 		void beginFrame() override;
 
+		void windowResize(uint32_t width, uint32_t height) override;
+
 	private:
 		void initialize();
 		void cleanup();

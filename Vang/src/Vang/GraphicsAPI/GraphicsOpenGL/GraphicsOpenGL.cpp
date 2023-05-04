@@ -1,6 +1,9 @@
 #include "Vang/GraphicsAPI/GraphicsOpenGL/GraphicsOpenGL.h"
 
 #include "Vang.h"
+#include "glad/glad.h"
+
+#include "GLFW/glfw3.h"
 
 namespace Vang {
 
@@ -16,9 +19,25 @@ namespace Vang {
 
 	GraphicsOpenGL::~GraphicsOpenGL() { cleanup(); }
 
-	void GraphicsOpenGL::beginFrame() {}
+	void GraphicsOpenGL::beginFrame() {
+		glClear(GL_COLOR_BUFFER_BIT);
+	}
 
-	void GraphicsOpenGL::initialize() { VANG_DEBUG("Initializing OpenGL"); }
+	void GraphicsOpenGL::windowResize(uint32_t width, uint32_t height) {
+		glViewport(0, 0, width, height);
+	}
+
+	void GraphicsOpenGL::initialize() {
+		VANG_DEBUG("Initializing OpenGL");
+
+		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+			VANG_FATAL("Failed to initialize GLAD!");
+		}
+
+		glClearColor(0.0f, 0.4f, 0.0f, 1.0f);
+
+		windowResize(m_vangInst.getWindow().getWidth(), m_vangInst.getWindow().getHeight());
+	}
 
 	void GraphicsOpenGL::cleanup() { VANG_DEBUG("Closing OpenGL"); }
 

@@ -14,6 +14,8 @@ namespace Vang {
 
 		std::string_view getApplicationName();
 
+		virtual void windowResize(uint32_t width, uint32_t height) = 0;
+
 	protected:
 		VangInst& m_vangInst;
 		std::string_view m_applicationName;

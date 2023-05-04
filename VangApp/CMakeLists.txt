@@ -12,3 +12,15 @@ target_include_directories(VangApp
 	PUBLIC
 		"src"
 )
+
+# Temporary for testing
+target_link_libraries(VangApp
+	PRIVATE
+		glad::glad
+		glfw
+		Vulkan::Vulkan
+	PUBLIC
+		imgui::imgui
+		glm::glm
+		spdlog::spdlog
+)

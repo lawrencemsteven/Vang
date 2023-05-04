@@ -18,7 +18,8 @@ namespace Vang {
 		initializeWindow();
 	}
 
-	WindowGLFW::WindowGLFW(VangInst& vangInst, std::string_view title, uint32_t width, uint32_t height)
+	WindowGLFW::WindowGLFW(VangInst& vangInst, std::string_view title, uint32_t width,
+						   uint32_t height)
 		: Window(vangInst, title, width, height) {
 		initializeWindow();
 	}
@@ -28,6 +29,7 @@ namespace Vang {
 	void WindowGLFW::beginFrame() {
 		if (glfwWindowShouldClose(m_window)) m_vangInst.toClose();
 
+		glfwSwapBuffers(m_window);
 		glfwPollEvents();
 	}
 
@@ -55,9 +57,33 @@ namespace Vang {
 		windowOpen = true;
 		glfwInit();
 
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
+#ifdef VANG_GRAPHICSAPI_OPENGL
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#endif
+
 		m_window = glfwCreateWindow(m_width, m_height, m_title.data(), nullptr, nullptr);
+
+		if (m_window == NULL) { VANG_FATAL("Failed to create GLFW Window!"); }
+
+		glfwMakeContextCurrent(m_window);
+
+		glfwSetWindowUserPointer(m_window, this);
+		glfwSetFramebufferSizeCallback(m_window, resize);
+	}
+
+	void WindowGLFW::resize(int width, int height) {
+		m_width	 = width;
+		m_height = height;
+		m_vangInst.getGraphicsAPI().windowResize(static_cast<uint32_t>(width),
+												 static_cast<uint32_t>(height));
+	}
+
+	void WindowGLFW::resize(GLFWwindow* window, int width, int height) {
+		WindowGLFW* windowGLFW = reinterpret_cast<WindowGLFW*>(glfwGetWindowUserPointer(window));
+		windowGLFW->resize(width, height);
 	}
 }
