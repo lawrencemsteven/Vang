@@ -4,7 +4,7 @@
 
 #include "vulkan/vulkan.h"
 
-namespace Vang {
+namespace Vang::gfx::Vulkan {
 
 	class VulkanInstance {
 	public:

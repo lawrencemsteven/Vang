@@ -2,7 +2,7 @@
 
 #include "Vang.h"
 
-namespace Vang {
+namespace Vang::gfx::Vulkan {
 
 	VulkanInstance::VulkanInstance(Window& window, std::string_view applicationName) {
 		createInstance(window, applicationName);

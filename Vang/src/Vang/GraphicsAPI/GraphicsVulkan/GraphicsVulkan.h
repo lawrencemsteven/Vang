@@ -5,7 +5,7 @@
 
 class VangInst;
 
-namespace Vang {
+namespace Vang::gfx::Vulkan {
 
 	class GraphicsVulkan : public GraphicsAPI {
 	public:

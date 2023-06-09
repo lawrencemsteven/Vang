@@ -2,7 +2,7 @@
 
 #include "Vang.h"
 
-namespace Vang {
+namespace Vang::gfx::Vulkan {
 
 	GraphicsVulkan::GraphicsVulkan(VangInst& vangInst)
 		: GraphicsAPI{vangInst},

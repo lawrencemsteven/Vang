@@ -39,6 +39,13 @@ set(Vang_GRAPHICSAPI_GRAPHICSOPENGL
     "./src/Vang/GraphicsAPI/GraphicsOpenGL/GraphicsOpenGL.cpp"
 )
 
+set(Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADER
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shader/Shader.h"
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shader/Shader.cpp"
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shader/ShaderProgram.h"
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shader/ShaderProgram.cpp"
+)
+
 set(Vang_FILES
     ${Vang_Vang}
     ${Vang_UTILITY_LOGGING}
@@ -48,4 +55,5 @@ set(Vang_FILES
     ${Vang_GRAPHICSAPI_GRAPHICSVULKAN}
     ${Vang_GRAPHICSAPI_GRAPHICSVULKAN_VULKANHELPERS}
     ${Vang_GRAPHICSAPI_GRAPHICSOPENGL}
+    ${Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADER}
 )

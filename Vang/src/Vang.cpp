@@ -7,10 +7,10 @@
 
 #ifdef VANG_GRAPHICSAPI_VULKAN
 #	include "Vang/GraphicsAPI/GraphicsVulkan/GraphicsVulkan.h"
-#	define VANG_CURRENT_GRAPHICSAPI Vang::GraphicsVulkan
+#	define VANG_CURRENT_GRAPHICSAPI Vang::gfx::Vulkan::GraphicsVulkan
 #elif VANG_GRAPHICSAPI_OPENGL
 #	include "Vang/GraphicsAPI/GraphicsOpenGL/GraphicsOpenGL.h"
-#	define VANG_CURRENT_GRAPHICSAPI Vang::GraphicsOpenGL
+#	define VANG_CURRENT_GRAPHICSAPI Vang::gfx::OpenGL::GraphicsOpenGL
 #endif
 
 VangInst& VangInst::Get(std::string_view applicationName) {
@@ -23,8 +23,8 @@ std::string_view VangInst::getApplicationName() { return m_applicationName; }
 Vang::Window& VangInst::getWindow() { return *m_window; }
 const Vang::Window& VangInst::getWindow() const { return *m_window; }
 
-Vang::GraphicsAPI& VangInst::getGraphicsAPI() { return *m_graphicsAPI; }
-const Vang::GraphicsAPI& VangInst::getGraphicsAPI() const { return *m_graphicsAPI; }
+Vang::gfx::GraphicsAPI& VangInst::getGraphicsAPI() { return *m_graphicsAPI; }
+const Vang::gfx::GraphicsAPI& VangInst::getGraphicsAPI() const { return *m_graphicsAPI; }
 
 void VangInst::beginFrame() {
 	m_window->beginFrame();

@@ -1,6 +1,6 @@
 #include "GraphicsAPI.h"
 
-namespace Vang {
+namespace Vang::gfx {
 
 	GraphicsAPI::GraphicsAPI(VangInst& vangInst)
 		: m_vangInst{vangInst},

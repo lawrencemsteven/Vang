@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Vang/GraphicsAPI/GraphicsAPI.h"
+#include "Vang/GraphicsAPI/GraphicsOpenGL/Shader/ShaderProgram.h"
 
 class VangInst;
 
-namespace Vang {
+namespace Vang::gfx::OpenGL {
 
 	class GraphicsOpenGL : public GraphicsAPI {
 	public:
@@ -24,6 +25,11 @@ namespace Vang {
 	private:
 		void initialize();
 		void cleanup();
+
+		void initializeOpenGL();
+		void initializeShaders();
+
+		ShaderProgram m_shaderProgram;
 	};
 
 }

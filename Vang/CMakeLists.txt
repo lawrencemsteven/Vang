@@ -12,6 +12,8 @@ source_group("Vang/GraphicsAPI" FILES ${Vang_GRAPHICSAPI})
 source_group("Vang/GraphicsAPI/GraphicsVulkan" FILES ${Vang_GRAPHICSAPI_GRAPHICSVULKAN})
 source_group("Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers" FILES ${Vang_GRAPHICSAPI_GRAPHICSVULKAN_VULKANHELPERS})
 source_group("Vang/GraphicsAPI/GraphicsOpenGL" FILES ${Vang_GRAPHICSAPI_GRAPHICSOPENGL})
+source_group("Vang/GraphicsAPI/GraphicsOpenGL/Shader" FILES ${Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADER})
+
 
 # WINDOW API'S:
 #   VANG_WINDOW_GLFW
@@ -26,7 +28,7 @@ source_group("Vang/GraphicsAPI/GraphicsOpenGL" FILES ${Vang_GRAPHICSAPI_GRAPHICS
 target_compile_definitions(Vang
 	PRIVATE
 		VANG_WINDOW_GLFW
-		VANG_GRAPHICSAPI_OPENGL
+		VANG_GRAPHICSAPI_VULKAN
 		VANG_DEBUG
 )
 

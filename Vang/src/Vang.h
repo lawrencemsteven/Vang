@@ -11,8 +11,8 @@ public:
 
 	Vang::Window& getWindow();
 	const Vang::Window& getWindow() const;
-	Vang::GraphicsAPI& getGraphicsAPI();
-	const Vang::GraphicsAPI& getGraphicsAPI() const;
+	Vang::gfx::GraphicsAPI& getGraphicsAPI();
+	const Vang::gfx::GraphicsAPI& getGraphicsAPI() const;
 
 	void beginFrame();
 	void endFrame();
@@ -27,7 +27,7 @@ private:
 	bool m_toClose;
 
 	std::unique_ptr<Vang::Window> m_window;
-	std::unique_ptr<Vang::GraphicsAPI> m_graphicsAPI;
+	std::unique_ptr<Vang::gfx::GraphicsAPI> m_graphicsAPI;
 
 	VangInst(std::string_view applicationName = "");
 	~VangInst() = default;

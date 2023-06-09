@@ -2,7 +2,7 @@
 
 class VangInst;
 
-namespace Vang {
+namespace Vang::gfx {
 
 	class GraphicsAPI {
 	public:
