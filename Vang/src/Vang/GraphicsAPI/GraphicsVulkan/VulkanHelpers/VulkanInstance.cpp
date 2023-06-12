@@ -1,16 +1,22 @@
 #include "Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers/VulkanInstance.h"
 
-#include "Vang.h"
-
 namespace Vang::gfx::Vulkan {
 
-	VulkanInstance::VulkanInstance(Window& window, std::string_view applicationName) {
+	const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation"};
+
+	VulkanInstance::VulkanInstance(const Window& window, std::string_view applicationName) {
 		createInstance(window, applicationName);
 	}
 
-	VulkanInstance::~VulkanInstance() {}
+	VulkanInstance::~VulkanInstance() { vkDestroyInstance(m_instance, nullptr); }
 
-	void VulkanInstance::createInstance(Window& window, std::string_view applicationName) {
+	void VulkanInstance::createInstance(const Window& window, std::string_view applicationName) {
+#ifdef VANG_GRAPHICSAPI_VULKAN_VALIDATION_LAYERS
+		if (!checkValidationLayerSupport()) {
+			VANG_FATAL("Validation layers requested, but not available!");
+		}
+#endif
+
 		VkApplicationInfo appInfo{};
 		appInfo.sType			   = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 		appInfo.pApplicationName   = applicationName.data();
@@ -23,14 +29,86 @@ namespace Vang::gfx::Vulkan {
 		createInfo.sType			= VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 		createInfo.pApplicationInfo = &appInfo;
 
-		uint32_t glfwExtensionCount = 0;
-		const char** glfwExtensions;
+		auto extensions = getRequiredExtensions(window);
 
-		VANG_FATAL("Test");
+		createInfo.enabledExtensionCount   = static_cast<uint32_t>(extensions.size());
+		createInfo.ppEnabledExtensionNames = extensions.data();
 
-		glfwExtensions = window.getGraphicsAPIInstanceExtensions(&glfwExtensionCount);
+#ifdef VANG_GRAPHICSAPI_VULKAN_VALIDATION_LAYERS
+		VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
+		createInfo.enabledLayerCount   = static_cast<uint32_t>(validationLayers.size());
+		createInfo.ppEnabledLayerNames = validationLayers.data();
 
-		VANG_ERROR(glfwExtensionCount + "");
+		populateDebugMessengerCreateInfo(debugCreateInfo);
+		createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&debugCreateInfo;
+#else
+		createInfo.enabledLayerCount = 0;
+
+		createInfo.pNext = nullptr;
+#endif
+		if (vkCreateInstance(&createInfo, nullptr, &m_instance) != VK_SUCCESS) {
+			std::cout << vkCreateInstance(&createInfo, nullptr, &m_instance) << std::endl;
+			VANG_FATAL("Failed to create Vulkan instance!");
+		}
 	}
 
+	std::vector<const char*> VulkanInstance::getRequiredExtensions(const Window& window) {
+		uint32_t windowExtensionCount = 0;
+		const char** windowExtensions;
+
+		windowExtensions = window.getGraphicsAPIInstanceExtensions(&windowExtensionCount);
+
+		std::vector<const char*> extensions{windowExtensions,
+											windowExtensions + windowExtensionCount};
+
+#ifdef VANG_GRAPHICSAPI_VULKAN_VALIDATION_LAYERS
+		extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+#endif
+
+		return extensions;
+	}
+
+	static VKAPI_ATTR VkBool32 VKAPI_CALL
+	debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+				  VkDebugUtilsMessageTypeFlagsEXT messageType,
+				  const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData) {
+		std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
+
+		return VK_FALSE;
+	}
+
+	void VulkanInstance::populateDebugMessengerCreateInfo(
+		VkDebugUtilsMessengerCreateInfoEXT& createInfo) {
+		createInfo				   = {};
+		createInfo.sType		   = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+		createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
+									 VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+									 VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+		createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
+								 VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+								 VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+		createInfo.pfnUserCallback = debugCallback;
+	}
+	bool VulkanInstance::checkValidationLayerSupport() {
+		uint32_t layerCount;
+		vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+
+		std::vector<VkLayerProperties> availableLayers(layerCount);
+		vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+
+		for (const char* layerName : validationLayers) {
+			bool layerFound = false;
+
+			for (const auto& layerProperties : availableLayers) {
+				if (strcmp(layerName, layerProperties.layerName) == 0) {
+					layerFound = true;
+					break;
+				}
+			}
+
+			if (!layerFound) { return false; }
+		}
+
+		return true;
+	}
 }

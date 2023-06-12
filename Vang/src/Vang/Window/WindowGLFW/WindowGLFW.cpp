@@ -34,15 +34,15 @@ namespace Vang {
 	}
 
 	void WindowGLFW::close() {
-		if (windowOpen) {
-			windowOpen = false;
+		if (m_windowOpen) {
+			m_windowOpen = false;
 			VANG_DEBUG("Closing GLFW Window");
 			glfwDestroyWindow(m_window);
 			glfwTerminate();
 		}
 	}
 
-	const char** WindowGLFW::getGraphicsAPIInstanceExtensions(uint32_t* count) {
+	const char** WindowGLFW::getGraphicsAPIInstanceExtensions(uint32_t* count) const {
 		return glfwGetRequiredInstanceExtensions(count);
 	}
 
@@ -54,16 +54,18 @@ namespace Vang {
 
 	void WindowGLFW::initializeWindow() {
 		VANG_DEBUG("Initializing GLFW Window");
-		windowOpen = true;
+		m_windowOpen = true;
 		glfwInit();
-
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
 #ifdef VANG_GRAPHICSAPI_OPENGL
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#elif VANG_GRAPHICSAPI_VULKAN
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 #endif
+
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
 		m_window = glfwCreateWindow(m_width, m_height, m_title.data(), nullptr, nullptr);
 

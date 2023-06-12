@@ -13,12 +13,14 @@ namespace Vang::gfx::Vulkan {
 		GraphicsVulkan(VangInst& vangInst);
 		GraphicsVulkan(VangInst& vangInst, std::string_view applicationName);
 		~GraphicsVulkan();
-		GraphicsVulkan(const GraphicsVulkan&)		 = delete;
-		GraphicsVulkan(GraphicsVulkan&&)			 = delete;
+		GraphicsVulkan(const GraphicsVulkan&)			 = delete;
+		GraphicsVulkan(GraphicsVulkan&&)				 = delete;
 		GraphicsVulkan& operator=(const GraphicsVulkan&) = delete;
 		GraphicsVulkan& operator=(GraphicsVulkan&&)		 = delete;
 
 		void beginFrame() override;
+
+		void windowResize(uint32_t width, uint32_t height) override;
 
 	private:
 		void initialize();

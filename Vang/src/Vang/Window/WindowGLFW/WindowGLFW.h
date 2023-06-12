@@ -24,7 +24,7 @@ namespace Vang {
 		void beginFrame() override;
 		void close() override;
 
-		const char** getGraphicsAPIInstanceExtensions(uint32_t* count) override;
+		const char** getGraphicsAPIInstanceExtensions(uint32_t* count) const override;
 
 		void setTitle(std::string_view title) override;
 

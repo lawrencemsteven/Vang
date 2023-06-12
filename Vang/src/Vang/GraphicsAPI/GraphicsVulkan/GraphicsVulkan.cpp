@@ -22,6 +22,8 @@ namespace Vang::gfx::Vulkan {
 
 	void GraphicsVulkan::beginFrame() {}
 
+	void GraphicsVulkan::windowResize(uint32_t width, uint32_t height) {}
+
 	void GraphicsVulkan::initialize() { VANG_DEBUG("Initializing Vulkan"); }
 
 	void GraphicsVulkan::cleanup() { VANG_DEBUG("Closing Vulkan"); }

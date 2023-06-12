@@ -9,5 +9,6 @@
 #include <stdexcept>
 #include <string_view>
 #include <sstream>
+#include <vector>
 
 #include "Vang/Utility/Logging/Log.h"

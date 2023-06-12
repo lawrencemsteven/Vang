@@ -15,7 +15,7 @@ namespace Vang {
 		virtual void beginFrame() = 0;
 		virtual void close()	  = 0;
 
-		virtual const char** getGraphicsAPIInstanceExtensions(uint32_t* count) = 0;
+		virtual const char** getGraphicsAPIInstanceExtensions(uint32_t* count) const = 0;
 
 		virtual void setTitle(std::string_view title) = 0;
 		std::string_view getTitle();
@@ -28,7 +28,7 @@ namespace Vang {
 		std::string_view m_title;
 		uint32_t m_width;
 		uint32_t m_height;
-		bool windowOpen = false;
+		bool m_windowOpen = false;
 	};
 
 }
