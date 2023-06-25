@@ -50,6 +50,16 @@ namespace Vang::gfx::Vulkan {
 			std::cout << vkCreateInstance(&createInfo, nullptr, &m_instance) << std::endl;
 			VANG_FATAL("Failed to create Vulkan instance!");
 		}
+
+#ifdef VANG_GRAPHICSAPI_VULKAN_VALIDATION_LAYERS
+		VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
+		populateDebugMessengerCreateInfo(debugCreateInfo);
+
+		if (CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger) !=
+			VK_SUCCESS) {
+			VANG_FATAL("failed to set up debug messenger!");
+		}
+#endif
 	}
 
 	std::vector<const char*> VulkanInstance::getRequiredExtensions(const Window& window) {

@@ -32,6 +32,8 @@ set(Vang_GRAPHICSAPI_GRAPHICSVULKAN
 set(Vang_GRAPHICSAPI_GRAPHICSVULKAN_VULKANHELPERS
     "./src/Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers/VulkanInstance.h"
     "./src/Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers/VulkanInstance.cpp"
+    "./src/Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers/VulkanSurface.h"
+    "./src/Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers/VulkanSurface.cpp"
 )
 
 set(Vang_GRAPHICSAPI_GRAPHICSOPENGL

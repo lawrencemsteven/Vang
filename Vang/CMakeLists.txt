@@ -28,7 +28,7 @@ source_group("Vang/GraphicsAPI/GraphicsOpenGL/Shader" FILES ${Vang_GRAPHICSAPI_G
 target_compile_definitions(Vang
 	PRIVATE
 		VANG_WINDOW_GLFW
-		VANG_GRAPHICSAPI_VULKAN
+		VANG_GRAPHICSAPI_OPENGL
 		VANG_DEBUG
 )
 

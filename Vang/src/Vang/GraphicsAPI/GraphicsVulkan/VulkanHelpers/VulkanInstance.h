@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vang/Window/Window.h"
+#include "Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers/VulkanSurface.h"
 
 #include "vulkan/vulkan.h"
 
@@ -18,6 +19,10 @@ namespace Vang::gfx::Vulkan {
 		bool checkValidationLayerSupport();
 
 		VkInstance m_instance;
+
+#ifdef VANG_GRAPHICSAPI_VULKAN_VALIDATION_LAYERS
+		VkDebugUtilsMessengerEXT m_debugMessenger
+#endif
 	};
 
 }
