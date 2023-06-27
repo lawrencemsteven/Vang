@@ -15,6 +15,7 @@ namespace Vang::gfx::OpenGL {
 			: m_shaderSource{shader_source} {}
 
 		void setSource(std::string_view shader_source) { m_shaderSource = shader_source; }
+		std::string_view getSource() { return m_shaderSource; }
 		void loadFromFile(std::string_view filepath) {
 			m_shaderSource.clear();
 			std::ifstream fileStream{filepath.data()};

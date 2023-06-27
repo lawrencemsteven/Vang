@@ -14,11 +14,82 @@
 
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 #include <ctime>
 
+#include <Vang/GraphicsAPI/GraphicsOpenGL/Shader/Shader.h>
+
 // settings
-const unsigned int SCR_WIDTH  = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH  = 1920;
+const unsigned int SCR_HEIGHT = 1080;
+
+const unsigned int RENDER_DISTANCE = 1;
+
+const std::string_view COMPUTE_SHADER_SOURCE = "../../../Vang/shaders/exampleRayMarcher.glsl";
+
+class World {
+public:
+	World()	 = default;
+	~World() = default;
+
+	glm::vec3 getUp() { return up; };
+
+	void setUp(glm::vec3 up) { this->up = up; }
+
+private:
+	glm::vec3 up{0.0f, 1.0f, 0.0f};
+};
+
+class Camera {
+public:
+	Camera()  = default;
+	~Camera() = default;
+
+	void setPosition(glm::vec3 position) { this->position = position; }
+	void setFOV(float fov) { this->fov = fov; }
+	void setForward(glm::vec3 forward) { this->forward = glm::normalize(forward); }
+	void setup(glm::vec3 up) { this->up = glm::normalize(up); }
+
+	void rotateRight(float x_offset) {
+		yaw -= x_offset;
+		recalculateForward();
+	}
+	void rotateUp(float y_offset) {
+		pitch += y_offset;
+		pitch = std::clamp(pitch, -89.0f, 89.0f);
+		recalculateForward();
+	}
+
+	glm::vec3 getPosition() { return position; }
+	glm::vec3 getForward() { return forward; }
+	glm::vec3 getGroundedForward() {
+		return glm::normalize(getForward() * glm::vec3{1.0f, 0.0f, 1.0f});
+	}
+	glm::vec3 getUp() { return up; }
+	glm::vec3 getRight() { return glm::cross(up, forward); }
+	float getFOV() { return fov; }
+	float getMoveSpeed() { return move_speed; }
+	float getLookSpeed() { return look_speed; }
+	glm::mat4 getView() { return glm::lookAt(position, position - forward, up); }
+
+private:
+	void recalculateForward() {
+		forward.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+		forward.y = sin(glm::radians(pitch));
+		forward.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	}
+
+	glm::vec3 position{0.0f};
+	glm::vec3 forward{0.0f, 0.0f, 1.0f};
+	glm::vec3 up{0.0f, 1.0f, 0.0f};
+	float pitch{0.0f};
+	float yaw{90.0f};
+	float move_speed{3.0f};
+	float look_speed{80.0f};
+	float fov{90};
+};
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
@@ -54,93 +125,25 @@ const char* fragmentShaderSource = R"(
 		FragColor = texture(screen, v_UV);
 	}
 )";
-const char* computeShaderSource	 = R"(
-	#version 460 core
-	layout(local_size_x = 16, local_size_y = 8, local_size_z = 1) in;
-	layout(rgba32f, binding = 0) uniform image2D screen;
 
-	uniform ivec2 screen_size;
-	uniform float iTime;
-
-	#define MAX_STEPS 100
-	#define MAX_DIST 100.0f
-	#define SURF_DIST 0.01f
-
-	float getDist(vec3 p) {
-		vec4 sphere = vec4(0, 1, 6, 1);
-
-		float sphere_dist = length(p - sphere.xyz) - sphere.w;
-		float plane_dist = p.y;
-
-		float dist = min(sphere_dist, plane_dist);
-		return dist;
-	}
-
-	float rayMarch(vec3 ro, vec3 rd) {
-		float dO = 0.0f;
-		
-		for (int i = 0; i < MAX_STEPS; i++) {
-			vec3 p = ro + rd*dO;
-			float dS = getDist(p);
-			dO += dS;
-			if (dO > MAX_DIST || dS < SURF_DIST) break;
-		}
-
-		return dO;
-	}
-
-	vec3 getNormal(vec3 p) {
-		float d = getDist(p);
-		vec2 e = vec2(0.01, 0);
-
-		vec3 n = d - vec3(
-			getDist(p-e.xyy),
-			getDist(p-e.yxy),
-			getDist(p-e.yyx));
-		
-		return normalize(n);
-	}
-
-	float getLight(vec3 p) {
-		vec3 lightPosition = vec3(0, 5, 6);
-		lightPosition.xz += vec2(sin(iTime), cos(iTime)) * 2.0f;
-		vec3 l = normalize(lightPosition - p);
-		vec3 n = getNormal(p);
-
-		float dif = clamp(dot(n, l), 0.0f, 1.0f);
-		float d = rayMarch(p+n*SURF_DIST*2, l);
-		if (d < length(lightPosition - p)) dif *= 0.1f;
-		return dif;
-	}
-
-	void main() {
-		ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
-		vec2 uv = (pixel_coords - 0.5*screen_size) / screen_size.y;
-
-		vec3 col = vec3(0);
-
-		vec3 ro = vec3(0,1,0);
-		vec3 rd = normalize(vec3(uv.x, uv.y, 1));
-		
-		float d = rayMarch(ro, rd);
-
-		vec3 p = ro + rd * d;
-		float dif = getLight(p);
-		col = vec3(dif);
-
-		imageStore(screen, pixel_coords, vec4(col, 1.0f));
-	}
-)";
+void initializeUniforms(unsigned int program) {
+	int screen_size[2] = {SCR_WIDTH, SCR_HEIGHT};
+	GLint myLoc		   = glGetUniformLocation(program, "iResolution");
+	glProgramUniform2iv(program, myLoc, 1, screen_size);
+}
 
 int main() {
+	Vang::gfx::OpenGL::ComputeShader vang_computeShader{};
+	vang_computeShader.loadFromFile(COMPUTE_SHADER_SOURCE);
+
 	// glfw: initialize and configure
 	// ------------------------------
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+	glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE);
 
 	// glfw window creation
 	// --------------------
@@ -153,6 +156,8 @@ int main() {
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -239,7 +244,8 @@ int main() {
 	glDeleteShader(fragmentShader);
 
 	// compute shader
-	unsigned int computeShader = glCreateShader(GL_COMPUTE_SHADER);
+	unsigned int computeShader		= glCreateShader(GL_COMPUTE_SHADER);
+	const char* computeShaderSource = vang_computeShader.getSource().data();
 	glShaderSource(computeShader, 1, &computeShaderSource, 0);
 	glCompileShader(computeShader);
 	// check for shader compile errors
@@ -275,31 +281,118 @@ int main() {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGBA, GL_FLOAT, NULL);
 	glBindImageTexture(0, m_texture0, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
 
-	int screen_size[2] = {SCR_WIDTH, SCR_HEIGHT};
-	GLint myLoc		   = glGetUniformLocation(computeProgram, "screen_size");
-	glProgramUniform2iv(computeProgram, myLoc, 1, screen_size);
-
+	initializeUniforms(computeProgram);
 	auto start_time	  = std::chrono::system_clock::now();
 	auto current_time = std::chrono::system_clock::now();
-	GLint myLoc2	  = glGetUniformLocation(computeProgram, "iTime");
-	glProgramUniform1f(computeProgram, myLoc2,
-					   std::chrono::duration<float>{current_time - start_time}.count());
 
-	// uncomment this call to draw in wireframe polygons.
-	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	World world{};
+
+	Camera camera{};
+	camera.setPosition({0.0f, 1.0f, 0.0f});
+	camera.setFOV(90);
 
 	// render loop
 	// -----------
+	bool e_key_pressed = false;
 	while (!glfwWindowShouldClose(window)) {
 		// input
 		// -----
 		processInput(window);
+		glfwPollEvents();
 
 		// render
 		// ------
+		// Update Time
+		float delta_time =
+			std::chrono::duration<float>{std::chrono::system_clock::now() - current_time}.count();
 		current_time = std::chrono::system_clock::now();
+
+		// Get New Camera Position
+		if (glfwGetKey(window, GLFW_KEY_W)) {
+			camera.setPosition(camera.getPosition() +
+							   camera.getGroundedForward() * camera.getMoveSpeed() * delta_time);
+		}
+		if (glfwGetKey(window, GLFW_KEY_A)) {
+			camera.setPosition(camera.getPosition() +
+							   glm::cross(camera.getGroundedForward(), world.getUp()) *
+								   camera.getMoveSpeed() * delta_time);
+		}
+		if (glfwGetKey(window, GLFW_KEY_S)) {
+			camera.setPosition(camera.getPosition() +
+							   -camera.getGroundedForward() * camera.getMoveSpeed() * delta_time);
+		}
+		if (glfwGetKey(window, GLFW_KEY_D)) {
+			camera.setPosition(camera.getPosition() +
+							   glm::cross(world.getUp(), camera.getGroundedForward()) *
+								   camera.getMoveSpeed() * delta_time);
+		}
+		if (glfwGetKey(window, GLFW_KEY_SPACE)) {
+			camera.setPosition(camera.getPosition() +
+							   world.getUp() * camera.getMoveSpeed() * delta_time);
+		}
+		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)) {
+			camera.setPosition(camera.getPosition() +
+							   -world.getUp() * camera.getMoveSpeed() * delta_time);
+		}
+		if (glfwGetKey(window, GLFW_KEY_RIGHT)) {
+			camera.rotateRight(camera.getLookSpeed() * delta_time);
+		}
+		if (glfwGetKey(window, GLFW_KEY_LEFT)) {
+			camera.rotateRight(-camera.getLookSpeed() * delta_time);
+		}
+		if (glfwGetKey(window, GLFW_KEY_UP)) {
+			camera.rotateUp(camera.getLookSpeed() * delta_time);
+		}
+		if (glfwGetKey(window, GLFW_KEY_DOWN)) {
+			camera.rotateUp(-camera.getLookSpeed() * delta_time);
+		}
+		if (glfwGetKey(window, GLFW_KEY_ESCAPE)) { break; }
+
+		if (glfwGetKey(window, GLFW_KEY_E)) {
+			if (!e_key_pressed) {
+				computeShader = glCreateShader(GL_COMPUTE_SHADER);
+				vang_computeShader.loadFromFile(COMPUTE_SHADER_SOURCE);
+				computeShaderSource = vang_computeShader.getSource().data();
+				glShaderSource(computeShader, 1, &computeShaderSource, 0);
+				glCompileShader(computeShader);
+				// check for shader compile errors
+				glGetShaderiv(computeShader, GL_COMPILE_STATUS, &success);
+				if (!success) {
+					glGetShaderInfoLog(computeShader, 512, NULL, infoLog);
+					std::cout << "ERROR::SHADER::COMPUTE::COMPILATION_FAILED\n"
+							  << infoLog << std::endl;
+				}
+				computeProgram = glCreateProgram();
+				glAttachShader(computeProgram, computeShader);
+				glLinkProgram(computeProgram);
+				glGetProgramiv(computeProgram, GL_LINK_STATUS, &success);
+				if (!success) {
+					glGetProgramInfoLog(computeProgram, 512, NULL, infoLog);
+					std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+				}
+				glDeleteShader(computeShader);
+				initializeUniforms(computeProgram);
+			}
+			e_key_pressed = true;
+		}
+		else { e_key_pressed = false; }
+
+		glm::mat4 view = camera.getView();
+
+		GLint myLoc2 = glGetUniformLocation(computeProgram, "iTime");
+		GLint myLoc3 = glGetUniformLocation(computeProgram, "camera.position");
+		GLint myLoc4 = glGetUniformLocation(computeProgram, "camera.forward");
+		GLint myLoc5 = glGetUniformLocation(computeProgram, "camera.up");
+		GLint myLoc6 = glGetUniformLocation(computeProgram, "camera.right");
+		GLint myLoc7 = glGetUniformLocation(computeProgram, "camera.fov");
 		glProgramUniform1f(computeProgram, myLoc2,
 						   std::chrono::duration<float>{current_time - start_time}.count());
+		glProgramUniform3f(computeProgram, myLoc3, camera.getPosition().x, camera.getPosition().y,
+						   camera.getPosition().z);
+		glProgramUniform3f(computeProgram, myLoc4, view[0][2], view[1][2], view[2][2]);
+		glProgramUniform3f(computeProgram, myLoc5, view[0][1], view[1][1], view[2][1]);
+		glProgramUniform3f(computeProgram, myLoc6, view[0][0], view[1][0], view[2][0]);
+		glProgramUniform1f(computeProgram, myLoc7, camera.getFOV());
 		glUseProgram(computeProgram);
 		glDispatchCompute(floor(SCR_WIDTH / 16), floor(SCR_HEIGHT / 8), 1);
 		glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
@@ -316,8 +409,9 @@ int main() {
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
+		glFlush();
 		glfwSwapBuffers(window);
-		glfwPollEvents();
+		// glfwPollEvents();
 	}
 
 	// optional: de-allocate all resources once they've outlived their purpose:
