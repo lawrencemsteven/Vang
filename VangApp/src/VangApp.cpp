@@ -27,7 +27,7 @@ const unsigned int SCR_HEIGHT = 1080;
 
 const unsigned int RENDER_DISTANCE = 1;
 
-const std::string_view COMPUTE_SHADER_SOURCE = "../../../Vang/shaders/exampleRayMarcher.glsl";
+const std::string_view COMPUTE_SHADER_SOURCE = "../../../Vang/shaders/voxelRayMarcher.glsl";
 
 class World {
 public:
@@ -61,6 +61,18 @@ public:
 		pitch = std::clamp(pitch, -89.0f, 89.0f);
 		recalculateForward();
 	}
+	void newMousePos(double xpos, double ypos) {
+		float xOffset = xpos - lastX;
+		float yOffset = ypos - lastY;
+		lastX		  = xpos;
+		lastY		  = ypos;
+
+		xOffset *= look_speed;
+		yOffset *= look_speed;
+
+		rotateRight(xOffset);
+		rotateUp(-yOffset);
+	}
 
 	glm::vec3 getPosition() { return position; }
 	glm::vec3 getForward() { return forward; }
@@ -87,9 +99,16 @@ private:
 	float pitch{0.0f};
 	float yaw{90.0f};
 	float move_speed{3.0f};
-	float look_speed{80.0f};
+	float look_speed{0.075f};
 	float fov{90};
+	float lastX = SCR_WIDTH / 2.0f;
+	float lastY = SCR_HEIGHT / 2.0f;
 };
+
+void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+	Camera* camera = static_cast<Camera*>(glfwGetWindowUserPointer(window));
+	camera->newMousePos(xpos, ypos);
+}
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
@@ -290,6 +309,9 @@ int main() {
 	Camera camera{};
 	camera.setPosition({0.0f, 1.0f, 0.0f});
 	camera.setFOV(90);
+
+	glfwSetWindowUserPointer(window, &camera);
+	glfwSetCursorPosCallback(window, mouseCallback);
 
 	// render loop
 	// -----------
