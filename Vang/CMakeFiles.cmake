@@ -4,9 +4,19 @@ set(Vang_Vang
     "./src/Vang.cpp"
 )
 
+set(Vang_UTILITY_CAMERA
+    "./src/Vang/Utility/Camera/Camera.h"
+    "./src/Vang/Utility/Camera/Camera.cpp"
+)
+
 set(Vang_UTILITY_LOGGING
     "./src/Vang/Utility/Logging/Log.h"
     "./src/Vang/Utility/Logging/Log.cpp"
+)
+
+set(Vang_UTILITY_PLAYER
+    "./src/Vang/Utility/Player/Player.h"
+    "./src/Vang/Utility/Player/Player.cpp"
 )
 
 set(Vang_WINDOW
@@ -20,8 +30,18 @@ set(Vang_WINDOW_WINDOWGLFW
 )
 
 set(Vang_GRAPHICSAPI
-    "./src/Vang/GraphicsAPI/GraphicsAPI.h"
-    "./src/Vang/GraphicsAPI/GraphicsAPI.cpp"
+    "./src/Vang/GraphicsAPI/Generic/GraphicsAPI.h"
+    "./src/Vang/GraphicsAPI/Generic/GraphicsAPI.cpp"
+)
+
+set(Vang_GRAPHICSAPI_SHADER
+    "./src/Vang/GraphicsAPI/Generic/Shader/Shader.h"
+    "./src/Vang/GraphicsAPI/Generic/Shader/Shader.cpp"
+)
+
+set(Vang_GRAPHICSAPI_SHADERPROGRAM
+    "./src/Vang/GraphicsAPI/Generic/ShaderProgram/ShaderProgram.h"
+    "./src/Vang/GraphicsAPI/Generic/ShaderProgram/ShaderProgram.cpp"
 )
 
 set(Vang_GRAPHICSAPI_GRAPHICSVULKAN
@@ -50,10 +70,14 @@ set(Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADER
 
 set(Vang_FILES
     ${Vang_Vang}
+    ${Vang_UTILITY_CAMERA}
     ${Vang_UTILITY_LOGGING}
+    ${Vang_UTILITY_PLAYER}
     ${Vang_WINDOW}
     ${Vang_WINDOW_WINDOWGLFW}
     ${Vang_GRAPHICSAPI}
+    ${Vang_GRAPHICSAPI_SHADER}
+    ${Vang_GRAPHICSAPI_SHADERPROGRAM}
     ${Vang_GRAPHICSAPI_GRAPHICSVULKAN}
     ${Vang_GRAPHICSAPI_GRAPHICSVULKAN_VULKANHELPERS}
     ${Vang_GRAPHICSAPI_GRAPHICSOPENGL}

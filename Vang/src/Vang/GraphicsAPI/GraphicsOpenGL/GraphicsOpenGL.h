@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vang/GraphicsAPI/GraphicsAPI.h"
+#include "Vang/GraphicsAPI/Generic/GraphicsAPI.h"
 #include "Vang/GraphicsAPI/GraphicsOpenGL/Shader/ShaderProgram.h"
 
 class VangInst;

@@ -1,5 +1,34 @@
 #pragma once
 
+#include "Vang/GraphicsAPI/Generic/Shader/Shader.h"
+
+namespace Vang::gfx::OpenGL {
+
+	class GL_Shader : public Shader {
+	public:
+		GL_Shader()							   = delete;
+		~GL_Shader()						   = default;
+		GL_Shader(const GL_Shader&)			   = delete;
+		GL_Shader(GL_Shader&&)				   = delete;
+		GL_Shader& operator=(const GL_Shader&) = delete;
+		GL_Shader& operator=(GL_Shader&&)	   = delete;
+
+		GL_Shader(std::filesystem::path path, ShaderType type);
+
+		std::optional<void> reload() override;
+
+	private:
+		std::optional<void> loadAndCompile() override;
+
+		std::optional<GLint> m_shader{};
+	};
+
+}
+
+#include "glad/glad.h"
+
+/*#include "Vang/GraphicsAPI/Generic/Shader/Shader.h"
+
 namespace Vang::gfx::OpenGL {
 
 	class Shader {
@@ -87,4 +116,4 @@ namespace Vang::gfx::OpenGL {
 		void compile() override;
 	};
 
-}
+}*/

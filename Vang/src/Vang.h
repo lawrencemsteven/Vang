@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Vang/Window/Window.h"
-#include "Vang/GraphicsAPI/GraphicsAPI.h"
+#include "Vang/GraphicsAPI/Generic/GraphicsAPI.h"
 
 class VangInst {
 public:
