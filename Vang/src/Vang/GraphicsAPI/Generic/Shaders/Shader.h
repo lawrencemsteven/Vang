@@ -21,6 +21,8 @@ namespace Vang::gfx {
 
 		virtual std::optional<void> reload() = 0;
 
+		virtual std::optional<int> getID() = 0;
+
 	protected:
 		virtual std::optional<void> loadAndCompile() = 0;
 

@@ -9,6 +9,11 @@ set(Vang_UTILITY_CAMERA
     "./src/Vang/Utility/Camera/Camera.cpp"
 )
 
+set(Vang_UTILITY_FILEIO
+    "./src/Vang/Utility/FileIO/FileIO.h"
+    "./src/Vang/Utility/FileIO/FileIO.cpp"
+)
+
 set(Vang_UTILITY_LOGGING
     "./src/Vang/Utility/Logging/Log.h"
     "./src/Vang/Utility/Logging/Log.cpp"
@@ -34,14 +39,11 @@ set(Vang_GRAPHICSAPI
     "./src/Vang/GraphicsAPI/Generic/GraphicsAPI.cpp"
 )
 
-set(Vang_GRAPHICSAPI_SHADER
-    "./src/Vang/GraphicsAPI/Generic/Shader/Shader.h"
-    "./src/Vang/GraphicsAPI/Generic/Shader/Shader.cpp"
-)
-
-set(Vang_GRAPHICSAPI_SHADERPROGRAM
-    "./src/Vang/GraphicsAPI/Generic/ShaderProgram/ShaderProgram.h"
-    "./src/Vang/GraphicsAPI/Generic/ShaderProgram/ShaderProgram.cpp"
+set(Vang_GRAPHICSAPI_SHADERS
+    "./src/Vang/GraphicsAPI/Generic/Shaders/Shader.h"
+    "./src/Vang/GraphicsAPI/Generic/Shaders/Shader.cpp"
+    "./src/Vang/GraphicsAPI/Generic/Shaders/ShaderProgram.h"
+    "./src/Vang/GraphicsAPI/Generic/Shaders/ShaderProgram.cpp"
 )
 
 set(Vang_GRAPHICSAPI_GRAPHICSVULKAN
@@ -61,25 +63,26 @@ set(Vang_GRAPHICSAPI_GRAPHICSOPENGL
     "./src/Vang/GraphicsAPI/GraphicsOpenGL/GraphicsOpenGL.cpp"
 )
 
-set(Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADER
-    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shader/Shader.h"
-    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shader/Shader.cpp"
-    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shader/ShaderProgram.h"
-    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shader/ShaderProgram.cpp"
+set(Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADERS
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/GL_Shader.h"
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/GL_Shader.cpp"
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/GL_ShaderProgram.h"
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/GL_ShaderProgram.cpp"
 )
 
 set(Vang_FILES
     ${Vang_Vang}
     ${Vang_UTILITY_CAMERA}
+    ${Vang_UTILITY_FILEIO}
     ${Vang_UTILITY_LOGGING}
     ${Vang_UTILITY_PLAYER}
     ${Vang_WINDOW}
     ${Vang_WINDOW_WINDOWGLFW}
     ${Vang_GRAPHICSAPI}
-    ${Vang_GRAPHICSAPI_SHADER}
+    ${Vang_GRAPHICSAPI_SHADERS}
     ${Vang_GRAPHICSAPI_SHADERPROGRAM}
     ${Vang_GRAPHICSAPI_GRAPHICSVULKAN}
     ${Vang_GRAPHICSAPI_GRAPHICSVULKAN_VULKANHELPERS}
     ${Vang_GRAPHICSAPI_GRAPHICSOPENGL}
-    ${Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADER}
+    ${Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADERS}
 )

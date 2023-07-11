@@ -1,13 +1,15 @@
 #pragma once
 
-#include "Vang/GraphicsAPI/Generic/Shader/Shader.h"
+#include "Vang/GraphicsAPI/Generic/Shaders/Shader.h"
+
+#include "glad/glad.h"
 
 namespace Vang::gfx::OpenGL {
 
 	class GL_Shader : public Shader {
 	public:
 		GL_Shader()							   = delete;
-		~GL_Shader()						   = default;
+		~GL_Shader(){};
 		GL_Shader(const GL_Shader&)			   = delete;
 		GL_Shader(GL_Shader&&)				   = delete;
 		GL_Shader& operator=(const GL_Shader&) = delete;
@@ -17,6 +19,8 @@ namespace Vang::gfx::OpenGL {
 
 		std::optional<void> reload() override;
 
+		std::optional<int> getID() override;
+
 	private:
 		std::optional<void> loadAndCompile() override;
 
@@ -24,8 +28,6 @@ namespace Vang::gfx::OpenGL {
 	};
 
 }
-
-#include "glad/glad.h"
 
 /*#include "Vang/GraphicsAPI/Generic/Shader/Shader.h"
 

@@ -1,29 +1,32 @@
-#include "Shader.h"
+#include "GL_Shader.h"
+
+#include "Vang/Utility/FileIO/FileIO.h"
 
 namespace Vang::gfx::OpenGL {
+
+	GL_Shader::~GL_Shader() {
+		if (m_shader.has_value()) { glDeleteShader(m_shader.value()); }
+	}
 
 	GL_Shader::GL_Shader(std::filesystem::path path, ShaderType type)
 		: Shader{path, type} {}
 
 	std::optional<void> GL_Shader::reload() { return loadAndCompile(); }
 
-	std::optional<void> GL_Shader::loadAndCompile() {
-		std::string shader_source;
-		std::ifstream fileStream{m_path};
+	std::optional<int> GL_Shader::getID() {
+		return m_shader.value_or(std::nullopt);
+	}
 
+	std::optional<void> GL_Shader::loadAndCompile() {
 		// Read From File
-		if (!fileStream.is_open()) {
-			VANG_ERROR("Could not read file!");
+		std::string shader_source;
+		if (const auto file_info = Vang::FileIO::readFile(m_path); file_info.has_value()) {
+			shader_source = file_info.value();
+		}
+		else {
+			VANG_ERROR("Shader File Could Not Be Read.");
 			return std::nullopt;
 		}
-
-		std::string line = "";
-		while (!fileStream.eof()) {
-			std::getline(fileStream, line);
-			shader_source.append(line + "\n");
-		}
-
-		fileStream.close();
 
 		// Create Shader
 		switch (m_type) {
