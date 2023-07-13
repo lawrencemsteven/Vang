@@ -47,9 +47,9 @@ namespace Vang::gfx::OpenGL {
 	}
 
 	void GraphicsOpenGL::initializeShaders() {
-		m_shaderProgram.setVertexShader("../../../Vang/shaders/main.vert.glsl");
-		m_shaderProgram.setFragmentShader("../../../Vang/shaders/main.frag.glsl");
-		m_shaderProgram.initialize();
+		//m_shaderProgram.setVertexShader("../../../Vang/shaders/main.vert.glsl");
+		//m_shaderProgram.setFragmentShader("../../../Vang/shaders/main.frag.glsl");
+		//m_shaderProgram.initialize();
 	}
 
 	void GraphicsOpenGL::cleanup() { VANG_DEBUG("Closing OpenGL"); }

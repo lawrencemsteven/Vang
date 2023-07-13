@@ -19,8 +19,6 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <ctime>
 
-#include <Vang/GraphicsAPI/GraphicsOpenGL/Shader/Shader.h>
-
 // settings
 const unsigned int SCR_WIDTH  = 1920;
 const unsigned int SCR_HEIGHT = 1080;
@@ -152,8 +150,8 @@ void initializeUniforms(unsigned int program) {
 }
 
 int main() {
-	Vang::gfx::OpenGL::ComputeShader vang_computeShader{};
-	vang_computeShader.loadFromFile(COMPUTE_SHADER_SOURCE);
+	//Vang::gfx::OpenGL::ComputeShader vang_computeShader{};
+	//vang_computeShader.loadFromFile(COMPUTE_SHADER_SOURCE);
 
 	// glfw: initialize and configure
 	// ------------------------------

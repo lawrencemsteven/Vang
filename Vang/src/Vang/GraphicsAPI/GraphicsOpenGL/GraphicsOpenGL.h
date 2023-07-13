@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Vang/GraphicsAPI/Generic/GraphicsAPI.h"
-#include "Vang/GraphicsAPI/GraphicsOpenGL/Shader/ShaderProgram.h"
 
 class VangInst;
 
@@ -28,8 +27,6 @@ namespace Vang::gfx::OpenGL {
 
 		void initializeOpenGL();
 		void initializeShaders();
-
-		ShaderProgram m_shaderProgram;
 	};
 
 }

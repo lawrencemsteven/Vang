@@ -40,10 +40,7 @@ set(Vang_GRAPHICSAPI
 )
 
 set(Vang_GRAPHICSAPI_SHADERS
-    "./src/Vang/GraphicsAPI/Generic/Shaders/Shader.h"
-    "./src/Vang/GraphicsAPI/Generic/Shaders/Shader.cpp"
     "./src/Vang/GraphicsAPI/Generic/Shaders/ShaderProgram.h"
-    "./src/Vang/GraphicsAPI/Generic/Shaders/ShaderProgram.cpp"
 )
 
 set(Vang_GRAPHICSAPI_GRAPHICSVULKAN

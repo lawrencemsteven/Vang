@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vang/GraphicsAPI/Generic/Shaders/ShaderProgram.h"
+#include "Vang/GraphicsAPI/GraphicsOpenGL/Shaders/GL_Shader.h"
 
 namespace Vang::gfx::OpenGL {
 
@@ -13,10 +14,11 @@ namespace Vang::gfx::OpenGL {
 		GL_ShaderProgram& operator=(const GL_ShaderProgram&) = delete;
 		GL_ShaderProgram& operator=(GL_ShaderProgram&&)	  = delete;
 
-		void attachShader(Shader& shader) override;
-		std::optional<void> linkProgram() override;
+		bool linkProgram() override;
 
 	private:
+		void attachShader(GL_Shader& shader);
+
 		GLuint m_shaderProgram;
 	};
 

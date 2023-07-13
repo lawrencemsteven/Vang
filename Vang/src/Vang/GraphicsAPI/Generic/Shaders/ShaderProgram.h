@@ -1,8 +1,26 @@
 #pragma once
 
-#include "Vang/GraphicsAPI/Generic/Shaders/Shader.h"
-
 namespace Vang::gfx {
+
+	enum class ShaderType {
+		Vertex,
+		Fragment,
+		Compute,
+	};
+
+	enum class ShaderDataType {
+		Float,
+		Float2,
+		Float3,
+		Float4,
+		Mat3,
+		Mat4,
+		Int,
+		Int2,
+		Int3,
+		Int4,
+		Bool,
+	};
 
 	class ShaderProgram {
 	public:
@@ -13,8 +31,7 @@ namespace Vang::gfx {
 		ShaderProgram& operator=(const ShaderProgram&) = delete;
 		ShaderProgram& operator=(ShaderProgram&&)	   = delete;
 
-		virtual void attachShader(Shader& shader)  = 0;
-		virtual std::optional<void> linkProgram() = 0;
+		virtual bool linkProgram() = 0;
 	};
 
 }

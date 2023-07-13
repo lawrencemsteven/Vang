@@ -9,15 +9,16 @@ namespace Vang::gfx::OpenGL {
 	}
 
 	GL_Shader::GL_Shader(std::filesystem::path path, ShaderType type)
-		: Shader{path, type} {}
-
-	std::optional<void> GL_Shader::reload() { return loadAndCompile(); }
-
-	std::optional<int> GL_Shader::getID() {
-		return m_shader.value_or(std::nullopt);
+		: m_path{path},
+		  m_type{type} {
+		loadAndCompile();
 	}
 
-	std::optional<void> GL_Shader::loadAndCompile() {
+	bool GL_Shader::reload() { return loadAndCompile(); }
+
+	std::optional<int> GL_Shader::getID() { return m_shader; }
+
+	bool GL_Shader::loadAndCompile() {
 		// Read From File
 		std::string shader_source;
 		if (const auto file_info = Vang::FileIO::readFile(m_path); file_info.has_value()) {
@@ -25,7 +26,7 @@ namespace Vang::gfx::OpenGL {
 		}
 		else {
 			VANG_ERROR("Shader File Could Not Be Read.");
-			return std::nullopt;
+			return false;
 		}
 
 		// Create Shader
@@ -55,35 +56,7 @@ namespace Vang::gfx::OpenGL {
 			VANG_ERROR("ERROR::SHADER::COMILATION_FAILED");
 			VANG_ERROR(info_log);
 		}
+		return true;
 	}
 
 }
-
-/* namespace Vang::gfx::OpenGL {
-
-	void Shader::compileType(unsigned int type) {
-		if (!hasSource()) { return; }
-
-		m_shader		  = glCreateShader(type);
-		const char* c_str = m_shaderSource.c_str();
-
-		glShaderSource(m_shader, 1, &c_str, NULL);
-		glCompileShader(m_shader);
-
-		int success;
-		char info_log[512];
-		glGetShaderiv(m_shader, GL_COMPILE_STATUS, &success);
-		if (!success) {
-			glGetShaderInfoLog(m_shader, 512, NULL, info_log);
-			VANG_ERROR("ERROR::SHADER::COMPILATION_FAILED");
-			VANG_FATAL(info_log);
-		}
-	}
-
-	void VertexShader::compile() { compileType(GL_VERTEX_SHADER); }
-
-	void FragmentShader::compile() { compileType(GL_FRAGMENT_SHADER); }
-
-	void ComputeShader::compile() { compileType(GL_COMPUTE_SHADER); }
-
-};*/
