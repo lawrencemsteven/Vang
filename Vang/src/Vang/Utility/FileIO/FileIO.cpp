@@ -2,8 +2,7 @@
 
 namespace Vang::FileIO {
 
-	std::optional<std::string> readFile(std::filesystem::path path) {
-		std::string file_data;
+	std::optional<std::string> readFile(const std::filesystem::path& path) {
 		std::ifstream fileStream{path};
 
 		// Read From File
@@ -12,13 +11,14 @@ namespace Vang::FileIO {
 			return std::nullopt;
 		}
 
-		std::string line = "";
-		while (!fileStream.eof()) {
-			std::getline(fileStream, line);
-			file_data.append(line + "\n");
-		}
+		std::string line;
+		std::string file_data;
 
-		fileStream.close();
+		while (!fileStream.eof()) {
+			line.clear();
+			std::getline(fileStream, line);
+			file_data.append(std::move(line) + "\n");
+		}
 
 		return file_data;
 	}

@@ -2,6 +2,6 @@
 
 namespace Vang::FileIO {
 
-	std::optional<std::string> readFile(std::filesystem::path path);
+	std::optional<std::string> readFile(const std::filesystem::path& path);
 
 }

@@ -14,7 +14,7 @@ uniform ivec2 iResolution;
 uniform float iTime;
 uniform Camera camera;
 
-#define MAX_STEPS 100
+#define MAX_STEPS 1000
 #define MAX_DIST 100.0f
 #define SURF_DIST 0.01f
 
@@ -80,7 +80,7 @@ void main() {
     float dif = getLight(p);
     col = vec3(dif);
 
-    //col *= vec3(1.0f, 0.0f, 0.0f);
+    col *= vec3(1.0f, 0.0f, 0.0f);
 
     imageStore(screen, pixel_coords, vec4(col, 1.0f));
 }

@@ -14,6 +14,11 @@ set(Vang_UTILITY_FILEIO
     "./src/Vang/Utility/FileIO/FileIO.cpp"
 )
 
+set(Vang_UTILITY_INPUT
+    "./src/Vang/Utility/Input/Input.h"
+    "./src/Vang/Utility/Input/Input.cpp"
+)
+
 set(Vang_UTILITY_LOGGING
     "./src/Vang/Utility/Logging/Log.h"
     "./src/Vang/Utility/Logging/Log.cpp"
@@ -22,6 +27,11 @@ set(Vang_UTILITY_LOGGING
 set(Vang_UTILITY_PLAYER
     "./src/Vang/Utility/Player/Player.h"
     "./src/Vang/Utility/Player/Player.cpp"
+)
+
+set(Vang_UTILITY_TIME
+    "./src/Vang/Utility/Time/Time.h"
+    "./src/Vang/Utility/Time/Time.cpp"
 )
 
 set(Vang_WINDOW
@@ -61,18 +71,26 @@ set(Vang_GRAPHICSAPI_GRAPHICSOPENGL
 )
 
 set(Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADERS
-    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/GL_Shader.h"
-    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/GL_Shader.cpp"
-    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/GL_ShaderProgram.h"
-    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/GL_ShaderProgram.cpp"
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/Shader.h"
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/Shader.cpp"
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/ShaderProgram.h"
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/ShaderProgram.cpp"
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/ShaderProgramManager.h"
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/ShaderProgramManager.cpp"
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/ShaderTexture.h"
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/ShaderTexture.cpp"
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/VertexData.h"
+    "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/VertexData.cpp"
 )
 
 set(Vang_FILES
     ${Vang_Vang}
     ${Vang_UTILITY_CAMERA}
     ${Vang_UTILITY_FILEIO}
+    ${Vang_UTILITY_INPUT}
     ${Vang_UTILITY_LOGGING}
     ${Vang_UTILITY_PLAYER}
+    ${Vang_UTILITY_TIME}
     ${Vang_WINDOW}
     ${Vang_WINDOW_WINDOWGLFW}
     ${Vang_GRAPHICSAPI}

@@ -1,24 +1,24 @@
-#include "GL_Shader.h"
+#include "Shader.h"
 
 #include "Vang/Utility/FileIO/FileIO.h"
 
 namespace Vang::gfx::OpenGL {
 
-	GL_Shader::~GL_Shader() {
-		if (m_shader.has_value()) { glDeleteShader(m_shader.value()); }
-	}
-
-	GL_Shader::GL_Shader(std::filesystem::path path, ShaderType type)
-		: m_path{path},
+	Shader::Shader(std::filesystem::path path, ShaderType type)
+		: m_path{std::move(path)},
 		  m_type{type} {
 		loadAndCompile();
 	}
 
-	bool GL_Shader::reload() { return loadAndCompile(); }
+	Shader::~Shader() {
+		if (m_shader.has_value()) { glDeleteShader(m_shader.value()); }
+	}
 
-	std::optional<int> GL_Shader::getID() { return m_shader; }
+	bool Shader::reload() { return loadAndCompile(); }
 
-	bool GL_Shader::loadAndCompile() {
+	std::optional<GLuint> Shader::getID() { return m_shader; }
+
+	bool Shader::loadAndCompile() {
 		// Read From File
 		std::string shader_source;
 		if (const auto file_info = Vang::FileIO::readFile(m_path); file_info.has_value()) {

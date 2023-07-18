@@ -67,6 +67,13 @@ float getLight(vec3 p) {
 
 void main() {
     ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
+
+    // Center Pixel
+    /*if (pixel_coords*2 == iResolution) {
+        imageStore(screen, pixel_coords, vec4(0.0f, 1.0f, 0.0f, 1.0f));
+        return;
+    }*/
+
     vec2 uv = (pixel_coords - 0.5*iResolution) / iResolution.y;
 
     vec3 col = vec3(0);
@@ -80,7 +87,7 @@ void main() {
     float dif = getLight(p);
     col = vec3(dif);
 
-    //col *= vec3(1.0f, 0.0f, 0.0f);
+    // col *= vec3(1.0f, 0.0f, 0.0f);
 
     imageStore(screen, pixel_coords, vec4(col, 1.0f));
 }

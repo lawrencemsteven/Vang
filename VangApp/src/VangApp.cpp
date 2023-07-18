@@ -1,16 +1,21 @@
-// #include <iostream>
-//
-// #include <Vang.h>
-//
-// int main() {
-//	VangInst& vangInst = VangInst::Get("VangApp");
-//	bool running  = true;
-//	while (running) {
-//		vangInst.beginFrame();
-//		vangInst.endFrame();
-//		if (vangInst.getToClose()) running = false;
-//	}
-// }
+#include <Vang.h>
+
+#define USING_VANG_ENGINE
+
+#ifdef USING_VANG_ENGINE
+
+int main() {
+	VangInst& vangInst = VangInst::Get("VangApp");
+	bool running	   = true;
+	while (running) {
+		vangInst.beginFrame();
+		vangInst.endFrame();
+		if (vangInst.getToClose())
+			running = false;
+	}
+}
+
+#else
 
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
@@ -19,11 +24,11 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <ctime>
 
+#include "Vang/Utility/FileIO/FileIO.h"
+
 // settings
 const unsigned int SCR_WIDTH  = 1920;
 const unsigned int SCR_HEIGHT = 1080;
-
-const unsigned int RENDER_DISTANCE = 1;
 
 const std::string_view COMPUTE_SHADER_SOURCE = "../../../Vang/shaders/voxelRayMarcher.glsl";
 
@@ -118,12 +123,12 @@ void processInput(GLFWwindow* window) {
 
 const char* vertexShaderSource	 = R"(
 	#version 460 core
-	
+
 	layout (location = 0) in vec2 a_Pos;
 	layout (location = 1) in vec2 a_UV;
 
 	out vec2 v_UV;
-	
+
 	void main() {
 		gl_Position = vec4(a_Pos.x, a_Pos.y, 0.0, 1.0);
 		v_UV = a_UV;
@@ -150,9 +155,6 @@ void initializeUniforms(unsigned int program) {
 }
 
 int main() {
-	//Vang::gfx::OpenGL::ComputeShader vang_computeShader{};
-	//vang_computeShader.loadFromFile(COMPUTE_SHADER_SOURCE);
-
 	// glfw: initialize and configure
 	// ------------------------------
 	glfwInit();
@@ -261,8 +263,9 @@ int main() {
 	glDeleteShader(fragmentShader);
 
 	// compute shader
-	unsigned int computeShader		= glCreateShader(GL_COMPUTE_SHADER);
-	const char* computeShaderSource = vang_computeShader.getSource().data();
+	unsigned int computeShader			  = glCreateShader(GL_COMPUTE_SHADER);
+	std::string computeShaderSourceString = Vang::FileIO::readFile(COMPUTE_SHADER_SOURCE).value();
+	const char* computeShaderSource		  = computeShaderSourceString.c_str();
 	glShaderSource(computeShader, 1, &computeShaderSource, 0);
 	glCompileShader(computeShader);
 	// check for shader compile errors
@@ -371,8 +374,9 @@ int main() {
 		if (glfwGetKey(window, GLFW_KEY_E)) {
 			if (!e_key_pressed) {
 				computeShader = glCreateShader(GL_COMPUTE_SHADER);
-				vang_computeShader.loadFromFile(COMPUTE_SHADER_SOURCE);
-				computeShaderSource = vang_computeShader.getSource().data();
+				std::string computeShaderSourceString =
+					Vang::FileIO::readFile(COMPUTE_SHADER_SOURCE).value();
+				computeShaderSource = computeShaderSourceString.c_str();
 				glShaderSource(computeShader, 1, &computeShaderSource, 0);
 				glCompileShader(computeShader);
 				// check for shader compile errors
@@ -445,3 +449,5 @@ int main() {
 	glfwTerminate();
 	return 0;
 }
+
+#endif

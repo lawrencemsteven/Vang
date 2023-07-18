@@ -7,8 +7,10 @@ target_compile_features(Vang PUBLIC cxx_std_20)
 source_group("Vang" FILES ${Vang_Vang})
 source_group("Vang/Utility/Camera" FILES ${Vang_UTILITY_CAMERA})
 source_group("Vang/Utility/FileIO" FILES ${Vang_UTILITY_FILEIO})
+source_group("Vang/Utility/Input" FILES ${Vang_UTILITY_INPUT})
 source_group("Vang/Utility/Logging" FILES ${Vang_UTILITY_LOGGING})
 source_group("Vang/Utility/Player" FILES ${Vang_UTILITY_PLAYER})
+source_group("Vang/Utility/Time" FILES ${Vang_UTILITY_TIME})
 source_group("Vang/Window" FILES ${Vang_WINDOW})
 source_group("Vang/Window/WindowGLFW" FILES ${Vang_WINDOW_WINDOWGLFW})
 source_group("Vang/GraphicsAPI/Generic" FILES ${Vang_GRAPHICSAPI})
@@ -17,7 +19,6 @@ source_group("Vang/GraphicsAPI/GraphicsVulkan" FILES ${Vang_GRAPHICSAPI_GRAPHICS
 source_group("Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers" FILES ${Vang_GRAPHICSAPI_GRAPHICSVULKAN_VULKANHELPERS})
 source_group("Vang/GraphicsAPI/GraphicsOpenGL" FILES ${Vang_GRAPHICSAPI_GRAPHICSOPENGL})
 source_group("Vang/GraphicsAPI/GraphicsOpenGL/Shaders" FILES ${Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADERS})
-
 
 # WINDOW API'S:
 #   VANG_WINDOW_GLFW

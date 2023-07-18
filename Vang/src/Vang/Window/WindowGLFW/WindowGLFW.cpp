@@ -1,6 +1,8 @@
 #include "Vang.h"
 #include "Vang/Window/WindowGLFW/WindowGLFW.h"
 
+#include "Vang/Utility/Input/Input.h"
+
 namespace Vang {
 
 	WindowGLFW::WindowGLFW(VangInst& vangInst)
@@ -31,6 +33,8 @@ namespace Vang {
 
 		glfwSwapBuffers(m_window);
 		glfwPollEvents();
+
+
 	}
 
 	void WindowGLFW::close() {
@@ -66,6 +70,7 @@ namespace Vang {
 #endif
 
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+		glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE);
 
 		m_window = glfwCreateWindow(m_width, m_height, m_title.data(), nullptr, nullptr);
 
@@ -75,6 +80,7 @@ namespace Vang {
 
 		glfwSetWindowUserPointer(m_window, this);
 		glfwSetFramebufferSizeCallback(m_window, resize);
+		glfwSetCursorPosCallback(m_window, mouseCallback);
 	}
 
 	void WindowGLFW::resize(int width, int height) {
@@ -84,8 +90,17 @@ namespace Vang {
 												 static_cast<uint32_t>(height));
 	}
 
+	void WindowGLFW::mouseCallback(double x_pos, double y_pos) {
+		m_vangInst.getPlayer().getCamera().mouseRotate(x_pos, y_pos);
+	}
+
 	void WindowGLFW::resize(GLFWwindow* window, int width, int height) {
 		WindowGLFW* windowGLFW = reinterpret_cast<WindowGLFW*>(glfwGetWindowUserPointer(window));
 		windowGLFW->resize(width, height);
+	}
+
+	void WindowGLFW::mouseCallback(GLFWwindow* window, double x_pos, double y_pos) {
+		WindowGLFW* windowGLFW = reinterpret_cast<WindowGLFW*>(glfwGetWindowUserPointer(window));
+		windowGLFW->mouseCallback(x_pos, y_pos);
 	}
 }

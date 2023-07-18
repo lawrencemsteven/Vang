@@ -32,6 +32,7 @@ namespace Vang::gfx {
 		ShaderProgram& operator=(ShaderProgram&&)	   = delete;
 
 		virtual bool linkProgram() = 0;
+		virtual bool reloadShaders() = 0;
 	};
 
 }
