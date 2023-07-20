@@ -9,6 +9,13 @@ set(Vang_UTILITY_CAMERA
     "./src/Vang/Utility/Camera/Camera.cpp"
 )
 
+set(Vang_UTILITY_EVENTS
+    "./src/Vang/Utility/Events/ApplicationEvent.h"
+    "./src/Vang/Utility/Events/Event.h"
+    "./src/Vang/Utility/Events/KeyEvent.h"
+    "./src/Vang/Utility/Events/MouseEvent.h"
+)
+
 set(Vang_UTILITY_FILEIO
     "./src/Vang/Utility/FileIO/FileIO.h"
     "./src/Vang/Utility/FileIO/FileIO.cpp"
@@ -86,6 +93,7 @@ set(Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADERS
 set(Vang_FILES
     ${Vang_Vang}
     ${Vang_UTILITY_CAMERA}
+    ${Vang_UTILITY_EVENTS}
     ${Vang_UTILITY_FILEIO}
     ${Vang_UTILITY_INPUT}
     ${Vang_UTILITY_LOGGING}

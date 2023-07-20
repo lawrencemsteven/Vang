@@ -6,6 +6,7 @@ target_compile_features(Vang PUBLIC cxx_std_20)
 
 source_group("Vang" FILES ${Vang_Vang})
 source_group("Vang/Utility/Camera" FILES ${Vang_UTILITY_CAMERA})
+source_group("Vang/Utility/Events" FILES ${Vang_UTILITY_EVENTS})
 source_group("Vang/Utility/FileIO" FILES ${Vang_UTILITY_FILEIO})
 source_group("Vang/Utility/Input" FILES ${Vang_UTILITY_INPUT})
 source_group("Vang/Utility/Logging" FILES ${Vang_UTILITY_LOGGING})
