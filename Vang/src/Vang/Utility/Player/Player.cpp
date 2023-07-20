@@ -4,11 +4,6 @@
 
 namespace Vang {
 
-	Player::Player(VangInst& vangInst)
-		: m_vangInst{vangInst},
-		  m_camera{vangInst} {
-	}
-
 	void Player::moveForward(float amount) {
 		m_position += m_camera.getGroundedForward() * m_speed * amount;
 	}
@@ -46,6 +41,6 @@ namespace Vang {
 
 	void Player::updateCameraPosition() {
 		m_camera.setPosition(m_position + m_camera.getUp() * cameraHeight);
-		m_vangInst.getGraphicsAPI().displayCamera(m_camera);
+		VangInst::Get().getGraphicsAPI().displayCamera(m_camera);
 	}
 }

@@ -14,17 +14,18 @@
 
 namespace Vang::gfx::OpenGL {
 
-	GraphicsOpenGL::GraphicsOpenGL(VangInst& vangInst)
-		: GraphicsAPI{vangInst} {
+	GraphicsOpenGL::GraphicsOpenGL() {
 		initialize();
 	}
 
-	GraphicsOpenGL::GraphicsOpenGL(VangInst& vangInst, std::string_view applicationName)
-		: GraphicsAPI{vangInst, applicationName} {
+	GraphicsOpenGL::GraphicsOpenGL(std::string_view applicationName)
+		: GraphicsAPI{applicationName} {
 		initialize();
 	}
 
-	GraphicsOpenGL::~GraphicsOpenGL() { cleanup(); }
+	GraphicsOpenGL::~GraphicsOpenGL() {
+		cleanup();
+	}
 
 	void GraphicsOpenGL::beginFrame() {
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -47,9 +48,10 @@ namespace Vang::gfx::OpenGL {
 
 	void GraphicsOpenGL::initialize() {
 		initializeOpenGL();
+		Window& window = VangInst::Get().getWindow();
 		m_shaderProgramManager.initialize(DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER,
-										  DEFAULT_COMPUTE_SHADER, m_vangInst.getWindow().getWidth(),
-										  m_vangInst.getWindow().getHeight());
+										  DEFAULT_COMPUTE_SHADER, window.getWidth(),
+										  window.getHeight());
 	}
 
 	void GraphicsOpenGL::initializeOpenGL() {
@@ -63,9 +65,12 @@ namespace Vang::gfx::OpenGL {
 
 		glClearColor(0.0f, 0.4f, 0.0f, 1.0f);
 
-		windowResize(m_vangInst.getWindow().getWidth(), m_vangInst.getWindow().getHeight());
+		Window& window = VangInst::Get().getWindow();
+		windowResize(window.getWidth(), window.getHeight());
 	}
 
-	void GraphicsOpenGL::cleanup() { VANG_DEBUG("Closing OpenGL"); }
+	void GraphicsOpenGL::cleanup() {
+		VANG_DEBUG("Closing OpenGL");
+	}
 
 }

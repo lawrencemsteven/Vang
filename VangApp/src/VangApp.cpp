@@ -6,6 +6,7 @@
 
 int main() {
 	VangInst& vangInst = VangInst::Get("VangApp");
+	vangInst.initialize();
 	bool running	   = true;
 	while (running) {
 		vangInst.beginFrame();
@@ -27,10 +28,11 @@ int main() {
 #include "Vang/Utility/FileIO/FileIO.h"
 
 // settings
-const unsigned int SCR_WIDTH  = 1920;
-const unsigned int SCR_HEIGHT = 1080;
+const unsigned int SCR_WIDTH  = 1280;
+const unsigned int SCR_HEIGHT = 720;
 
 const std::string_view COMPUTE_SHADER_SOURCE = "../../../Vang/shaders/voxelRayMarcher.glsl";
+//const std::string_view COMPUTE_SHADER_SOURCE = "../../../Vang/shaders/2dSceneTest.glsl";
 
 class World {
 public:

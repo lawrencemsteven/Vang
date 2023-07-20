@@ -2,13 +2,11 @@
 
 #include <glm/glm.hpp>
 
-class VangInst;
-
 namespace Vang {
 
 	class Camera {
 	public:
-		Camera(VangInst& vangInst);
+		Camera()  = default;
 		~Camera() = default;
 
 		void setPosition(const glm::vec3& position);
@@ -42,7 +40,6 @@ namespace Vang {
 		float m_fov{90.0f};
 		std::optional<float> m_lastX;
 		std::optional<float> m_lastY;
-		VangInst& m_vangInst;
 	};
 
 }

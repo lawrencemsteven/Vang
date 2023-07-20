@@ -5,31 +5,30 @@
 
 namespace Vang {
 
-	WindowGLFW::WindowGLFW(VangInst& vangInst)
-		: Window(vangInst) {
+	WindowGLFW::WindowGLFW(){
 		initializeWindow();
 	}
 
-	WindowGLFW::WindowGLFW(VangInst& vangInst, std::string_view title)
-		: Window(vangInst, title) {
+	WindowGLFW::WindowGLFW(std::string_view title)
+		: Window(title) {
 		initializeWindow();
 	}
 
-	WindowGLFW::WindowGLFW(VangInst& vangInst, uint32_t width, uint32_t height)
-		: Window(vangInst, width, height) {
+	WindowGLFW::WindowGLFW(uint32_t width, uint32_t height)
+		: Window(width, height) {
 		initializeWindow();
 	}
 
-	WindowGLFW::WindowGLFW(VangInst& vangInst, std::string_view title, uint32_t width,
+	WindowGLFW::WindowGLFW(std::string_view title, uint32_t width,
 						   uint32_t height)
-		: Window(vangInst, title, width, height) {
+		: Window(title, width, height) {
 		initializeWindow();
 	}
 
 	WindowGLFW::~WindowGLFW() { close(); }
 
 	void WindowGLFW::beginFrame() {
-		if (glfwWindowShouldClose(m_window)) m_vangInst.toClose();
+		if (glfwWindowShouldClose(m_window)) VangInst::Get().toClose();
 
 		glfwSwapBuffers(m_window);
 		glfwPollEvents();
@@ -86,12 +85,12 @@ namespace Vang {
 	void WindowGLFW::resize(int width, int height) {
 		m_width	 = width;
 		m_height = height;
-		m_vangInst.getGraphicsAPI().windowResize(static_cast<uint32_t>(width),
+		VangInst::Get().getGraphicsAPI().windowResize(static_cast<uint32_t>(width),
 												 static_cast<uint32_t>(height));
 	}
 
 	void WindowGLFW::mouseCallback(double x_pos, double y_pos) {
-		m_vangInst.getPlayer().getCamera().mouseRotate(x_pos, y_pos);
+		VangInst::Get().getPlayer().getCamera().mouseRotate(x_pos, y_pos);
 	}
 
 	void WindowGLFW::resize(GLFWwindow* window, int width, int height) {

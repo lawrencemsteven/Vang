@@ -4,7 +4,6 @@
 #include "Vang/GraphicsAPI/Generic/GraphicsAPI.h"
 #include "Vang/Utility/Player/Player.h"
 
-// TODO: Move away from singleton
 class VangInst {
 public:
 	static VangInst& Get(std::string_view applicationName = "");
@@ -17,6 +16,8 @@ public:
 	const Vang::gfx::GraphicsAPI& getGraphicsAPI() const;
 	Vang::Player& getPlayer();
 	const Vang::Player& getPlayer() const;
+
+	void initialize();
 
 	void beginFrame();
 	void endFrame();

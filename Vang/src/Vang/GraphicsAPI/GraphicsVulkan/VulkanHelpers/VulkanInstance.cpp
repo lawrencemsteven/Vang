@@ -1,21 +1,24 @@
 #include "Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers/VulkanInstance.h"
 
+#include "Vang.h"
+
 namespace Vang::gfx::Vulkan {
 
 	const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation"};
 
-	VulkanInstance::VulkanInstance(const Window& window, std::string_view applicationName) {
-		createInstance(window, applicationName);
+	VulkanInstance::VulkanInstance(std::string_view applicationName) {
+		createInstance(applicationName);
 	}
 
 	VulkanInstance::~VulkanInstance() { vkDestroyInstance(m_instance, nullptr); }
 
-	void VulkanInstance::createInstance(const Window& window, std::string_view applicationName) {
+	void VulkanInstance::createInstance(std::string_view applicationName) {
 #ifdef VANG_GRAPHICSAPI_VULKAN_VALIDATION_LAYERS
 		if (!checkValidationLayerSupport()) {
 			VANG_FATAL("Validation layers requested, but not available!");
 		}
 #endif
+		Window& window = VangInst::Get().getWindow();
 
 		VkApplicationInfo appInfo{};
 		appInfo.sType			   = VK_STRUCTURE_TYPE_APPLICATION_INFO;

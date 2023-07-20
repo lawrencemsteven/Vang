@@ -4,35 +4,33 @@
 #include <glm/gtx/transform.hpp>
 
 namespace Vang {
-	Camera::Camera(VangInst& vangInst)
-		: m_vangInst{vangInst} {
-	}
+
 	void Camera::setPosition(const glm::vec3& position) {
 		m_position = position;
-		m_vangInst.getGraphicsAPI().displayCamera(*this);
+		VangInst::Get().getGraphicsAPI().displayCamera(*this);
 	}
 
 	void Camera::setFOV(float fov) {
 		m_fov = fov;
-		m_vangInst.getGraphicsAPI().displayCamera(*this);
+		VangInst::Get().getGraphicsAPI().displayCamera(*this);
 	}
 
 	void Camera::setLookSensitivity(float lookSensitivity) {
 		m_lookSensitivity = lookSensitivity;
-		m_vangInst.getGraphicsAPI().displayCamera(*this);
+		VangInst::Get().getGraphicsAPI().displayCamera(*this);
 	}
 
 	void Camera::rotateRight(float x_offset) {
 		m_yaw -= x_offset;
 		recalculateForward();
-		m_vangInst.getGraphicsAPI().displayCamera(*this);
+		VangInst::Get().getGraphicsAPI().displayCamera(*this);
 	}
 
 	void Camera::rotateUp(float y_offset) {
 		m_pitch += y_offset;
 		m_pitch = std::clamp(m_pitch, -89.0f, 89.0f);
 		recalculateForward();
-		m_vangInst.getGraphicsAPI().displayCamera(*this);
+		VangInst::Get().getGraphicsAPI().displayCamera(*this);
 	}
 
 	void Camera::mouseRotate(double x_pos, double y_pos) {
@@ -53,14 +51,14 @@ namespace Vang {
 
 		rotateRight(x_offset);
 		rotateUp(y_offset);
-		m_vangInst.getGraphicsAPI().displayCamera(*this);
+		VangInst::Get().getGraphicsAPI().displayCamera(*this);
 	}
 
 	void Camera::lookAt(const glm::vec3& look_at) {
 		VANG_ERROR("Camera::lookAt has not been implemented yet!");
 		// This can most likely be done with glm::lookat function, just needs to be implemented and
 		// tested.
-		m_vangInst.getGraphicsAPI().displayCamera(*this);
+		VangInst::Get().getGraphicsAPI().displayCamera(*this);
 	}
 
 	const glm::vec3& Camera::getPosition() const {

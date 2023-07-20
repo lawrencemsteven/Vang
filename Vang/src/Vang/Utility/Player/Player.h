@@ -2,13 +2,11 @@
 
 #include "Vang/Utility/Camera/Camera.h"
 
-class VangInst;
-
 namespace Vang {
 
 	class Player {
 	public:
-		Player(VangInst& vangInst);
+		Player()  = default;
 		~Player() = default;
 
 		void moveForward(float amount);
@@ -27,7 +25,6 @@ namespace Vang {
 		void updateCameraPosition();
 
 		// TODO: Make this editable, maybe somewhere to set player size or height?
-		VangInst& m_vangInst;
 		const float cameraHeight = 1.8f;
 		Camera m_camera;
 		glm::vec3 m_position{0.0f};

@@ -4,17 +4,16 @@
 
 namespace Vang::gfx::Vulkan {
 
-	GraphicsVulkan::GraphicsVulkan(VangInst& vangInst)
-		: GraphicsAPI{vangInst},
-		  m_vulkanInstance{
-			  std::make_unique<VulkanInstance>(m_vangInst.getWindow(), m_applicationName)} {
+	/* GraphicsVulkan::GraphicsVulkan(VangInst& vangInst)
+		: m_vulkanInstance{
+			  std::make_unique<VulkanInstance>(m_applicationName)} {
 		initialize();
 	}
 
 	GraphicsVulkan::GraphicsVulkan(VangInst& vangInst, std::string_view applicationName)
-		: GraphicsAPI{vangInst, applicationName},
+		: GraphicsAPI{applicationName},
 		  m_vulkanInstance{
-			  std::make_unique<VulkanInstance>(m_vangInst.getWindow(), m_applicationName)} {
+			  std::make_unique<VulkanInstance>(m_applicationName)} {
 		initialize();
 	}
 
@@ -26,6 +25,6 @@ namespace Vang::gfx::Vulkan {
 
 	void GraphicsVulkan::initialize() { VANG_DEBUG("Initializing Vulkan"); }
 
-	void GraphicsVulkan::cleanup() { VANG_DEBUG("Closing Vulkan"); }
+	void GraphicsVulkan::cleanup() { VANG_DEBUG("Closing Vulkan"); }*/
 
 }

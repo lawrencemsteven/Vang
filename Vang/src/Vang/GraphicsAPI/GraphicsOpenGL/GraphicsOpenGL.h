@@ -3,14 +3,12 @@
 #include "Vang/GraphicsAPI/Generic/GraphicsAPI.h"
 #include "Vang/GraphicsAPI/GraphicsOpenGL/Shaders/ShaderProgramManager.h"
 
-class VangInst;
-
 namespace Vang::gfx::OpenGL {
 
 	class GraphicsOpenGL : public GraphicsAPI {
 	public:
-		GraphicsOpenGL(VangInst& vangInst);
-		GraphicsOpenGL(VangInst& vangInst, std::string_view applicationName);
+		GraphicsOpenGL();
+		GraphicsOpenGL(std::string_view applicationName);
 		~GraphicsOpenGL();
 		GraphicsOpenGL(const GraphicsOpenGL&)			 = delete;
 		GraphicsOpenGL(GraphicsOpenGL&&)				 = delete;

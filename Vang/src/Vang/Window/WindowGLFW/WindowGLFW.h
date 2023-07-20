@@ -4,16 +4,14 @@
 
 #include "GLFW/glfw3.h"
 
-class VangInst;
-
 namespace Vang {
 
 	class WindowGLFW : public Window {
 	public:
-		WindowGLFW(VangInst& vangInst);
-		WindowGLFW(VangInst& vangInst, std::string_view title);
-		WindowGLFW(VangInst& vangInst, uint32_t width, uint32_t height);
-		WindowGLFW(VangInst& vangInst, std::string_view title, uint32_t width, uint32_t height);
+		WindowGLFW();
+		WindowGLFW(std::string_view title);
+		WindowGLFW(uint32_t width, uint32_t height);
+		WindowGLFW(std::string_view title, uint32_t width, uint32_t height);
 		~WindowGLFW();
 		WindowGLFW(const WindowGLFW&)	  = delete;
 		WindowGLFW(WindowGLFW&&)		  = delete;
