@@ -65,7 +65,7 @@ void VangInst::onEvent(Vang::Event& e) {
 }
 
 bool VangInst::mouseMovedEventHandler(Vang::MouseMovedEvent& e) {
-	m_player->getCamera().mouseRotate(e.getX(), e.getY());
+	m_player->getCamera().mouseRotate(e.getX(), -e.getY());
 	return true;
 }
 

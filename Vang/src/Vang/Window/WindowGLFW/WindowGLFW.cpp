@@ -80,6 +80,8 @@ namespace Vang {
 			VANG_FATAL("Failed to create GLFW Window!");
 		}
 
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 		setVSync(m_data.vSync);
 		glfwMakeContextCurrent(m_window);
 
