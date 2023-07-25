@@ -40,9 +40,21 @@ void VangInst::initialize() {
 	m_player	  = std::make_unique<Vang::Player>();
 }
 
+void VangInst::pushLayer(Vang::Layer* layer) {
+	m_layerStack.pushLayer(layer);
+}
+
+void VangInst::pushOverlay(Vang::Layer* overlay) {
+	m_layerStack.pushOverlay(overlay);
+}
+
 void VangInst::beginFrame() {
 	m_window->beginFrame();
 	m_graphicsAPI->beginFrame();
+
+	for (Vang::Layer* layer : m_layerStack) {
+		layer->onUpdate();
+	}
 }
 
 void VangInst::endFrame() {
@@ -62,6 +74,12 @@ bool VangInst::getToClose() {
 void VangInst::onEvent(Vang::Event& e) {
 	Vang::EventDispatcher dispatcher{e};
 	dispatcher.dispatch<Vang::MouseMovedEvent>(BIND_EVENT_FN(mouseMovedEventHandler));
+
+	for (auto it = m_layerStack.end(); it != m_layerStack.begin();) {
+		(*--it)->onEvent(e);
+		if (e.handled)
+			break;
+	}
 }
 
 bool VangInst::mouseMovedEventHandler(Vang::MouseMovedEvent& e) {

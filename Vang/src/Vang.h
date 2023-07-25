@@ -35,6 +35,9 @@ public:
 
 	void initialize();
 
+	void pushLayer(Vang::Layer* layer);
+	void pushOverlay(Vang::Layer* overlay);
+
 	void beginFrame();
 	void endFrame();
 
@@ -49,6 +52,7 @@ private:
 
 	std::string m_applicationName;
 	bool m_toClose;
+	Vang::LayerStack m_layerStack;
 
 	std::unique_ptr<Vang::Window> m_window;
 	std::unique_ptr<Vang::gfx::GraphicsAPI> m_graphicsAPI;
