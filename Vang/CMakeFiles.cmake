@@ -25,6 +25,13 @@ set(Vang_UTILITY_INPUT
     "./src/Vang/Utility/Input/Input.h"
 )
 
+set(Vang_UTILITY_LAYERS
+    "./src/Vang/Utility/Layers/Layer.h"
+    "./src/Vang/Utility/Layers/Layer.cpp"
+    "./src/Vang/Utility/Layers/LayerStack.h"
+    "./src/Vang/Utility/Layers/LayerStack.cpp"
+)
+
 set(Vang_UTILITY_LOGGING
     "./src/Vang/Utility/Logging/Log.h"
     "./src/Vang/Utility/Logging/Log.cpp"
@@ -95,6 +102,7 @@ set(Vang_FILES
     ${Vang_UTILITY_EVENTS}
     ${Vang_UTILITY_FILEIO}
     ${Vang_UTILITY_INPUT}
+    ${Vang_UTILITY_LAYERS}
     ${Vang_UTILITY_LOGGING}
     ${Vang_UTILITY_PLAYER}
     ${Vang_UTILITY_TIME}

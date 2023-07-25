@@ -16,6 +16,7 @@
 #include "Vang/GraphicsAPI/Generic/GraphicsAPI.h"
 #include "Vang/Utility/Events/Event.h"
 #include "Vang/Utility/Events/MouseEvent.h"
+#include "Vang/Utility/Layers/LayerStack.h"
 #include "Vang/Utility/Player/Player.h"
 #include "Vang/Window/Window.h"
 
