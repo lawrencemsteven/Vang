@@ -1,24 +1,13 @@
 #include "Vang.h"
 
-#ifdef VANG_GRAPHICSAPI_VULKAN
-#	include "Vang/GraphicsAPI/GraphicsVulkan/GraphicsVulkan.h"
-#	define VANG_CURRENT_GRAPHICSAPI Vang::gfx::Vulkan::GraphicsVulkan
-#elif VANG_GRAPHICSAPI_OPENGL
-#	include "Vang/GraphicsAPI/GraphicsOpenGL/GraphicsOpenGL.h"
-#	define VANG_CURRENT_GRAPHICSAPI Vang::gfx::OpenGL::GraphicsOpenGL
-#endif
+#define BIND_EVENT_FN(x) std::bind(&VangInst::x, this, std::placeholders::_1)
 
-#ifdef VANG_WINDOW_GLFW
-#	include "Vang/Window/WindowGLFW/WindowGLFW.h"
-#	define VANG_CURRENT_WINDOW Vang::WindowGLFW
-#endif
-
-VangInst& VangInst::Get(std::string_view applicationName) {
+VangInst& VangInst::Get(const std::string& applicationName) {
 	static VangInst s_vangInst{applicationName};
 	return s_vangInst;
 }
 
-std::string_view VangInst::getApplicationName() {
+const std::string& VangInst::getApplicationName() {
 	return m_applicationName;
 }
 
@@ -45,7 +34,8 @@ const Vang::Player& VangInst::getPlayer() const {
 }
 
 void VangInst::initialize() {
-	m_window	  = std::make_unique<VANG_CURRENT_WINDOW>(m_applicationName);
+	m_window	  = std::make_unique<VANG_CURRENT_WINDOW>(m_applicationName, 1920, 1080);
+	m_window->setEventCallback(BIND_EVENT_FN(onEvent));
 	m_graphicsAPI = std::make_unique<VANG_CURRENT_GRAPHICSAPI>(m_applicationName);
 	m_player	  = std::make_unique<Vang::Player>();
 }
@@ -67,6 +57,16 @@ void VangInst::toClose() {
 }
 bool VangInst::getToClose() {
 	return m_toClose;
+}
+
+void VangInst::onEvent(Vang::Event& e) {
+	Vang::EventDispatcher dispatcher{e};
+	dispatcher.dispatch<Vang::MouseMovedEvent>(BIND_EVENT_FN(mouseMovedEventHandler));
+}
+
+bool VangInst::mouseMovedEventHandler(Vang::MouseMovedEvent& e) {
+	m_player->getCamera().mouseRotate(e.getX(), e.getY());
+	return true;
 }
 
 void VangInst::cleanup() {

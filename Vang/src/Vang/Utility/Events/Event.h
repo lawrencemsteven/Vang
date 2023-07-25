@@ -1,7 +1,7 @@
 #pragma once
 
-namespace Tars {
-	// Events in Tars are currently blocking, meaning when an event occurs it immediately gets
+namespace Vang {
+	// Events in Vang are currently blocking, meaning when an event occurs it immediately gets
 	// dispatched and must be dealt with right then and there. For the future, a better strategy
 	// might be to buffer events in an event bus and process them during the "event" part of the
 	// update stage.
@@ -14,10 +14,6 @@ namespace Tars {
 		WindowFocus,
 		WindowLostFocus,
 		WindowMoved,
-
-		AppTick,
-		AppUpdate,
-		AppRender,
 
 		KeyPressed,
 		KeyReleased,

@@ -8,10 +8,7 @@ namespace Vang {
 
 	class WindowGLFW : public Window {
 	public:
-		WindowGLFW();
-		WindowGLFW(std::string_view title);
-		WindowGLFW(uint32_t width, uint32_t height);
-		WindowGLFW(std::string_view title, uint32_t width, uint32_t height);
+		WindowGLFW(const std::string& title, uint32_t width, uint32_t height);
 		~WindowGLFW();
 		WindowGLFW(const WindowGLFW&)	  = delete;
 		WindowGLFW(WindowGLFW&&)		  = delete;
@@ -23,17 +20,20 @@ namespace Vang {
 
 		const char** getGraphicsAPIInstanceExtensions(uint32_t* count) const override;
 
-		void setTitle(std::string_view title) override;
-
+		void setTitle(const std::string& title) override;
 		void setResolution(uint32_t width, uint32_t height) override;
-
-		void resize(int width, int height);
-		void mouseCallback(double xpos, double ypos);
+		void setEventCallback(const EventCallbackFn& callback) override;
+		void setVSync(bool enabled) override;
 
 	private:
 		void initializeWindow();
-		static void resize(GLFWwindow* window, int width, int height);
-		static void mouseCallback(GLFWwindow* window, double xpos, double ypos);
+		static void resizeCallback(GLFWwindow* window, int width, int height);
+		static void closeCallback(GLFWwindow* window);
+		static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		static void charCallback(GLFWwindow* window, unsigned int keycode);
+		static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+		static void mouseScrollCallback(GLFWwindow* window, double xOffset, double yOffset);
+		static void mouseMoveCallback(GLFWwindow* window, double xOffset, double yOffset);
 
 		GLFWwindow* m_window;
 	};

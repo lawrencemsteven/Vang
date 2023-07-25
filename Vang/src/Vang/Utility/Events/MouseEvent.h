@@ -1,16 +1,22 @@
 #pragma once
 
 #include "Event.h"
+#include "Vang/Utility/Input/Input.h"
 
-namespace Tars {
+namespace Vang {
 	class MouseMovedEvent : public Event {
 	public:
 		MouseMovedEvent(float x, float y)
 			: m_mouseX(x),
-			  m_mouseY(y) {}
+			  m_mouseY(y) {
+		}
 
-		inline float getX() const { return m_mouseX; }
-		inline float getY() const { return m_mouseY; }
+		inline float getX() const {
+			return m_mouseX;
+		}
+		inline float getY() const {
+			return m_mouseY;
+		}
 
 		std::string ToString() const override {
 			std::stringstream ss;
@@ -28,10 +34,15 @@ namespace Tars {
 	public:
 		MouseScrolledEvent(float xOffset, float yOffset)
 			: m_xOffset(xOffset),
-			  m_yOffset(yOffset) {}
+			  m_yOffset(yOffset) {
+		}
 
-		inline float getXOffset() const { return m_xOffset; }
-		inline float getYOffset() const { return m_yOffset; }
+		inline float getXOffset() const {
+			return m_xOffset;
+		}
+		inline float getYOffset() const {
+			return m_yOffset;
+		}
 
 		std::string ToString() const override {
 			std::stringstream ss;
@@ -47,24 +58,28 @@ namespace Tars {
 
 	class MouseButtonEvent : public Event {
 	public:
-		inline int getMouseButton() const { return m_button; }
+		inline Input::MOUSE getMouseButton() const {
+			return m_button;
+		}
 
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	protected:
-		MouseButtonEvent(int button)
-			: m_button(button) {}
+		MouseButtonEvent(Input::MOUSE button)
+			: m_button(button) {
+		}
 
-		int m_button;
+		Input::MOUSE m_button;
 	};
 
 	class MouseButtonPressedEvent : public MouseButtonEvent {
 	public:
-		MouseButtonPressedEvent(int button)
-			: MouseButtonEvent(button) {}
+		MouseButtonPressedEvent(Input::MOUSE button)
+			: MouseButtonEvent(button) {
+		}
 
 		std::string ToString() const override {
 			std::stringstream ss;
-			ss << "MouseButtonPressedEvent: " << m_button;
+			ss << "MouseButtonPressedEvent: " << static_cast<int>(m_button);
 			return ss.str();
 		}
 
@@ -73,12 +88,13 @@ namespace Tars {
 
 	class MouseButtonReleasedEvent : public MouseButtonEvent {
 	public:
-		MouseButtonReleasedEvent(int button)
-			: MouseButtonEvent(button) {}
+		MouseButtonReleasedEvent(Input::MOUSE button)
+			: MouseButtonEvent(button) {
+		}
 
 		std::string ToString() const override {
 			std::stringstream ss;
-			ss << "MouseButtonReleasedEvent: " << m_button;
+			ss << "MouseButtonReleasedEvent: " << static_cast<int>(m_button);
 			return ss.str();
 		}
 

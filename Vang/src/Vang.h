@@ -1,14 +1,29 @@
 #pragma once
 
-#include "Vang/Window/Window.h"
+#ifdef VANG_GRAPHICSAPI_VULKAN
+#	include "Vang/GraphicsAPI/GraphicsVulkan/GraphicsVulkan.h"
+#	define VANG_CURRENT_GRAPHICSAPI Vang::gfx::Vulkan::GraphicsVulkan
+#elif VANG_GRAPHICSAPI_OPENGL
+#	include "Vang/GraphicsAPI/GraphicsOpenGL/GraphicsOpenGL.h"
+#	define VANG_CURRENT_GRAPHICSAPI Vang::gfx::OpenGL::GraphicsOpenGL
+#endif
+
+#ifdef VANG_WINDOW_GLFW
+#	include "Vang/Window/WindowGLFW/WindowGLFW.h"
+#	define VANG_CURRENT_WINDOW Vang::WindowGLFW
+#endif
+
 #include "Vang/GraphicsAPI/Generic/GraphicsAPI.h"
+#include "Vang/Utility/Events/Event.h"
+#include "Vang/Utility/Events/MouseEvent.h"
 #include "Vang/Utility/Player/Player.h"
+#include "Vang/Window/Window.h"
 
 class VangInst {
 public:
-	static VangInst& Get(std::string_view applicationName = "");
+	static VangInst& Get(const std::string& applicationName = "");
 
-	std::string_view getApplicationName();
+	const std::string& getApplicationName();
 
 	Vang::Window& getWindow();
 	const Vang::Window& getWindow() const;
@@ -25,10 +40,13 @@ public:
 	void toClose();
 	bool getToClose();
 
+	void onEvent(Vang::Event& e);
+	bool mouseMovedEventHandler(Vang::MouseMovedEvent& e);
+
 private:
 	void cleanup();
 
-	std::string_view m_applicationName;
+	std::string m_applicationName;
 	bool m_toClose;
 
 	std::unique_ptr<Vang::Window> m_window;

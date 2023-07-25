@@ -1,5 +1,7 @@
 #pragma once
 
+#include "glad/glad.h"
+
 #include "Vang/GraphicsAPI/Generic/GraphicsAPI.h"
 #include "Vang/GraphicsAPI/GraphicsOpenGL/Shaders/ShaderProgramManager.h"
 
