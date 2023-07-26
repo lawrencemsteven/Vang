@@ -21,6 +21,7 @@ source_group("Vang/GraphicsAPI/GraphicsVulkan" FILES ${Vang_GRAPHICSAPI_GRAPHICS
 source_group("Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers" FILES ${Vang_GRAPHICSAPI_GRAPHICSVULKAN_VULKANHELPERS})
 source_group("Vang/GraphicsAPI/GraphicsOpenGL" FILES ${Vang_GRAPHICSAPI_GRAPHICSOPENGL})
 source_group("Vang/GraphicsAPI/GraphicsOpenGL/Shaders" FILES ${Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADERS})
+source_group("Vang/Voxel" FILES ${Vang_VOXEL})
 
 # WINDOW API'S:
 #   VANG_WINDOW_GLFW

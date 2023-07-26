@@ -99,6 +99,17 @@ set(Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADERS
     "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/VertexData.cpp"
 )
 
+set(Vang_VOXEL
+    "./src/Vang/Voxel/Block.cpp"
+    "./src/Vang/Voxel/Block.h"
+    "./src/Vang/Voxel/Chunk.cpp"
+    "./src/Vang/Voxel/Chunk.h"
+    "./src/Vang/Voxel/Universe.cpp"
+    "./src/Vang/Voxel/Universe.h"
+    "./src/Vang/Voxel/Chunk.cpp"
+    "./src/Vang/Voxel/Chunk.h"
+)
+
 set(Vang_FILES
     ${Vang_Vang}
     ${Vang_UTILITY_CAMERA}
@@ -118,4 +129,5 @@ set(Vang_FILES
     ${Vang_GRAPHICSAPI_GRAPHICSVULKAN_VULKANHELPERS}
     ${Vang_GRAPHICSAPI_GRAPHICSOPENGL}
     ${Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADERS}
+    ${Vang_VOXEL}
 )
