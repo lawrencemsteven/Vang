@@ -48,19 +48,18 @@ void VangInst::pushOverlay(Vang::Layer* overlay) {
 	m_layerStack.pushOverlay(overlay);
 }
 
-void VangInst::beginFrame() {
-	m_window->beginFrame();
-	m_graphicsAPI->beginFrame();
+void VangInst::update() {
+	m_window->update();
+	m_graphicsAPI->update();
 
 	for (Vang::Layer* layer : m_layerStack) {
 		layer->onUpdate();
 	}
-}
-
-void VangInst::endFrame() {
-
-	if (m_toClose)
+	
+	Vang::Time::updateDeltaTime();
+	if (m_toClose) {
 		cleanup();
+	}
 }
 
 void VangInst::toClose() {
@@ -72,19 +71,11 @@ bool VangInst::getToClose() {
 }
 
 void VangInst::onEvent(Vang::Event& e) {
-	Vang::EventDispatcher dispatcher{e};
-	dispatcher.dispatch<Vang::MouseMovedEvent>(BIND_EVENT_FN(mouseMovedEventHandler));
-
 	for (auto it = m_layerStack.end(); it != m_layerStack.begin();) {
 		(*--it)->onEvent(e);
 		if (e.handled)
 			break;
 	}
-}
-
-bool VangInst::mouseMovedEventHandler(Vang::MouseMovedEvent& e) {
-	m_player->getCamera().mouseRotate(e.getX(), -e.getY());
-	return true;
 }
 
 void VangInst::cleanup() {

@@ -58,22 +58,22 @@ namespace Vang {
 
 	class MouseButtonEvent : public Event {
 	public:
-		inline Input::MOUSE getMouseButton() const {
+		inline MOUSE getMouseButton() const {
 			return m_button;
 		}
 
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	protected:
-		MouseButtonEvent(Input::MOUSE button)
+		MouseButtonEvent(MOUSE button)
 			: m_button(button) {
 		}
 
-		Input::MOUSE m_button;
+		MOUSE m_button;
 	};
 
 	class MouseButtonPressedEvent : public MouseButtonEvent {
 	public:
-		MouseButtonPressedEvent(Input::MOUSE button)
+		MouseButtonPressedEvent(MOUSE button)
 			: MouseButtonEvent(button) {
 		}
 
@@ -88,7 +88,7 @@ namespace Vang {
 
 	class MouseButtonReleasedEvent : public MouseButtonEvent {
 	public:
-		MouseButtonReleasedEvent(Input::MOUSE button)
+		MouseButtonReleasedEvent(MOUSE button)
 			: MouseButtonEvent(button) {
 		}
 

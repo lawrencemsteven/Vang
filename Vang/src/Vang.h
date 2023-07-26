@@ -18,6 +18,7 @@
 #include "Vang/Utility/Events/MouseEvent.h"
 #include "Vang/Utility/Layers/LayerStack.h"
 #include "Vang/Utility/Player/Player.h"
+#include "Vang/Utility/Time/Time.h"
 #include "Vang/Window/Window.h"
 
 class VangInst {
@@ -38,14 +39,12 @@ public:
 	void pushLayer(Vang::Layer* layer);
 	void pushOverlay(Vang::Layer* overlay);
 
-	void beginFrame();
-	void endFrame();
+	void update();
 
 	void toClose();
 	bool getToClose();
 
 	void onEvent(Vang::Event& e);
-	bool mouseMovedEventHandler(Vang::MouseMovedEvent& e);
 
 private:
 	void cleanup();

@@ -18,7 +18,7 @@ namespace Vang::gfx::Vulkan {
 		GraphicsVulkan& operator=(const GraphicsVulkan&) = delete;
 		GraphicsVulkan& operator=(GraphicsVulkan&&)		 = delete;
 
-		void beginFrame() override;
+		void update() override;
 
 		void windowResize(uint32_t width, uint32_t height) override;
 

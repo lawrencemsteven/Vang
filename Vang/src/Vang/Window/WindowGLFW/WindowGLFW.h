@@ -15,7 +15,7 @@ namespace Vang {
 		WindowGLFW& operator=(const WindowGLFW&) = delete;
 		WindowGLFW& operator=(WindowGLFW&&)		 = delete;
 
-		void beginFrame() override;
+		void update() override;
 		void close() override;
 
 		const char** getGraphicsAPIInstanceExtensions(uint32_t* count) const override;
@@ -24,6 +24,8 @@ namespace Vang {
 		void setResolution(uint32_t width, uint32_t height) override;
 		void setEventCallback(const EventCallbackFn& callback) override;
 		void setVSync(bool enabled) override;
+
+		void* getNativeWindow() const override;
 
 	private:
 		void initializeWindow();

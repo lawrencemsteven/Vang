@@ -10,7 +10,7 @@ namespace Vang {
 
 		Window(const std::string& title, uint32_t width, uint32_t height);
 
-		virtual void beginFrame() = 0;
+		virtual void update() = 0;
 		virtual void close()	  = 0;
 
 		virtual const char** getGraphicsAPIInstanceExtensions(uint32_t* count) const = 0;
@@ -24,6 +24,8 @@ namespace Vang {
 		virtual void setResolution(uint32_t width, uint32_t height)	   = 0;
 		virtual void setEventCallback(const EventCallbackFn& callback) = 0;
 		virtual void setVSync(bool enabled)							   = 0;
+
+		virtual void* getNativeWindow() const = 0;
 
 	protected:
 		struct WindowData {

@@ -27,15 +27,9 @@ namespace Vang::gfx::OpenGL {
 		cleanup();
 	}
 
-	void GraphicsOpenGL::beginFrame() {
+	void GraphicsOpenGL::update() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		m_shaderProgramManager.update();
-	}
-
-	void GraphicsOpenGL::endFrame() {
-		glClear(GL_COLOR_BUFFER_BIT);
-		glFlush();
-		Time::updateDeltaTime();
 	}
 
 	void GraphicsOpenGL::windowResize(uint32_t width, uint32_t height) {

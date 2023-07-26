@@ -6,19 +6,19 @@
 namespace Vang {
 	class KeyEvent : public Event {
 	public:
-		inline Input::KEY getKeyCode() const { return m_keyCode; }
+		inline KEY getKeyCode() const { return m_keyCode; }
 
 		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 	protected:
-		KeyEvent(Input::KEY keycode)
+		KeyEvent(KEY keycode)
 			: m_keyCode(keycode) {}
 
-		Input::KEY m_keyCode;
+		KEY m_keyCode;
 	};
 
 	class KeyPressedEvent : public KeyEvent {
 	public:
-		KeyPressedEvent(Input::KEY keycode, int repeatCount)
+		KeyPressedEvent(KEY keycode, int repeatCount)
 			: KeyEvent(keycode),
 			  m_repeatCount(repeatCount) {}
 
@@ -37,7 +37,7 @@ namespace Vang {
 
 	class KeyReleasedEvent : public KeyEvent {
 	public:
-		KeyReleasedEvent(Input::KEY keycode)
+		KeyReleasedEvent(KEY keycode)
 			: KeyEvent(keycode) {}
 
 		std::string ToString() const override {
@@ -51,7 +51,7 @@ namespace Vang {
 
 	class KeyTypedEvent : public KeyEvent {
 	public:
-		KeyTypedEvent(Input::KEY keycode)
+		KeyTypedEvent(KEY keycode)
 			: KeyEvent(keycode) {}
 
 		std::string ToString() const override {

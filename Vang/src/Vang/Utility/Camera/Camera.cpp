@@ -72,13 +72,13 @@ namespace Vang {
 	const glm::vec3& Camera::getGroundedForward() const {
 		// TODO: This should also take into account the current Universe's up vector and not be hard
 		// coded to 1 on x and z.
-		return glm::normalize(getForward() * glm::vec3{1.0f, 0.0f, 1.0f});
+		return glm::normalize(m_forward * glm::vec3{1.0f, 0.0f, 1.0f});
 	}
 
 	const glm::vec3& Camera::getGroundedRight() const {
 		// TODO: This should be the world up vector and NOT the camera up vector. Since the camera
 		// does not currently support any other directions for the up vector this will work for now.
-		return glm::normalize(glm::cross(m_up, getGroundedForward()));
+		return -glm::normalize(glm::cross(m_forward * glm::vec3{1.0f, 0.0f, 1.0f}, m_up));
 	}
 
 	const glm::vec3& Camera::getUp() const {

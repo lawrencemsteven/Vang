@@ -23,6 +23,7 @@ set(Vang_UTILITY_FILEIO
 
 set(Vang_UTILITY_INPUT
     "./src/Vang/Utility/Input/Input.h"
+    "./src/Vang/Utility/Input/Input.cpp"
 )
 
 set(Vang_UTILITY_LAYERS
@@ -55,6 +56,8 @@ set(Vang_WINDOW
 set(Vang_WINDOW_WINDOWGLFW
     "./src/Vang/Window/WindowGLFW/WindowGLFW.h"
     "./src/Vang/Window/WindowGLFW/WindowGLFW.cpp"
+    "./src/Vang/Window/WindowGLFW/InputGLFW.h"
+    "./src/Vang/Window/WindowGLFW/InputGLFW.cpp"
 )
 
 set(Vang_GRAPHICSAPI

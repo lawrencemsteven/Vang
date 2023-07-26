@@ -17,7 +17,7 @@ namespace Vang {
 		close();
 	}
 
-	void WindowGLFW::beginFrame() {
+	void WindowGLFW::update() {
 		if (glfwWindowShouldClose(m_window))
 			VangInst::Get().toClose();
 
@@ -56,6 +56,10 @@ namespace Vang {
 		}
 
 		m_data.vSync = enabled;
+	}
+
+	void* WindowGLFW::getNativeWindow() const {
+		return m_window;
 	}
 
 	void WindowGLFW::initializeWindow() {
@@ -117,17 +121,17 @@ namespace Vang {
 
 		switch (action) {
 			case GLFW_PRESS: {
-				KeyPressedEvent event{static_cast<Input::KEY>(key), 0};
+				KeyPressedEvent event{static_cast<KEY>(key), 0};
 				data.eventCallback(event);
 				break;
 			}
 			case GLFW_RELEASE: {
-				KeyReleasedEvent event{static_cast<Input::KEY>(key)};
+				KeyReleasedEvent event{static_cast<KEY>(key)};
 				data.eventCallback(event);
 				break;
 			}
 			case GLFW_REPEAT: {
-				KeyPressedEvent event{static_cast<Input::KEY>(key), 1};
+				KeyPressedEvent event{static_cast<KEY>(key), 1};
 				data.eventCallback(event);
 				break;
 			}
@@ -137,7 +141,7 @@ namespace Vang {
 	void WindowGLFW::charCallback(GLFWwindow* window, unsigned int keycode) {
 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-		KeyTypedEvent event{static_cast<Input::KEY>(keycode)};
+		KeyTypedEvent event{static_cast<KEY>(keycode)};
 		data.eventCallback(event);
 	}
 
@@ -146,12 +150,12 @@ namespace Vang {
 
 		switch (action) {
 			case GLFW_PRESS: {
-				MouseButtonPressedEvent event{static_cast<Input::MOUSE>(button)};
+				MouseButtonPressedEvent event{static_cast<MOUSE>(button)};
 				data.eventCallback(event);
 				break;
 			}
 			case GLFW_RELEASE: {
-				MouseButtonReleasedEvent event{static_cast<Input::MOUSE>(button)};
+				MouseButtonReleasedEvent event{static_cast<MOUSE>(button)};
 				data.eventCallback(event);
 				break;
 			}

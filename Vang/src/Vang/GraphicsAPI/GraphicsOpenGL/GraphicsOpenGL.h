@@ -17,8 +17,7 @@ namespace Vang::gfx::OpenGL {
 		GraphicsOpenGL& operator=(const GraphicsOpenGL&) = delete;
 		GraphicsOpenGL& operator=(GraphicsOpenGL&&)		 = delete;
 
-		void beginFrame() override;
-		void endFrame() override;
+		void update() override;
 
 		void windowResize(uint32_t width, uint32_t height) override;
 

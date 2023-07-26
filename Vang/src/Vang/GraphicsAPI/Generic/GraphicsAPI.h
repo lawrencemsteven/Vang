@@ -9,8 +9,7 @@ namespace Vang::gfx {
 		GraphicsAPI();
 		GraphicsAPI(std::string_view application_name);
 
-		virtual void beginFrame() = 0;
-		virtual void endFrame()	  = 0;
+		virtual void update() = 0;
 
 		std::string_view getApplicationName();
 
