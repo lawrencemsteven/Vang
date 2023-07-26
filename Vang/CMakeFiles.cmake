@@ -106,8 +106,8 @@ set(Vang_VOXEL
     "./src/Vang/Voxel/Chunk.h"
     "./src/Vang/Voxel/Universe.cpp"
     "./src/Vang/Voxel/Universe.h"
-    "./src/Vang/Voxel/Chunk.cpp"
-    "./src/Vang/Voxel/Chunk.h"
+    "./src/Vang/Voxel/World.cpp"
+    "./src/Vang/Voxel/World.h"
 )
 
 set(Vang_FILES
