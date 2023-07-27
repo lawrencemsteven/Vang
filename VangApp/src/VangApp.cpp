@@ -47,6 +47,7 @@ int main() {
 	bool running	   = true;
 	while (running) {
 		vangInst.update();
+
 		if (vangInst.getToClose())
 			running = false;
 	}

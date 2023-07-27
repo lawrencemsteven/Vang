@@ -48,6 +48,20 @@ set(Vang_UTILITY_TIME
     "./src/Vang/Utility/Time/Time.cpp"
 )
 
+set(Vang_ITEMS
+    "./src/Vang/Items/Item.h"
+    "./src/Vang/Items/Item.cpp"
+)
+
+set(Vang_ITEMS_USABILITY
+    "./src/Vang/Items/Usability/Placeable.h"
+    "./src/Vang/Items/Usability/Placeable.cpp"
+    "./src/Vang/Items/Usability/Unusable.h"
+    "./src/Vang/Items/Usability/Unusable.cpp"
+    "./src/Vang/Items/Usability/Usability.h"
+    "./src/Vang/Items/Usability/Usability.cpp"
+)
+
 set(Vang_WINDOW
     "./src/Vang/Window/Window.h"
     "./src/Vang/Window/Window.cpp"
@@ -120,6 +134,8 @@ set(Vang_FILES
     ${Vang_UTILITY_LOGGING}
     ${Vang_UTILITY_PLAYER}
     ${Vang_UTILITY_TIME}
+    ${Vang_ITEMS}
+    ${Vang_ITEMS_USABILITY}
     ${Vang_WINDOW}
     ${Vang_WINDOW_WINDOWGLFW}
     ${Vang_GRAPHICSAPI}
