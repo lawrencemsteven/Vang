@@ -62,3 +62,5 @@ target_precompile_headers(Vang
 	PUBLIC
 		"./src/VangPCH.h"
 )
+
+add_subdirectory("tests")
