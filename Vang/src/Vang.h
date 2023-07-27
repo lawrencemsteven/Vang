@@ -19,6 +19,7 @@
 #include "Vang/Utility/Layers/LayerStack.h"
 #include "Vang/Utility/Player/Player.h"
 #include "Vang/Utility/Time/Time.h"
+#include "Vang/Voxel/Universe.h"
 #include "Vang/Window/Window.h"
 
 class VangInst {
