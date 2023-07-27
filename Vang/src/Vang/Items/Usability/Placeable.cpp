@@ -2,7 +2,15 @@
 
 #include "Vang/Items/Item.h"
 
-void Vang::Placeable::use(Item& item) {
-	VANG_INFO("PLACE ITEM!");
-	VANG_INFO(item.getName());
+namespace Vang {
+
+	void Placeable::use(Item& item) {
+		VANG_INFO("PLACE ITEM!");
+		VANG_INFO(item.getName());
+	}
+
+	UsabilityType Placeable::getType() const {
+		return UsabilityType::Placeable;
+	}
+
 }
