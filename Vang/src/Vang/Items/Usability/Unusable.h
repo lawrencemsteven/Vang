@@ -6,7 +6,7 @@ namespace Vang {
 
 	class Unusable : public Usability {
 	public:
-		void use(Item& item) override;
+		void use(Item& item) const override;
 		UsabilityType getType() const override;
 	};
 

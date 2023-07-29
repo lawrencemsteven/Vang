@@ -1,14 +1,14 @@
 #pragma once
 
+#include "BlockBlueprint.h"
 #include "Vang/Items/Item.h"
 
-
-// TODO: Some way to define a texture? Maybe a texture is just a number corresponding to the surface
-// shader?
 namespace Vang {
 
 	class Block : public Item {
-	
+	public:
+		Block(const BlockBlueprint& blockBlueprint);
+		Block(const BlockBlueprint& blockBlueprint, uint32_t amount);
 	};
 
 }

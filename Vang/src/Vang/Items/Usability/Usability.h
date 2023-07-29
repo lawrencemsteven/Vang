@@ -12,7 +12,7 @@ namespace Vang {
 
 	class Usability {
 	public:
-		virtual void use(Item&)				  = 0;
+		virtual void use(Item&) const		  = 0;
 		virtual UsabilityType getType() const = 0;
 
 		static std::unique_ptr<Usability> createFromType(UsabilityType usabilityType);

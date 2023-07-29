@@ -14,6 +14,7 @@
 #endif
 
 #include "Vang/GraphicsAPI/Generic/GraphicsAPI.h"
+#include "Vang/Utility/BlueprintContainer/BlueprintContainer.h"
 #include "Vang/Utility/Events/Event.h"
 #include "Vang/Utility/Events/MouseEvent.h"
 #include "Vang/Utility/Layers/LayerStack.h"

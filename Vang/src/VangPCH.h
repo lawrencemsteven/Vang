@@ -9,6 +9,7 @@
 #include <fstream>
 #include <map>
 #include <memory>
+#include <set>
 #include <source_location>
 #include <stdexcept>
 #include <string_view>

@@ -4,6 +4,11 @@ set(Vang_Vang
     "./src/Vang.cpp"
 )
 
+set(Vang_UTILITY_BLUEPRINTCONTAINER
+    "./src/Vang/Utility/BlueprintContainer/BlueprintContainer.h"
+    "./src/Vang/Utility/BlueprintContainer/BlueprintContainer.cpp"
+)
+
 set(Vang_UTILITY_CAMERA
     "./src/Vang/Utility/Camera/Camera.h"
     "./src/Vang/Utility/Camera/Camera.cpp"
@@ -51,6 +56,8 @@ set(Vang_UTILITY_TIME
 set(Vang_ITEMS
     "./src/Vang/Items/Item.h"
     "./src/Vang/Items/Item.cpp"
+    "./src/Vang/Items/ItemBlueprint.h"
+    "./src/Vang/Items/ItemBlueprint.cpp"
 )
 
 set(Vang_ITEMS_USABILITY
@@ -60,6 +67,13 @@ set(Vang_ITEMS_USABILITY
     "./src/Vang/Items/Usability/Unusable.cpp"
     "./src/Vang/Items/Usability/Usability.h"
     "./src/Vang/Items/Usability/Usability.cpp"
+)
+
+set(Vang_MODDING
+    "./src/Vang/Modding/Mod.h"
+    "./src/Vang/Modding/Mod.cpp"
+    "./src/Vang/Modding/ModManager.h"
+    "./src/Vang/Modding/ModManager.cpp"
 )
 
 set(Vang_WINDOW
@@ -114,18 +128,21 @@ set(Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADERS
 )
 
 set(Vang_VOXEL
-    "./src/Vang/Voxel/Block.cpp"
     "./src/Vang/Voxel/Block.h"
-    "./src/Vang/Voxel/Chunk.cpp"
+    "./src/Vang/Voxel/Block.cpp"
+    "./src/Vang/Voxel/BlockBlueprint.h"
+    "./src/Vang/Voxel/BlockBlueprint.cpp"
     "./src/Vang/Voxel/Chunk.h"
-    "./src/Vang/Voxel/Universe.cpp"
+    "./src/Vang/Voxel/Chunk.cpp"
     "./src/Vang/Voxel/Universe.h"
-    "./src/Vang/Voxel/World.cpp"
+    "./src/Vang/Voxel/Universe.cpp"
     "./src/Vang/Voxel/World.h"
+    "./src/Vang/Voxel/World.cpp"
 )
 
 set(Vang_FILES
     ${Vang_Vang}
+    ${Vang_UTILITY_BLUEPRINTCONTAINER}
     ${Vang_UTILITY_CAMERA}
     ${Vang_UTILITY_EVENTS}
     ${Vang_UTILITY_FILEIO}
@@ -136,6 +153,7 @@ set(Vang_FILES
     ${Vang_UTILITY_TIME}
     ${Vang_ITEMS}
     ${Vang_ITEMS_USABILITY}
+    ${Vang_MODDING}
     ${Vang_WINDOW}
     ${Vang_WINDOW_WINDOWGLFW}
     ${Vang_GRAPHICSAPI}

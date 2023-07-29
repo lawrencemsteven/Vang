@@ -4,9 +4,9 @@
 
 namespace Vang {
 
-	void Placeable::use(Item& item) {
+	void Placeable::use(Item& item) const {
 		VANG_INFO("PLACE ITEM!");
-		VANG_INFO(item.getName());
+		VANG_INFO(item.getBlueprint().getFullTechnicalName());
 	}
 
 	UsabilityType Placeable::getType() const {
