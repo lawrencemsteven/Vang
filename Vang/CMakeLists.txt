@@ -37,6 +37,7 @@ source_group("Vang/Voxel" FILES ${Vang_VOXEL})
 
 # OTHER:
 #   VANG_DEBUG - Log warning, info, and debug
+#	VANG_BLOCK_LOGGING_COUT - Block logging cout messages (unit_tests)
 target_compile_definitions(Vang
 	PRIVATE
 		VANG_WINDOW_GLFW

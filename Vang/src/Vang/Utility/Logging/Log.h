@@ -1,5 +1,6 @@
 #pragma once
 
+
 #ifdef VANG_DEBUG
 #	define VANG_FATAL(message) Vang::Log::Fatal(message);
 #	define VANG_ERROR(message) Vang::Log::Error(message);
@@ -7,9 +8,9 @@
 #	define VANG_INFO(message) Vang::Log::Info(message);
 #	define VANG_DEBUG(message) Vang::Log::Debug(message);
 #else
-#	define VANG_FATAL(message)
+#	define VANG_FATAL(message) Vang::Log::FatalExceptionOnly(message);
 #	define VANG_ERROR(message)
-#	define VANG_WARN(message) 
+#	define VANG_WARN(message)
 #	define VANG_INFO(message)
 #	define VANG_DEBUG(message)
 #endif
@@ -38,6 +39,8 @@ namespace Vang {
 		static void Error(const std::string_view message,
 						  const std::source_location location = std::source_location::current());
 		static void Fatal(const std::string_view message,
+						  const std::source_location location = std::source_location::current());
+		static void FatalExceptionOnly(const std::string_view message,
 						  const std::source_location location = std::source_location::current());
 
 	private:
