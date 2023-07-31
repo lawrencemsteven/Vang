@@ -6,7 +6,6 @@ set(Vang_Vang
 
 set(Vang_UTILITY_BLUEPRINTCONTAINER
     "./src/Vang/Utility/BlueprintContainer/BlueprintContainer.h"
-    "./src/Vang/Utility/BlueprintContainer/BlueprintContainer.cpp"
 )
 
 set(Vang_UTILITY_CAMERA

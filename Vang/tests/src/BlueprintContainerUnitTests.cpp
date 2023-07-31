@@ -234,20 +234,18 @@ TEST_CASE("BlueprintContainer.setBlueprintId()") {
 		Mod mod{"Default"};
 		uint32_t numItems = 10;
 
+		std::cout << "Test0\n";
 		for (uint32_t i = 0; i < numItems; i++) {
 			itemBlueprintContainer.addBlueprint(
 				{mod, "Test_Item_" + std::to_string(i), "Test Item " + std::to_string(i)});
 		}
-
-		for (uint32_t i = 0; i < numItems; i++) {
-			itemBlueprintContainer.getBlueprintId(mod.getName() + "::Test_Item_" +
-												  std::to_string(i));
-		}
+		std::cout << "Test1\n";
 
 		CHECK(itemBlueprintContainer.setBlueprintId(mod.getName() + "::Test_Item_0", numItems - 1));
 		CHECK(itemBlueprintContainer.getBlueprintId(mod.getName() + "::Test_Item_0").value() ==
 			  numItems - 1);
 
+		std::cout << "Test\n";
 		for (uint32_t i = 1; i < numItems; i++) {
 			CHECK(itemBlueprintContainer.setBlueprintId(
 				mod.getName() + "::Test_Item_" + std::to_string(i), i - 1));
@@ -255,6 +253,7 @@ TEST_CASE("BlueprintContainer.setBlueprintId()") {
 					  .getBlueprintId(mod.getName() + "::Test_Item_" + std::to_string(i))
 					  .value() == i - 1);
 		}
+		std::cout << "Test2\n";
 	}
 }
 

@@ -1,5 +1,7 @@
 #include "Vang.h"
 
+using namespace Vang;
+
 #define BIND_EVENT_FN(x) std::bind(&VangInst::x, this, std::placeholders::_1)
 
 VangInst& VangInst::Get(const std::string& applicationName) {
@@ -11,40 +13,63 @@ const std::string& VangInst::getApplicationName() {
 	return m_applicationName;
 }
 
-Vang::Window& VangInst::getWindow() {
+Window& VangInst::getWindow() {
 	return *m_window;
 }
-const Vang::Window& VangInst::getWindow() const {
+const Window& VangInst::getWindow() const {
 	return *m_window;
 }
 
-Vang::gfx::GraphicsAPI& VangInst::getGraphicsAPI() {
+gfx::GraphicsAPI& VangInst::getGraphicsAPI() {
 	return *m_graphicsAPI;
 }
-const Vang::gfx::GraphicsAPI& VangInst::getGraphicsAPI() const {
+const gfx::GraphicsAPI& VangInst::getGraphicsAPI() const {
 	return *m_graphicsAPI;
 }
 
-Vang::Player& VangInst::getPlayer() {
-	return *m_player;
+Player& VangInst::getPlayer() {
+	return m_player;
 }
 
-const Vang::Player& VangInst::getPlayer() const {
-	return *m_player;
+const Player& VangInst::getPlayer() const {
+	return m_player;
+}
+
+BlueprintContainer<BlockBlueprint>& VangInst::getBlockManager() {
+	return m_blockManager;
+}
+
+const BlueprintContainer<BlockBlueprint>& VangInst::getBlockManager() const {
+	return m_blockManager;
+}
+
+BlueprintContainer<ItemBlueprint>& VangInst::getItemManager() {
+	return m_itemManager;
+}
+
+const BlueprintContainer<ItemBlueprint>& VangInst::getItemManager() const {
+	return m_itemManager;
+}
+
+ModManager& VangInst::getModManager() {
+	return m_modManager;
+}
+
+const ModManager& VangInst::getModManager() const {
+	return m_modManager;
 }
 
 void VangInst::initialize() {
-	m_window	  = std::make_unique<VANG_CURRENT_WINDOW>(m_applicationName, 1920, 1080);
+	m_window = std::make_unique<VANG_CURRENT_WINDOW>(m_applicationName, 1920, 1080);
 	m_window->setEventCallback(BIND_EVENT_FN(onEvent));
 	m_graphicsAPI = std::make_unique<VANG_CURRENT_GRAPHICSAPI>(m_applicationName);
-	m_player	  = std::make_unique<Vang::Player>();
 }
 
-void VangInst::pushLayer(Vang::Layer* layer) {
+void VangInst::pushLayer(Layer* layer) {
 	m_layerStack.pushLayer(layer);
 }
 
-void VangInst::pushOverlay(Vang::Layer* overlay) {
+void VangInst::pushOverlay(Layer* overlay) {
 	m_layerStack.pushOverlay(overlay);
 }
 
@@ -52,11 +77,11 @@ void VangInst::update() {
 	m_window->update();
 	m_graphicsAPI->update();
 
-	for (Vang::Layer* layer : m_layerStack) {
+	for (Layer* layer : m_layerStack) {
 		layer->onUpdate();
 	}
 	
-	Vang::Time::updateDeltaTime();
+	Time::updateDeltaTime();
 	if (m_toClose) {
 		cleanup();
 	}
@@ -70,7 +95,7 @@ bool VangInst::getToClose() {
 	return m_toClose;
 }
 
-void VangInst::onEvent(Vang::Event& e) {
+void VangInst::onEvent(Event& e) {
 	for (auto it = m_layerStack.end(); it != m_layerStack.begin();) {
 		(*--it)->onEvent(e);
 		if (e.handled)

@@ -14,6 +14,7 @@
 #endif
 
 #include "Vang/GraphicsAPI/Generic/GraphicsAPI.h"
+#include "Vang/Modding/ModManager.h"
 #include "Vang/Utility/BlueprintContainer/BlueprintContainer.h"
 #include "Vang/Utility/Events/Event.h"
 #include "Vang/Utility/Events/MouseEvent.h"
@@ -35,6 +36,12 @@ public:
 	const Vang::gfx::GraphicsAPI& getGraphicsAPI() const;
 	Vang::Player& getPlayer();
 	const Vang::Player& getPlayer() const;
+	Vang::BlueprintContainer<Vang::BlockBlueprint>& getBlockManager();
+	const Vang::BlueprintContainer<Vang::BlockBlueprint>& getBlockManager() const;
+	Vang::BlueprintContainer<Vang::ItemBlueprint>& getItemManager();
+	const Vang::BlueprintContainer<Vang::ItemBlueprint>& getItemManager() const;
+	Vang::ModManager& getModManager();
+	const Vang::ModManager& getModManager() const;
 
 	void initialize();
 
@@ -57,7 +64,10 @@ private:
 
 	std::unique_ptr<Vang::Window> m_window;
 	std::unique_ptr<Vang::gfx::GraphicsAPI> m_graphicsAPI;
-	std::unique_ptr<Vang::Player> m_player;
+	Vang::Player m_player;
+	Vang::BlueprintContainer<Vang::BlockBlueprint> m_blockManager;
+	Vang::BlueprintContainer<Vang::ItemBlueprint> m_itemManager;
+	Vang::ModManager m_modManager;
 
 	VangInst(std::string_view applicationName = "");
 	~VangInst()							 = default;
