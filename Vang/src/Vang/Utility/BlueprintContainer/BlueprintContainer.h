@@ -19,11 +19,6 @@ namespace Vang {
 		std::map<std::string, uint32_t> m_sorted_names_to_ids;
 
 		bool addSortedName(std::string name, uint32_t index);
-
-		struct BinarySearchReturn {
-			uint32_t blueprint_id{0};
-			bool found{false};
-		};
 	};
 
 
