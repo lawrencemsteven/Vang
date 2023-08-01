@@ -47,6 +47,11 @@ set(Vang_UTILITY_PLAYER
     "./src/Vang/Utility/Player/Player.cpp"
 )
 
+set(Vang_UTILITY_TEXTURES
+    "./src/Vang/Utility/Textures/TextureBlueprint.h"
+    "./src/Vang/Utility/Textures/TextureBlueprint.cpp"
+)
+
 set(Vang_UTILITY_TIME
     "./src/Vang/Utility/Time/Time.h"
     "./src/Vang/Utility/Time/Time.cpp"
@@ -149,6 +154,7 @@ set(Vang_FILES
     ${Vang_UTILITY_LAYERS}
     ${Vang_UTILITY_LOGGING}
     ${Vang_UTILITY_PLAYER}
+    ${Vang_UTILITY_TEXTURES}
     ${Vang_UTILITY_TIME}
     ${Vang_ITEMS}
     ${Vang_ITEMS_USABILITY}
