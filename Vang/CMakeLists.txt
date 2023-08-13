@@ -52,9 +52,7 @@ target_link_libraries(Vang
 		glfw
 		Vulkan::Vulkan
 	PUBLIC
-		imgui::imgui
 		glm::glm
-		spdlog::spdlog
 )
 
 target_include_directories(Vang

@@ -18,12 +18,12 @@ namespace Vang {
 		void mouseRotate(double x_pos, double y_pos);
 		void lookAt(const glm::vec3& look_at);
 
-		const glm::vec3& getPosition() const;
-		const glm::vec3& getForward() const;
-		const glm::vec3& getGroundedForward() const;
-		const glm::vec3& getGroundedRight() const;
-		const glm::vec3& getUp() const;
-		const glm::vec3& getRight() const;
+		glm::vec3 getPosition() const;
+		glm::vec3 getForward() const;
+		glm::vec3 getGroundedForward() const;
+		glm::vec3 getGroundedRight() const;
+		glm::vec3 getUp() const;
+		glm::vec3 getRight() const;
 		float getFOV() const;
 		float getLookSensitivity() const;
 		const glm::mat4 getView() const;

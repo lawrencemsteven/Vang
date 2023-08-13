@@ -20,7 +20,5 @@ target_link_libraries(VangApp
 		glfw
 		Vulkan::Vulkan
 	PUBLIC
-		imgui::imgui
 		glm::glm
-		spdlog::spdlog
 )
