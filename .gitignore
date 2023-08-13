@@ -33,6 +33,7 @@
 
 # Directories
 build/
+.vscode/
 
 # Files
 CMakeUserPresets.json

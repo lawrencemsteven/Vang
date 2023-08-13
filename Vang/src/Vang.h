@@ -14,6 +14,7 @@
 #endif
 
 #include "Vang/GraphicsAPI/Generic/GraphicsAPI.h"
+#include "Vang/Items/ItemBlueprint.h"
 #include "Vang/Modding/ModManager.h"
 #include "Vang/Utility/BlueprintContainer/BlueprintContainer.h"
 #include "Vang/Utility/Events/Event.h"
@@ -21,6 +22,7 @@
 #include "Vang/Utility/Layers/LayerStack.h"
 #include "Vang/Utility/Player/Player.h"
 #include "Vang/Utility/Time/Time.h"
+#include "Vang/Voxel/BlockBlueprint.h"
 #include "Vang/Voxel/Universe.h"
 #include "Vang/Window/Window.h"
 
