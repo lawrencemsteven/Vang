@@ -8,6 +8,7 @@ namespace Vang {
 	public:
 		Universe();
 		Universe(std::string seed);
+		Universe operator=(const Universe&);
 
 	private:
 		const std::string m_seed;

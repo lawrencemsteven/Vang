@@ -140,6 +140,8 @@ set(Vang_VOXEL
     "./src/Vang/Voxel/Chunk.cpp"
     "./src/Vang/Voxel/Universe.h"
     "./src/Vang/Voxel/Universe.cpp"
+    "./src/Vang/Voxel/UniverseManager.h"
+    "./src/Vang/Voxel/UniverseManager.cpp"
     "./src/Vang/Voxel/World.h"
     "./src/Vang/Voxel/World.cpp"
 )
