@@ -2,7 +2,7 @@
 
 #include "Vang/Utility/Events/Event.h"
 
-namespace Vang {
+namespace Vang::Windowing {
 
 	class Window {
 	public:

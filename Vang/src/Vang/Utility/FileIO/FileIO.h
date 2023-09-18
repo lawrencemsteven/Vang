@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Vang::FileIO {
+namespace Vang::Utility::FileIO {
 
 	std::optional<std::string> readFile(const std::filesystem::path& path);
 

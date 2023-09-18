@@ -1,6 +1,6 @@
 #include "LayerStack.h"
 
-namespace Vang {
+namespace Vang::Utility::Layers {
 
 	LayerStack::LayerStack() {}
 

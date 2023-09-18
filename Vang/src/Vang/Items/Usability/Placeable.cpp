@@ -2,7 +2,7 @@
 
 #include "Vang/Items/Item.h"
 
-namespace Vang {
+namespace Vang::Inventory {
 
 	void Placeable::use(Item& item) const {
 		VANG_INFO("PLACE ITEM!");

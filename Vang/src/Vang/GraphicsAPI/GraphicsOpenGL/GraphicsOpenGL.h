@@ -21,7 +21,7 @@ namespace Vang::gfx::OpenGL {
 
 		void windowResize(uint32_t width, uint32_t height) override;
 
-		void displayCamera(const Camera& camera) override;
+		void displayCamera(const Vang::Objects::Camera& camera) override;
 
 	private:
 		void initialize();

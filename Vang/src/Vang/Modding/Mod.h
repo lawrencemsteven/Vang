@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Vang {
+namespace Vang::Modding {
 
 	class Mod {
 	public:

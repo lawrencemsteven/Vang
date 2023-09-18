@@ -6,7 +6,7 @@
 #include "Vang/Utility/Events/ApplicationEvent.h"
 #include "Vang/Utility/Events/KeyEvent.h"
 
-namespace Vang {
+namespace Vang::Windowing {
 
 	WindowGLFW::WindowGLFW(const std::string& title, uint32_t width, uint32_t height)
 		: Window(title, width, height) {

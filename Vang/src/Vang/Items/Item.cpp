@@ -2,13 +2,13 @@
 
 #include "Usability/Unusable.h"
 
-namespace Vang {
+namespace Vang::Inventory {
 
-	Item::Item(const ItemBlueprint& itemBlueprint)
+	Item::Item(const Vang::Blueprints::ItemBlueprint& itemBlueprint)
 		: m_blueprint{itemBlueprint} {
 	}
 
-	Item::Item(const ItemBlueprint& itemBlueprint, uint32_t amount)
+	Item::Item(const Vang::Blueprints::ItemBlueprint& itemBlueprint, uint32_t amount)
 		: m_blueprint{itemBlueprint},
 		  m_amount{amount} {}
 
@@ -25,7 +25,7 @@ namespace Vang {
 													static_cast<int32_t>(m_blueprint.getMaxStack())));
 	}
 
-	const ItemBlueprint& Item::getBlueprint() const {
+	const Vang::Blueprints::ItemBlueprint& Item::getBlueprint() const {
 		return m_blueprint;
 	}
 

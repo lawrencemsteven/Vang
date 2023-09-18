@@ -1,40 +1,42 @@
 #include <Vang.h>
 
-class PlayerMovementLayer : public Vang::Layer {
+namespace Window = Vang::Windowing;
+
+class PlayerMovementLayer : public Vang::Utility::Layers::Layer {
 public:
 	PlayerMovementLayer()
 		: Layer{"Player Movement"} {}
 	
 	void onUpdate() override {
-		if (Vang::Input::isKeyPressed(Vang::KEY::W)) {
-			VangInst::Get().getPlayer().moveForward(Vang::Time::deltaTime());
+		if (Window::Input::isKeyPressed(Window::KEY::W)) {
+			VangInst::Get().getPlayer().moveForward(Vang::Utility::Time::deltaTime());
 		}
-		else if (Vang::Input::isKeyPressed(Vang::KEY::S)) {
-			VangInst::Get().getPlayer().moveForward(-Vang::Time::deltaTime());
-		}
-
-		if (Vang::Input::isKeyPressed(Vang::KEY::D)) {
-			VangInst::Get().getPlayer().moveRight(Vang::Time::deltaTime());
-		}
-		else if (Vang::Input::isKeyPressed(Vang::KEY::A)) {
-			VangInst::Get().getPlayer().moveRight(-Vang::Time::deltaTime());
+		else if (Window::Input::isKeyPressed(Window::KEY::S)) {
+			VangInst::Get().getPlayer().moveForward(-Vang::Utility::Time::deltaTime());
 		}
 
-		if (Vang::Input::isKeyPressed(Vang::KEY::SPACE)) {
-			VangInst::Get().getPlayer().moveUp(Vang::Time::deltaTime());
+		if (Window::Input::isKeyPressed(Window::KEY::D)) {
+			VangInst::Get().getPlayer().moveRight(Vang::Utility::Time::deltaTime());
 		}
-		else if (Vang::Input::isKeyPressed(Vang::KEY::LEFT_SHIFT)) {
-			VangInst::Get().getPlayer().moveUp(-Vang::Time::deltaTime());
+		else if (Window::Input::isKeyPressed(Window::KEY::A)) {
+			VangInst::Get().getPlayer().moveRight(-Vang::Utility::Time::deltaTime());
+		}
+
+		if (Window::Input::isKeyPressed(Window::KEY::SPACE)) {
+			VangInst::Get().getPlayer().moveUp(Vang::Utility::Time::deltaTime());
+		}
+		else if (Window::Input::isKeyPressed(Window::KEY::LEFT_SHIFT)) {
+			VangInst::Get().getPlayer().moveUp(-Vang::Utility::Time::deltaTime());
 		}
 	}
 
-	void onEvent(Vang::Event& e) override {
-		Vang::EventDispatcher dispatcher{e};
-		dispatcher.dispatch<Vang::MouseMovedEvent>(
+	void onEvent(Window::Event& e) override {
+		Window::EventDispatcher dispatcher{e};
+		dispatcher.dispatch<Window::MouseMovedEvent>(
 			std::bind(&PlayerMovementLayer::mouseMovedHandler, this, std::placeholders::_1));
 	}
 
-	bool mouseMovedHandler(Vang::MouseMovedEvent& e) {
+	bool mouseMovedHandler(Window::MouseMovedEvent& e) {
 		VangInst::Get().getPlayer().getCamera().mouseRotate(e.getX(), -e.getY());
 		return true;
 	}

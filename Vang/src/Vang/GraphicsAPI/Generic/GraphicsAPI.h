@@ -15,7 +15,7 @@ namespace Vang::gfx {
 
 		virtual void windowResize(uint32_t width, uint32_t height) = 0;
 
-		virtual void displayCamera(const Camera& camera) = 0;
+		virtual void displayCamera(const Vang::Objects::Camera& camera) = 0;
 
 	protected:
 		std::string_view m_applicationName;

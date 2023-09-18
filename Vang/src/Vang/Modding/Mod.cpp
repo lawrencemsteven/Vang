@@ -1,6 +1,6 @@
 #include "Mod.h"
 
-namespace Vang {
+namespace Vang::Modding {
 
 	Mod::Mod(std::string name)
 		: m_name{std::move(name)} {}

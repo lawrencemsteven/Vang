@@ -3,7 +3,7 @@
 #include "Unusable.h"
 #include "Placeable.h"
 
-namespace Vang {
+namespace Vang::Inventory {
 
 	std::unique_ptr<Usability> Usability::createFromType(UsabilityType usabilityType) {
 		switch (usabilityType) {

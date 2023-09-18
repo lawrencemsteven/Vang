@@ -2,64 +2,64 @@
 
 #include "Usability/Unusable.h"
 
-namespace Vang {
+namespace Vang::Blueprints {
 
-	ItemBlueprint::ItemBlueprint(Mod& mod, std::string technicalName,
+	ItemBlueprint::ItemBlueprint(Vang::Modding::Mod& mod, std::string technicalName,
 								 std::string displayName)
 		: m_mod{mod},
 		  m_technicalName{std::move(technicalName)},
 		  m_displayName{std::move(displayName)} {
 		m_maxStack	= 1;
-		m_usability = std::make_unique<Unusable>();
+		m_usability = std::make_unique<Vang::Inventory::Unusable>();
 	}
 
-	ItemBlueprint::ItemBlueprint(Mod& mod, std::string technicalName,
+	ItemBlueprint::ItemBlueprint(Vang::Modding::Mod& mod, std::string technicalName,
 								 std::string displayName, uint32_t maxStack)
 		: ItemBlueprint{mod, std::move(technicalName), std::move(displayName)} {
 		m_maxStack = maxStack;
 	}
 
-	ItemBlueprint::ItemBlueprint(Mod& mod, std::string technicalName,
-								 std::string displayName, std::unique_ptr<Usability> usability)
+	ItemBlueprint::ItemBlueprint(Vang::Modding::Mod& mod, std::string technicalName,
+								 std::string displayName, std::unique_ptr<Vang::Inventory::Usability> usability)
 		: ItemBlueprint{mod, std::move(technicalName), std::move(displayName)} {
 		setUsability(std::move(usability));
 	}
 
-	ItemBlueprint::ItemBlueprint(Mod& mod, std::string technicalName,
+	ItemBlueprint::ItemBlueprint(Vang::Modding::Mod& mod, std::string technicalName,
 								 std::string displayName, uint32_t maxStack,
-								 std::unique_ptr<Usability> usability)
+								 std::unique_ptr<Vang::Inventory::Usability> usability)
 		: ItemBlueprint{mod, std::move(technicalName), std::move(displayName),
 						maxStack} {
 		setUsability(std::move(usability));
 	}
 
-	ItemBlueprint::ItemBlueprint(Mod& mod, std::string technicalName,
-								 std::string displayName, UsabilityType usabilityType)
+	ItemBlueprint::ItemBlueprint(Vang::Modding::Mod& mod, std::string technicalName,
+								 std::string displayName, Vang::Inventory::UsabilityType usabilityType)
 		: ItemBlueprint{mod, std::move(technicalName), std::move(displayName)} {
 		setUsability(usabilityType);
 	}
 
-	ItemBlueprint::ItemBlueprint(Mod& mod, std::string technicalName,
+	ItemBlueprint::ItemBlueprint(Vang::Modding::Mod& mod, std::string technicalName,
 								 std::string displayName, uint32_t maxStack,
-								 UsabilityType usabilityType)
+								 Vang::Inventory::UsabilityType usabilityType)
 		: ItemBlueprint{mod, std::move(technicalName), std::move(displayName),
 						maxStack} {
-		m_usability = std::move(Usability::createFromType(usabilityType));
+		m_usability = std::move(Vang::Inventory::Usability::createFromType(usabilityType));
 	}
 
 	void ItemBlueprint::setMaxStack(uint32_t maxStack) {
 		m_maxStack = maxStack;
 	}
 
-	void ItemBlueprint::setUsability(std::unique_ptr<Usability> usability) {
+	void ItemBlueprint::setUsability(std::unique_ptr<Vang::Inventory::Usability> usability) {
 		m_usability = std::move(usability);
 	}
 
-	void ItemBlueprint::setUsability(UsabilityType usabilityType) {
-		m_usability = std::move(Usability::createFromType(usabilityType));
+	void ItemBlueprint::setUsability(Vang::Inventory::UsabilityType usabilityType) {
+		m_usability = std::move(Vang::Inventory::Usability::createFromType(usabilityType));
 	}
 
-	Mod& ItemBlueprint::getMod() const {
+	Vang::Modding::Mod& ItemBlueprint::getMod() const {
 		return m_mod;
 	}
 
@@ -79,11 +79,11 @@ namespace Vang {
 		return m_maxStack;
 	}
 
-	Usability& ItemBlueprint::getUsability() const {
+	Vang::Inventory::Usability& ItemBlueprint::getUsability() const {
 		return *m_usability;
 	}
 
-	UsabilityType ItemBlueprint::getUsabilityType() const {
+	Vang::Inventory::UsabilityType ItemBlueprint::getUsabilityType() const {
 		return m_usability->getType();
 	}
 

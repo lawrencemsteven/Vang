@@ -2,7 +2,7 @@
 
 #include "Universe.h"
 
-namespace Vang::UniverseManager {
+namespace Vang::Voxel::UniverseManager {
 
 	const Universe& createUniverse(const std::string& seed);
 

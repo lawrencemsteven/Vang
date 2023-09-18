@@ -36,13 +36,13 @@ namespace Vang::gfx::OpenGL {
 		glViewport(0, 0, width, height);
 	}
 
-	void GraphicsOpenGL::displayCamera(const Camera& camera) {
+	void GraphicsOpenGL::displayCamera(const Vang::Objects::Camera& camera) {
 		m_shaderProgramManager.displayCamera(camera);
 	}
 
 	void GraphicsOpenGL::initialize() {
 		initializeOpenGL();
-		Window& window = VangInst::Get().getWindow();
+		Vang::Windowing::Window& window = VangInst::Get().getWindow();
 		m_shaderProgramManager.initialize(DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER,
 										  DEFAULT_COMPUTE_SHADER, window.getWidth(),
 										  window.getHeight());
@@ -59,7 +59,7 @@ namespace Vang::gfx::OpenGL {
 
 		glClearColor(0.0f, 0.4f, 0.0f, 1.0f);
 
-		Window& window = VangInst::Get().getWindow();
+		Vang::Windowing::Window& window = VangInst::Get().getWindow();
 		windowResize(window.getWidth(), window.getHeight());
 	}
 

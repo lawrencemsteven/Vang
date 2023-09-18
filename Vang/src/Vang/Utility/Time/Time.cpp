@@ -1,6 +1,6 @@
 #include "Time.h"
 
-namespace Vang::Time {
+namespace Vang::Utility::Time {
 
 	const static auto start_time = std::chrono::system_clock::now();
 

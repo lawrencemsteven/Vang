@@ -3,12 +3,12 @@
 #include "BlockBlueprint.h"
 #include "Vang/Items/Item.h"
 
-namespace Vang {
+namespace Vang::Inventory {
 
 	class Block : public Item {
 	public:
-		Block(const BlockBlueprint& blockBlueprint);
-		Block(const BlockBlueprint& blockBlueprint, uint32_t amount);
+		Block(const Vang::Blueprints::BlockBlueprint& blockBlueprint);
+		Block(const Vang::Blueprints::BlockBlueprint& blockBlueprint, uint32_t amount);
 	};
 
 }

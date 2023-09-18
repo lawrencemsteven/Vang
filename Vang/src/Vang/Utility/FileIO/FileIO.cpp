@@ -1,6 +1,6 @@
 #include "FileIO.h"
 
-namespace Vang::FileIO {
+namespace Vang::Utility::FileIO {
 
 	std::optional<std::string> readFile(const std::filesystem::path& path) {
 		std::ifstream fileStream{path};

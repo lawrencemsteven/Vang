@@ -18,7 +18,7 @@ namespace Vang::gfx::Vulkan {
 			VANG_FATAL("Validation layers requested, but not available!");
 		}
 #endif
-		Window& window = VangInst::Get().getWindow();
+		Vang::Windowing::Window& window = VangInst::Get().getWindow();
 
 		VkApplicationInfo appInfo{};
 		appInfo.sType			   = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -65,7 +65,7 @@ namespace Vang::gfx::Vulkan {
 #endif
 	}
 
-	std::vector<const char*> VulkanInstance::getRequiredExtensions(const Window& window) {
+	std::vector<const char*> VulkanInstance::getRequiredExtensions(const Vang::Windowing::Window& window) {
 		uint32_t windowExtensionCount = 0;
 		const char** windowExtensions;
 

@@ -18,7 +18,7 @@ namespace Vang::gfx::OpenGL {
 							 unsigned int height);
 
 		void update();
-		void displayCamera(const Camera& camera);
+		void displayCamera(const Vang::Objects::Camera& camera);
 
 		ShaderProgram& getRasterShaderProgram();
 		ShaderProgram& getComputeShaderProgram();

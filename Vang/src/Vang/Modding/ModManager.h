@@ -2,7 +2,7 @@
 
 #include "Mod.h"
 
-namespace Vang {
+namespace Vang::Modding {
 
 	class ModManager {
 	public:

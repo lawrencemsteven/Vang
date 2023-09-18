@@ -3,7 +3,7 @@
 #include "Event.h"
 #include "Vang/Utility/Input/Input.h"
 
-namespace Vang {
+namespace Vang::Windowing {
 	class KeyEvent : public Event {
 	public:
 		inline KEY getKeyCode() const { return m_keyCode; }

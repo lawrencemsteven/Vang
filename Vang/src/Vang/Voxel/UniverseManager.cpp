@@ -1,7 +1,7 @@
 #include "UniverseManager.h"
 
 
-namespace Vang::UniverseManager {
+namespace Vang::Voxel::UniverseManager {
 
 	static Universe s_currentUniverse;
 

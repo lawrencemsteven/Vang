@@ -2,7 +2,7 @@
 
 #include "Layer.h"
 
-namespace Vang {
+namespace Vang::Utility::Layers {
 
 	class LayerStack {
 	public:

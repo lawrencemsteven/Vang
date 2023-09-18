@@ -2,20 +2,20 @@
 
 
 #ifdef VANG_DEBUG
-#	define VANG_FATAL(message) Vang::Log::Fatal(message);
-#	define VANG_ERROR(message) Vang::Log::Error(message);
-#	define VANG_WARN(message) Vang::Log::Warn(message);
-#	define VANG_INFO(message) Vang::Log::Info(message);
-#	define VANG_DEBUG(message) Vang::Log::Debug(message);
+#	define VANG_FATAL(message) Vang::Utility::Log::Fatal(message);
+#	define VANG_ERROR(message) Vang::Utility::Log::Error(message);
+#	define VANG_WARN(message) Vang::Utility::Log::Warn(message);
+#	define VANG_INFO(message) Vang::Utility::Log::Info(message);
+#	define VANG_DEBUG(message) Vang::Utility::Log::Debug(message);
 #else
-#	define VANG_FATAL(message) Vang::Log::FatalExceptionOnly(message);
+#	define VANG_FATAL(message) Vang::Utility::Log::FatalExceptionOnly(message);
 #	define VANG_ERROR(message)
 #	define VANG_WARN(message)
 #	define VANG_INFO(message)
 #	define VANG_DEBUG(message)
 #endif
 
-namespace Vang {
+namespace Vang::Utility {
 
 	class Log {
 	public:

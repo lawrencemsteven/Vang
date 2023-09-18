@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-namespace Vang {
+namespace Vang::Objects {
 
 	class Camera {
 	public:

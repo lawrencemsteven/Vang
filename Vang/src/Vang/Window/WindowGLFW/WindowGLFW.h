@@ -4,7 +4,7 @@
 
 #include "GLFW/glfw3.h"
 
-namespace Vang {
+namespace Vang::Windowing {
 
 	class WindowGLFW : public Window {
 	public:

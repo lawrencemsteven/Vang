@@ -2,7 +2,7 @@
 
 #include "Vang.h"
 
-namespace Vang {
+namespace Vang::Objects {
 
 	void Player::moveForward(float amount) {
 		m_position += m_camera.getGroundedForward() * m_speed * amount;

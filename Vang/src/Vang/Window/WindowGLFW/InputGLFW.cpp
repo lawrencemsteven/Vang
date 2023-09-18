@@ -2,7 +2,7 @@
 
 #include "Vang.h"
 
-namespace Vang {
+namespace Vang::Windowing {
 
 	Input* Input::s_instance = new GLFWInput();
 

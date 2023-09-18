@@ -1,6 +1,6 @@
 #include "Log.h"
 
-namespace Vang {
+namespace Vang::Utility {
 
 	Log::Level Log::s_level = Log::Level::DEBUG;
 

@@ -2,7 +2,7 @@
 
 #include "Chunk.h"
 
-namespace Vang {
+namespace Vang::Voxel {
 
 	class World {
 	public:

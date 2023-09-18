@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Vang::Time {
+namespace Vang::Utility::Time {
 
 	float timeSinceStart();
 

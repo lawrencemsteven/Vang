@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Vang {
+namespace Vang::Blueprints {
 
 	template <class T>
 	class BlueprintContainer {

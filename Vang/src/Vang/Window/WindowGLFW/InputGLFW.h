@@ -3,7 +3,7 @@
 #include "glad/glad.h"
 #include "Vang/Utility/Input/Input.h"
 
-namespace Vang {
+namespace Vang::Windowing {
 
 	class GLFWInput : public Input {
 	protected:

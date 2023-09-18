@@ -1,6 +1,6 @@
 #include "Input.h"
 
-namespace Vang {
+namespace Vang::Windowing {
 
 	bool Input::isKeyPressed(KEY keycode) {
 		return s_instance->isKeyPressedImpl(keycode);

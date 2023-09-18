@@ -2,7 +2,7 @@
 
 #include "Vang/Utility/Camera/Camera.h"
 
-namespace Vang {
+namespace Vang::Objects {
 
 	class Player {
 	public:

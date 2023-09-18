@@ -2,7 +2,7 @@
 
 #include "Usability.h"
 
-namespace Vang {
+namespace Vang::Inventory {
 
 	class Unusable : public Usability {
 	public:

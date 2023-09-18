@@ -31,7 +31,7 @@ namespace Vang::gfx::OpenGL {
 	}
 
 	void ShaderProgramManager::update() {
-		m_computeShaderProgram.setUniform("iTime", Time::timeSinceStart());
+		m_computeShaderProgram.setUniform("iTime", Vang::Utility::Time::timeSinceStart());
 
 		m_computeShaderProgram.use();
 		glDispatchCompute(floor(m_screenWidth / 16.0f), floor(m_screenHeight / 8.0f), 1);
@@ -40,7 +40,7 @@ namespace Vang::gfx::OpenGL {
 		m_vertexData.update();
 	}
 
-	void ShaderProgramManager::displayCamera(const Camera& camera) {
+	void ShaderProgramManager::displayCamera(const Vang::Objects::Camera& camera) {
 		// Camera Position
 		const glm::vec3 camera_position = camera.getPosition();
 		m_computeShaderProgram.setUniform("camera.position", camera_position.x, camera_position.y,

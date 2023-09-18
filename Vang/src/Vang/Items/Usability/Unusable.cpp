@@ -1,6 +1,6 @@
 #include "Unusable.h"
 
-namespace Vang {
+namespace Vang::Inventory {
 
 	void Unusable::use(Item& item) const {}
 

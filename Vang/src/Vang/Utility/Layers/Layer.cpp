@@ -1,6 +1,6 @@
 #include "Layer.h"
 
-namespace Vang {
+namespace Vang::Utility::Layers {
 
 	Layer::Layer(const std::string& name)
 		: m_debugName{name} {}

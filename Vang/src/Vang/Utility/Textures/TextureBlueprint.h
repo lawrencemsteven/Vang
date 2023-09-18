@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Vang {
+namespace Vang::Blueprints {
 
 	class TextureBlueprint {
 	public:

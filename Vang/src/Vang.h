@@ -10,7 +10,7 @@
 
 #ifdef VANG_WINDOW_GLFW
 #	include "Vang/Window/WindowGLFW/WindowGLFW.h"
-#	define VANG_CURRENT_WINDOW Vang::WindowGLFW
+#	define VANG_CURRENT_WINDOW Vang::Windowing::WindowGLFW
 #endif
 
 #include "Vang/GraphicsAPI/Generic/GraphicsAPI.h"
@@ -32,44 +32,44 @@ public:
 
 	const std::string& getApplicationName();
 
-	Vang::Window& getWindow();
-	const Vang::Window& getWindow() const;
+	Vang::Windowing::Window& getWindow();
+	const Vang::Windowing::Window& getWindow() const;
 	Vang::gfx::GraphicsAPI& getGraphicsAPI();
 	const Vang::gfx::GraphicsAPI& getGraphicsAPI() const;
-	Vang::Player& getPlayer();
-	const Vang::Player& getPlayer() const;
-	Vang::BlueprintContainer<Vang::BlockBlueprint>& getBlockManager();
-	const Vang::BlueprintContainer<Vang::BlockBlueprint>& getBlockManager() const;
-	Vang::BlueprintContainer<Vang::ItemBlueprint>& getItemManager();
-	const Vang::BlueprintContainer<Vang::ItemBlueprint>& getItemManager() const;
-	Vang::ModManager& getModManager();
-	const Vang::ModManager& getModManager() const;
+	Vang::Objects::Player& getPlayer();
+	const Vang::Objects::Player& getPlayer() const;
+	Vang::Blueprints::BlueprintContainer<Vang::Blueprints::BlockBlueprint>& getBlockManager();
+	const Vang::Blueprints::BlueprintContainer<Vang::Blueprints::BlockBlueprint>& getBlockManager() const;
+	Vang::Blueprints::BlueprintContainer<Vang::Blueprints::ItemBlueprint>& getItemManager();
+	const Vang::Blueprints::BlueprintContainer<Vang::Blueprints::ItemBlueprint>& getItemManager() const;
+	Vang::Modding::ModManager& getModManager();
+	const Vang::Modding::ModManager& getModManager() const;
 
 	void initialize();
 
-	void pushLayer(Vang::Layer* layer);
-	void pushOverlay(Vang::Layer* overlay);
+	void pushLayer(Vang::Utility::Layers::Layer* layer);
+	void pushOverlay(Vang::Utility::Layers::Layer* overlay);
 
 	void update();
 
 	void toClose();
 	bool getToClose();
 
-	void onEvent(Vang::Event& e);
+	void onEvent(Vang::Windowing::Event& e);
 
 private:
 	void cleanup();
 
 	std::string m_applicationName;
 	bool m_toClose;
-	Vang::LayerStack m_layerStack;
+	Vang::Utility::Layers::LayerStack m_layerStack;
 
-	std::unique_ptr<Vang::Window> m_window;
+	std::unique_ptr<Vang::Windowing::Window> m_window;
 	std::unique_ptr<Vang::gfx::GraphicsAPI> m_graphicsAPI;
-	Vang::Player m_player;
-	Vang::BlueprintContainer<Vang::BlockBlueprint> m_blockManager;
-	Vang::BlueprintContainer<Vang::ItemBlueprint> m_itemManager;
-	Vang::ModManager m_modManager;
+	Vang::Objects::Player m_player;
+	Vang::Blueprints::BlueprintContainer<Vang::Blueprints::BlockBlueprint> m_blockManager;
+	Vang::Blueprints::BlueprintContainer<Vang::Blueprints::ItemBlueprint> m_itemManager;
+	Vang::Modding::ModManager m_modManager;
 
 	VangInst(std::string_view applicationName = "");
 	~VangInst()							 = default;

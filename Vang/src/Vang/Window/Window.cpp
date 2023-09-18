@@ -1,6 +1,6 @@
 #include "Vang/Window/Window.h"
 
-namespace Vang {
+namespace Vang::Windowing {
 
 	Window::Window(const std::string& title, uint32_t width, uint32_t height) {
 		m_data.title  = title;

@@ -2,7 +2,7 @@
 
 #include "Vang/Utility/Events/Event.h"
 
-namespace Vang {
+namespace Vang::Utility::Layers {
 
 	class Layer {
 	public:
@@ -12,7 +12,7 @@ namespace Vang {
 		virtual void onAttach() {}
 		virtual void onDetach() {}
 		virtual void onUpdate() {}
-		virtual void onEvent(Event& event) {}
+		virtual void onEvent(Vang::Windowing::Event& event) {}
 
 		const std::string& getName() const;
 

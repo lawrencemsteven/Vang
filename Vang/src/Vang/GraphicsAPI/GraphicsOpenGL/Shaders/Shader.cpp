@@ -21,7 +21,7 @@ namespace Vang::gfx::OpenGL {
 	bool Shader::loadAndCompile() {
 		// Read From File
 		std::string shader_source;
-		if (const auto file_info = Vang::FileIO::readFile(m_path); file_info.has_value()) {
+		if (const auto file_info = Vang::Utility::FileIO::readFile(m_path); file_info.has_value()) {
 			shader_source = file_info.value();
 		}
 		else {

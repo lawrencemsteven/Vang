@@ -3,7 +3,7 @@
 #include "Event.h"
 #include "Vang/Utility/Input/Input.h"
 
-namespace Vang {
+namespace Vang::Windowing {
 	class MouseMovedEvent : public Event {
 	public:
 		MouseMovedEvent(float x, float y)

@@ -1,32 +1,32 @@
 #include "BlockBlueprint.h"
 
-namespace Vang {
+namespace Vang::Blueprints {
 
-	BlockBlueprint::BlockBlueprint(Mod& mod, std::string technicalName, std::string displayName)
+	BlockBlueprint::BlockBlueprint(Vang::Modding::Mod& mod, std::string technicalName, std::string displayName)
 		: ItemBlueprint{mod, std::move(technicalName), std::move(displayName),
-						UsabilityType::Placeable} {}
+						Vang::Inventory::UsabilityType::Placeable} {}
 
-	BlockBlueprint::BlockBlueprint(Mod& mod, std::string technicalName, std::string displayName,
+	BlockBlueprint::BlockBlueprint(Vang::Modding::Mod& mod, std::string technicalName, std::string displayName,
 								   uint32_t maxStack)
 		: ItemBlueprint{mod, std::move(technicalName), std::move(displayName), maxStack,
-						UsabilityType::Placeable} {}
+						Vang::Inventory::UsabilityType::Placeable} {}
 
-	BlockBlueprint::BlockBlueprint(Mod& mod, std::string technicalName, std::string displayName,
-								   std::unique_ptr<Usability> usability)
+	BlockBlueprint::BlockBlueprint(Vang::Modding::Mod& mod, std::string technicalName, std::string displayName,
+								   std::unique_ptr<Vang::Inventory::Usability> usability)
 		: ItemBlueprint{mod, std::move(technicalName), std::move(displayName),
 						std::move(usability)} {}
 
-	BlockBlueprint::BlockBlueprint(Mod& mod, std::string technicalName, std::string displayName,
-								   uint32_t maxStack, std::unique_ptr<Usability> usability)
+	BlockBlueprint::BlockBlueprint(Vang::Modding::Mod& mod, std::string technicalName, std::string displayName,
+								   uint32_t maxStack, std::unique_ptr<Vang::Inventory::Usability> usability)
 		: ItemBlueprint{mod, std::move(technicalName), std::move(displayName), maxStack,
 						std::move(usability)} {}
 
-	BlockBlueprint::BlockBlueprint(Mod& mod, std::string technicalName, std::string displayName,
-								   UsabilityType usabilityType)
+	BlockBlueprint::BlockBlueprint(Vang::Modding::Mod& mod, std::string technicalName, std::string displayName,
+								   Vang::Inventory::UsabilityType usabilityType)
 		: ItemBlueprint{mod, std::move(technicalName), std::move(displayName), usabilityType} {}
 
-	BlockBlueprint::BlockBlueprint(Mod& mod, std::string technicalName, std::string displayName,
-								   uint32_t maxStack, UsabilityType usabilityType)
+	BlockBlueprint::BlockBlueprint(Vang::Modding::Mod& mod, std::string technicalName, std::string displayName,
+								   uint32_t maxStack, Vang::Inventory::UsabilityType usabilityType)
 		: ItemBlueprint{mod, std::move(technicalName), std::move(displayName), maxStack,
 						usabilityType} {}
 

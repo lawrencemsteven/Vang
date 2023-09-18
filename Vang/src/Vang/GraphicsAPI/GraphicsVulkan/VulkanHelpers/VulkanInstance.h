@@ -14,7 +14,7 @@ namespace Vang::gfx::Vulkan {
 
 	private:
 		void createInstance(std::string_view applicationName);
-		std::vector<const char*> getRequiredExtensions(const Window& window);
+		std::vector<const char*> getRequiredExtensions(const Vang::Windowing::Window& window);
 		void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
 		bool checkValidationLayerSupport();
 
