@@ -31,6 +31,7 @@ namespace Vang::gfx::OpenGL {
 			}
 		}
 		reinitialize();
+		return true;
 	}
 
 	void ShaderProgram::reinitialize() {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vang/Window/Window.h"
+#include "Vang/Window/WindowGLFW/GLFWInputCache.h"
 
 #include "GLFW/glfw3.h"
 

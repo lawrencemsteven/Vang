@@ -2,6 +2,8 @@
 
 namespace Vang {
 
+	// TODO: All classes should follow rule of 5 and should have copy constructors deleted!
+
 	static bool s_running{true};
 	static std::string s_applicationName{};
 	static VANG_CURRENT_WINDOW s_window{s_applicationName, DEFAULT_WIDTH, DEFAULT_HEIGHT};
@@ -11,7 +13,12 @@ namespace Vang {
 	static Vang::Blueprints::BlueprintContainer<Vang::Blueprints::ItemBlueprint> s_itemManager{};
 	static Vang::Modding::ModManager s_modManager{};
 	static Vang::Utility::Layers::LayerStack s_layerStack{};
-	static Vang::Windowing::EventHandler s_eventHandler{};
+	static Vang::Utility::Events::EventHandler s_eventHandler{};
+	static VANG_CURRENT_WINDOW_INPUT s_inputCache{};
+
+	void cleanup() {
+		s_window.close();
+	}
 
 	bool getRunning() {
 		return s_running;
@@ -19,14 +26,17 @@ namespace Vang {
 
 	void update() {
 		s_window.update();
-		s_graphicsAPI.update();
 		s_layerStack.update();
+		s_graphicsAPI.update();
 
 		Vang::Utility::Time::updateDeltaTime();
+
+		if (!s_running) {
+			cleanup;
+		}
 	}
 
 	void close() {
-		s_window.close();
 		s_running = false;
 	}
 
@@ -54,7 +64,10 @@ namespace Vang {
 	Vang::Utility::Layers::LayerStack& getLayerStack() {
 		return s_layerStack;
 	}
-	Vang::Windowing::EventHandler& getEventHandler() {
+	Vang::Utility::Events::EventHandler& getEventHandler() {
 		return s_eventHandler;
+	}
+	Vang::Input::InputCache& getInputCache() {
+		return s_inputCache;
 	}
 }

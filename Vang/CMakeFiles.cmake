@@ -20,7 +20,6 @@ set(Vang_FILES
     "./src/Vang/Utility/FileIO/FileIO.cpp"
 
     "./src/Vang/Utility/Input/Input.h"
-    "./src/Vang/Utility/Input/Input.cpp"
 
     "./src/Vang/Utility/Layers/Layer.h"
     "./src/Vang/Utility/Layers/Layer.cpp"
@@ -61,8 +60,8 @@ set(Vang_FILES
 
     "./src/Vang/Window/WindowGLFW/WindowGLFW.h"
     "./src/Vang/Window/WindowGLFW/WindowGLFW.cpp"
-    "./src/Vang/Window/WindowGLFW/InputGLFW.h"
-    "./src/Vang/Window/WindowGLFW/InputGLFW.cpp"
+    "./src/Vang/Window/WindowGLFW/GLFWInputCache.h"
+    "./src/Vang/Window/WindowGLFW/GLFWInputCache.cpp"
 
     "./src/Vang/GraphicsAPI/Generic/GraphicsAPI.h"
     "./src/Vang/GraphicsAPI/Generic/GraphicsAPI.cpp"

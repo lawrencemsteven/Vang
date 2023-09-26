@@ -4,7 +4,7 @@
 
 namespace Vang::Windowing {
 
-	void onEvent(Vang::Windowing::Event& e) {
+	void onEvent(Vang::Utility::Events::Event& e) {
 		Vang::getEventHandler().onEvent(e);
 	}
 
@@ -12,7 +12,6 @@ namespace Vang::Windowing {
 		m_data.title  = title;
 		m_data.width  = width;
 		m_data.height = height;
-		m_data.vSync  = false;
 		m_data.eventCallback = &onEvent;
 	}
 

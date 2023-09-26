@@ -2,7 +2,7 @@
 
 #include "Event.h"
 
-namespace Vang::Windowing {
+namespace Vang::Utility::Events {
 	class WindowResizeEvent : public Event {
 	public:
 		WindowResizeEvent(unsigned int width, unsigned int height)

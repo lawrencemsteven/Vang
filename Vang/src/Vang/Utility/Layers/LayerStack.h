@@ -10,7 +10,7 @@ namespace Vang::Utility::Layers {
 		~LayerStack();
 
 		void update();
-		void onEvent(Vang::Windowing::Event& e);
+		void onEvent(Vang::Utility::Events::Event& e);
 
 		void pushLayer(Layer* layer);
 		void pushOverlay(Layer* overlay);

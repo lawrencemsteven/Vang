@@ -101,14 +101,15 @@ namespace Vang::Windowing {
 		data.width		 = width;
 		data.height		 = height;
 
-		WindowResizeEvent event{static_cast<unsigned int>(width), static_cast<unsigned int>(height)};
+		Vang::Utility::Events::WindowResizeEvent event{static_cast<unsigned int>(width),
+													   static_cast<unsigned int>(height)};
 		data.eventCallback(event);
 	}
 
 	void WindowGLFW::closeCallback(GLFWwindow* window) {
 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-		WindowCloseEvent event{};
+		Vang::Utility::Events::WindowCloseEvent event{};
 		data.eventCallback(event);
 	}
 
@@ -117,17 +118,19 @@ namespace Vang::Windowing {
 
 		switch (action) {
 			case GLFW_PRESS: {
-				KeyPressedEvent event{static_cast<KEY>(key), 0};
+				Vang::Utility::Events::KeyPressedEvent event{static_cast<Vang::Input::KEY>(key),
+															 0};
 				data.eventCallback(event);
 				break;
 			}
 			case GLFW_RELEASE: {
-				KeyReleasedEvent event{static_cast<KEY>(key)};
+				Vang::Utility::Events::KeyReleasedEvent event{static_cast<Vang::Input::KEY>(key)};
 				data.eventCallback(event);
 				break;
 			}
 			case GLFW_REPEAT: {
-				KeyPressedEvent event{static_cast<KEY>(key), 1};
+				Vang::Utility::Events::KeyPressedEvent event{static_cast<Vang::Input::KEY>(key),
+															 1};
 				data.eventCallback(event);
 				break;
 			}
@@ -137,7 +140,7 @@ namespace Vang::Windowing {
 	void WindowGLFW::charCallback(GLFWwindow* window, unsigned int keycode) {
 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-		KeyTypedEvent event{static_cast<KEY>(keycode)};
+		Vang::Utility::Events::KeyTypedEvent event{static_cast<Vang::Input::KEY>(keycode)};
 		data.eventCallback(event);
 	}
 
@@ -146,12 +149,14 @@ namespace Vang::Windowing {
 
 		switch (action) {
 			case GLFW_PRESS: {
-				MouseButtonPressedEvent event{static_cast<MOUSE>(button)};
+				Vang::Utility::Events::MouseButtonPressedEvent event{
+					static_cast<Vang::Input::MOUSE>(button)};
 				data.eventCallback(event);
 				break;
 			}
 			case GLFW_RELEASE: {
-				MouseButtonReleasedEvent event{static_cast<MOUSE>(button)};
+				Vang::Utility::Events::MouseButtonReleasedEvent event{
+					static_cast<Vang::Input::MOUSE>(button)};
 				data.eventCallback(event);
 				break;
 			}
@@ -161,14 +166,16 @@ namespace Vang::Windowing {
 	void WindowGLFW::mouseScrollCallback(GLFWwindow* window, double xOffset, double yOffset) {
 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-		MouseScrolledEvent event{static_cast<float>(xOffset), static_cast<float>(yOffset)};
+		Vang::Utility::Events::MouseScrolledEvent event{static_cast<float>(xOffset),
+														static_cast<float>(yOffset)};
 		data.eventCallback(event);
 	}
 
 	void WindowGLFW::mouseMoveCallback(GLFWwindow* window, double xOffset, double yOffset) {
 		Window::WindowData& data = *(WindowData*)(glfwGetWindowUserPointer(window));
 
-		MouseMovedEvent event{static_cast<float>(xOffset), static_cast<float>(yOffset)};
+		Vang::Utility::Events::MouseMovedEvent event{static_cast<float>(xOffset),
+													 static_cast<float>(yOffset)};
 		data.eventCallback(event);
 	}
 }

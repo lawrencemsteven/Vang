@@ -2,11 +2,11 @@
 
 #include "Event.h"
 
-namespace Vang::Windowing {
+namespace Vang::Utility::Events {
 
 	class EventHandler {
 	public:
-		void onEvent(Vang::Windowing::Event& e);
+		void onEvent(Event& e);
 	};
 
 }

@@ -3,30 +3,35 @@
 #include "Event.h"
 #include "Vang/Utility/Input/Input.h"
 
-namespace Vang::Windowing {
+namespace Vang::Utility::Events {
 	class KeyEvent : public Event {
 	public:
-		inline KEY getKeyCode() const { return m_keyCode; }
+		inline Vang::Input::KEY getKeyCode() const {
+			return m_keyCode;
+		}
 
 		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 	protected:
-		KeyEvent(KEY keycode)
+		KeyEvent(Vang::Input::KEY keycode)
 			: m_keyCode(keycode) {}
 
-		KEY m_keyCode;
+		Vang::Input::KEY m_keyCode;
 	};
 
 	class KeyPressedEvent : public KeyEvent {
 	public:
-		KeyPressedEvent(KEY keycode, int repeatCount)
+		KeyPressedEvent(Vang::Input::KEY keycode, int repeatCount)
 			: KeyEvent(keycode),
 			  m_repeatCount(repeatCount) {}
 
-		inline int getRepeatCount() const { return m_repeatCount; }
-		
+		inline int getRepeatCount() const {
+			return m_repeatCount;
+		}
+
 		std::string ToString() const override {
 			std::stringstream ss;
-			ss << "KeyPressedEvent: " << static_cast<int>(m_keyCode) << " (" << m_repeatCount << " repeats)";
+			ss << "KeyPressedEvent: " << static_cast<int>(m_keyCode) << " (" << m_repeatCount
+			   << " repeats)";
 			return ss.str();
 		}
 
@@ -37,7 +42,7 @@ namespace Vang::Windowing {
 
 	class KeyReleasedEvent : public KeyEvent {
 	public:
-		KeyReleasedEvent(KEY keycode)
+		KeyReleasedEvent(Vang::Input::KEY keycode)
 			: KeyEvent(keycode) {}
 
 		std::string ToString() const override {
@@ -51,7 +56,7 @@ namespace Vang::Windowing {
 
 	class KeyTypedEvent : public KeyEvent {
 	public:
-		KeyTypedEvent(KEY keycode)
+		KeyTypedEvent(Vang::Input::KEY keycode)
 			: KeyEvent(keycode) {}
 
 		std::string ToString() const override {

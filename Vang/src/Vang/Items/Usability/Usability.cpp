@@ -9,7 +9,7 @@ namespace Vang::Inventory {
 		switch (usabilityType) {
 			case UsabilityType::Unusable: return std::make_unique<Unusable>();
 			case UsabilityType::Placeable: return std::make_unique<Placeable>();
-			default: VANG_FATAL("USABILITY TYPE NOT SUPPORTED!");
+			default: VANG_FATAL("USABILITY TYPE NOT SUPPORTED!"); return nullptr;
 		}
 	}
 

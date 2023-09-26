@@ -6,7 +6,7 @@ namespace Vang::Windowing {
 
 	class Window {
 	public:
-		using EventCallbackFn = std::function<void(Event&)>;
+		using EventCallbackFn = std::function<void(Vang::Utility::Events::Event&)>;
 
 		Window(const std::string& title, uint32_t width, uint32_t height);
 
@@ -28,10 +28,10 @@ namespace Vang::Windowing {
 
 	protected:
 		struct WindowData {
-			std::string title;
-			uint32_t width;
-			uint32_t height;
-			bool vSync;
+			std::string title{};
+			uint32_t width{};
+			uint32_t height{};
+			bool vSync{false};
 
 			EventCallbackFn eventCallback;
 		};

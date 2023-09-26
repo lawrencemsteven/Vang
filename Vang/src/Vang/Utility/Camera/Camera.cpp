@@ -33,7 +33,7 @@ namespace Vang::Objects {
 		Vang::getGraphicsAPI().displayCamera(*this);
 	}
 
-	void Camera::mouseRotate(double x_pos, double y_pos) {
+	void Camera::mouseRotate(float x_pos, float y_pos) {
 		// Logic may need to be changed. This is when the user clicks back into the window
 		if (!m_lastX.has_value() || !m_lastY.has_value()) {
 			m_lastX = x_pos;

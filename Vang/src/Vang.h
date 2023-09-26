@@ -14,6 +14,7 @@
 #ifdef VANG_WINDOW_GLFW
 #	include "Vang/Window/WindowGLFW/WindowGLFW.h"
 #	define VANG_CURRENT_WINDOW Vang::Windowing::WindowGLFW
+#	define VANG_CURRENT_WINDOW_INPUT Vang::Input::GLFWInputCache
 #endif
 
 #include "Vang/GraphicsAPI/Generic/GraphicsAPI.h"
@@ -43,5 +44,6 @@ namespace Vang {
 	Vang::Blueprints::BlueprintContainer<Vang::Blueprints::ItemBlueprint>& getItemManager();
 	Vang::Modding::ModManager& getModManager();
 	Vang::Utility::Layers::LayerStack& getLayerStack();
-	Vang::Windowing::EventHandler& getEventHandler();
+	Vang::Utility::Events::EventHandler& getEventHandler();
+	Vang::Input::InputCache& getInputCache();
 };

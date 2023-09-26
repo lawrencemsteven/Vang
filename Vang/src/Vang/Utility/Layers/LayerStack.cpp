@@ -16,7 +16,7 @@ namespace Vang::Utility::Layers {
 		}
 	}
 
-	void LayerStack::onEvent(Vang::Windowing::Event& e) {
+	void LayerStack::onEvent(Vang::Utility::Events::Event& e) {
 		for (auto it = m_layers.end(); it != m_layers.begin();) {
 			(*--it)->onEvent(e);
 			if (e.handled)

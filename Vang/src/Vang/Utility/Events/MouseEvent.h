@@ -3,7 +3,7 @@
 #include "Event.h"
 #include "Vang/Utility/Input/Input.h"
 
-namespace Vang::Windowing {
+namespace Vang::Utility::Events {
 	class MouseMovedEvent : public Event {
 	public:
 		MouseMovedEvent(float x, float y)
@@ -58,22 +58,22 @@ namespace Vang::Windowing {
 
 	class MouseButtonEvent : public Event {
 	public:
-		inline MOUSE getMouseButton() const {
+		inline Vang::Input::MOUSE getMouseButton() const {
 			return m_button;
 		}
 
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	protected:
-		MouseButtonEvent(MOUSE button)
+		MouseButtonEvent(Vang::Input::MOUSE button)
 			: m_button(button) {
 		}
 
-		MOUSE m_button;
+		Vang::Input::MOUSE m_button;
 	};
 
 	class MouseButtonPressedEvent : public MouseButtonEvent {
 	public:
-		MouseButtonPressedEvent(MOUSE button)
+		MouseButtonPressedEvent(Vang::Input::MOUSE button)
 			: MouseButtonEvent(button) {
 		}
 
@@ -88,7 +88,7 @@ namespace Vang::Windowing {
 
 	class MouseButtonReleasedEvent : public MouseButtonEvent {
 	public:
-		MouseButtonReleasedEvent(MOUSE button)
+		MouseButtonReleasedEvent(Vang::Input::MOUSE button)
 			: MouseButtonEvent(button) {
 		}
 

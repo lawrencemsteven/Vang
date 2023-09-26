@@ -15,7 +15,7 @@ namespace Vang::Objects {
 
 		void rotateRight(float x_offset);
 		void rotateUp(float y_offset);
-		void mouseRotate(double x_pos, double y_pos);
+		void mouseRotate(float x_pos, float y_pos);
 		void lookAt(const glm::vec3& look_at);
 
 		glm::vec3 getPosition() const;

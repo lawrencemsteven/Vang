@@ -12,7 +12,7 @@ namespace Vang::Utility::Layers {
 		virtual void onAttach() {}
 		virtual void onDetach() {}
 		virtual void onUpdate() {}
-		virtual void onEvent(Vang::Windowing::Event& event) {}
+		virtual void onEvent(Vang::Utility::Events::Event& event) {}
 
 		const std::string& getName() const;
 

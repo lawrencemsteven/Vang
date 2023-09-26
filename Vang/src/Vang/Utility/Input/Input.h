@@ -4,7 +4,7 @@
 
 #include "Vang/Utility/Camera/Camera.h"
 
-namespace Vang::Windowing {
+namespace Vang::Input {
 
 	enum class KEY {
 		UNKNOWN	   = -1,
@@ -156,22 +156,12 @@ namespace Vang::Windowing {
 		BUTTON_BACK	   = BUTTON_5,
 	};
 
-	class Input {
+	class InputCache {
 	public:
-		static bool isKeyPressed(KEY keycode);
-		static bool isMouseButtonPressed(MOUSE button);
-		static std::pair<float, float> getMousePosition();
-		static float getMouseX();
-		static float getMouseY();
-
-	protected:
-		virtual bool isKeyPressedImpl(KEY keycode)			   = 0;
-		virtual bool isMouseButtonPressedImpl(MOUSE button)	   = 0;
-		virtual std::pair<float, float> getMousePositionImpl() = 0;
-		virtual float getMouseXImpl()						   = 0;
-		virtual float getMouseYImpl()						   = 0;
-
-	private:
-		static Input* s_instance;
+		virtual bool isKeyPressed(KEY keycode) const			 = 0;
+		virtual bool isMouseButtonPressed(MOUSE button) const	 = 0;
+		virtual std::pair<float, float> getMousePosition() const = 0;
+		virtual float getMouseX() const							 = 0;
+		virtual float getMouseY() const							 = 0;
 	};
 }

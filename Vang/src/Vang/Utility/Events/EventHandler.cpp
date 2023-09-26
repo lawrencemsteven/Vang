@@ -2,9 +2,9 @@
 
 #include "Vang.h"
 
-namespace Vang::Windowing {
+namespace Vang::Utility::Events {
 
-	void EventHandler::onEvent(Vang::Windowing::Event& e) {
+	void EventHandler::onEvent(Event& e) {
 		Vang::getLayerStack().onEvent(e);
 	}
 }
