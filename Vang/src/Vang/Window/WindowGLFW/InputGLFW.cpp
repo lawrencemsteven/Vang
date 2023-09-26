@@ -7,19 +7,19 @@ namespace Vang::Windowing {
 	Input* Input::s_instance = new GLFWInput();
 
 	bool GLFWInput::isKeyPressedImpl(KEY keycode) {
-		auto window = static_cast<GLFWwindow*>(VangInst::Get().getWindow().getNativeWindow());
+		auto window = static_cast<GLFWwindow*>(Vang::getWindow().getNativeWindow());
 		auto state	= glfwGetKey(window, static_cast<int>(keycode));
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
 	bool GLFWInput::isMouseButtonPressedImpl(MOUSE button) {
-		auto window = static_cast<GLFWwindow*>(VangInst::Get().getWindow().getNativeWindow());
+		auto window = static_cast<GLFWwindow*>(Vang::getWindow().getNativeWindow());
 		auto state	= glfwGetMouseButton(window, static_cast<int>(button));
 		return state == GLFW_PRESS;
 	}
 
 	std::pair<float, float> GLFWInput::getMousePositionImpl() {
-		auto window = static_cast<GLFWwindow*>(VangInst::Get().getWindow().getNativeWindow());
+		auto window = static_cast<GLFWwindow*>(Vang::getWindow().getNativeWindow());
 		double xPos, yPos;
 		glfwGetCursorPos(window, &xPos, &yPos);
 		return {static_cast<float>(xPos), static_cast<float>(yPos)};

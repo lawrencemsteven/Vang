@@ -46,6 +46,6 @@ namespace Vang::Objects {
 
 	void Player::updateCameraPosition() {
 		m_camera.setPosition(m_position + m_camera.getUp() * cameraHeight);
-		VangInst::Get().getGraphicsAPI().displayCamera(m_camera);
+		Vang::getGraphicsAPI().displayCamera(m_camera);
 	}
 }

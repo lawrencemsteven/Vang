@@ -22,7 +22,6 @@ namespace Vang::Windowing {
 
 		virtual void setTitle(const std::string& title)				   = 0;
 		virtual void setResolution(uint32_t width, uint32_t height)	   = 0;
-		virtual void setEventCallback(const EventCallbackFn& callback) = 0;
 		virtual void setVSync(bool enabled)							   = 0;
 
 		virtual void* getNativeWindow() const = 0;

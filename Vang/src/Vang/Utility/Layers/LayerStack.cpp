@@ -10,6 +10,20 @@ namespace Vang::Utility::Layers {
 		}
 	}
 
+	void LayerStack::update() {
+		for (Layer* layer : m_layers) {
+			layer->onUpdate();
+		}
+	}
+
+	void LayerStack::onEvent(Vang::Windowing::Event& e) {
+		for (auto it = m_layers.end(); it != m_layers.begin();) {
+			(*--it)->onEvent(e);
+			if (e.handled)
+				break;
+		}
+	}
+
 	void LayerStack::pushLayer(Layer* layer) {
 		m_layers.emplace(m_layers.begin() + m_layerInsertIndex, layer);
 		m_layerInsertIndex++;
@@ -37,13 +51,4 @@ namespace Vang::Utility::Layers {
 			overlay->onDetach();
 		}
 	}
-
-	std::vector<Layer*>::iterator LayerStack::begin() {
-		return m_layers.begin();
-	}
-
-	std::vector<Layer*>::iterator LayerStack::end() {
-		return m_layers.end();
-	}
-
 }

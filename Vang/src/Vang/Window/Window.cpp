@@ -1,12 +1,19 @@
 #include "Vang/Window/Window.h"
 
+#include "Vang.h"
+
 namespace Vang::Windowing {
+
+	void onEvent(Vang::Windowing::Event& e) {
+		Vang::getEventHandler().onEvent(e);
+	}
 
 	Window::Window(const std::string& title, uint32_t width, uint32_t height) {
 		m_data.title  = title;
 		m_data.width  = width;
 		m_data.height = height;
 		m_data.vSync  = false;
+		m_data.eventCallback = &onEvent;
 	}
 
 	const std::string& Window::getTitle() const {

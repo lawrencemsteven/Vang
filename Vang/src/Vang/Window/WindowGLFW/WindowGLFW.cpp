@@ -19,7 +19,7 @@ namespace Vang::Windowing {
 
 	void WindowGLFW::update() {
 		if (glfwWindowShouldClose(m_window))
-			VangInst::Get().toClose();
+			Vang::close();
 
 		glfwSwapBuffers(m_window);
 		glfwPollEvents();
@@ -41,10 +41,6 @@ namespace Vang::Windowing {
 
 	void WindowGLFW::setResolution(uint32_t width, uint32_t height) {
 		VANG_FATAL("NOT YET IMPLEMENTED!");
-	}
-
-	void WindowGLFW::setEventCallback(const EventCallbackFn& callback) {
-		m_data.eventCallback = callback;
 	}
 
 	void WindowGLFW::setVSync(bool enabled) {

@@ -1,124 +1,77 @@
-set(Vang_Vang
+    
+set(Vang_FILES
     "./src/VangPCH.h"
     "./src/Vang.h"
     "./src/Vang.cpp"
-)
 
-set(Vang_UTILITY_BLUEPRINTCONTAINER
     "./src/Vang/Utility/BlueprintContainer/BlueprintContainer.h"
-)
 
-set(Vang_UTILITY_CAMERA
     "./src/Vang/Utility/Camera/Camera.h"
     "./src/Vang/Utility/Camera/Camera.cpp"
-)
 
-set(Vang_UTILITY_EVENTS
     "./src/Vang/Utility/Events/ApplicationEvent.h"
     "./src/Vang/Utility/Events/Event.h"
     "./src/Vang/Utility/Events/KeyEvent.h"
     "./src/Vang/Utility/Events/MouseEvent.h"
-)
+    "./src/Vang/Utility/Events/EventHandler.h"
+    "./src/Vang/Utility/Events/EventHandler.cpp"
 
-set(Vang_UTILITY_FILEIO
     "./src/Vang/Utility/FileIO/FileIO.h"
     "./src/Vang/Utility/FileIO/FileIO.cpp"
-)
 
-set(Vang_UTILITY_INPUT
     "./src/Vang/Utility/Input/Input.h"
     "./src/Vang/Utility/Input/Input.cpp"
-)
 
-set(Vang_UTILITY_LAYERS
     "./src/Vang/Utility/Layers/Layer.h"
     "./src/Vang/Utility/Layers/Layer.cpp"
     "./src/Vang/Utility/Layers/LayerStack.h"
     "./src/Vang/Utility/Layers/LayerStack.cpp"
-)
 
-set(Vang_UTILITY_LOGGING
     "./src/Vang/Utility/Logging/Log.h"
     "./src/Vang/Utility/Logging/Log.cpp"
-)
 
-set(Vang_UTILITY_PLAYER
     "./src/Vang/Utility/Player/Player.h"
     "./src/Vang/Utility/Player/Player.cpp"
-)
 
-set(Vang_UTILITY_TEXTURES
     "./src/Vang/Utility/Textures/TextureBlueprint.h"
     "./src/Vang/Utility/Textures/TextureBlueprint.cpp"
-)
 
-set(Vang_UTILITY_TIME
     "./src/Vang/Utility/Time/Time.h"
     "./src/Vang/Utility/Time/Time.cpp"
-)
 
-set(Vang_ITEMS
     "./src/Vang/Items/Item.h"
     "./src/Vang/Items/Item.cpp"
     "./src/Vang/Items/ItemBlueprint.h"
     "./src/Vang/Items/ItemBlueprint.cpp"
-)
 
-set(Vang_ITEMS_USABILITY
     "./src/Vang/Items/Usability/Placeable.h"
     "./src/Vang/Items/Usability/Placeable.cpp"
     "./src/Vang/Items/Usability/Unusable.h"
     "./src/Vang/Items/Usability/Unusable.cpp"
     "./src/Vang/Items/Usability/Usability.h"
     "./src/Vang/Items/Usability/Usability.cpp"
-)
 
-set(Vang_MODDING
     "./src/Vang/Modding/Mod.h"
     "./src/Vang/Modding/Mod.cpp"
     "./src/Vang/Modding/ModManager.h"
     "./src/Vang/Modding/ModManager.cpp"
-)
 
-set(Vang_WINDOW
     "./src/Vang/Window/Window.h"
     "./src/Vang/Window/Window.cpp"
-)
 
-set(Vang_WINDOW_WINDOWGLFW
     "./src/Vang/Window/WindowGLFW/WindowGLFW.h"
     "./src/Vang/Window/WindowGLFW/WindowGLFW.cpp"
     "./src/Vang/Window/WindowGLFW/InputGLFW.h"
     "./src/Vang/Window/WindowGLFW/InputGLFW.cpp"
-)
 
-set(Vang_GRAPHICSAPI
     "./src/Vang/GraphicsAPI/Generic/GraphicsAPI.h"
     "./src/Vang/GraphicsAPI/Generic/GraphicsAPI.cpp"
-)
 
-set(Vang_GRAPHICSAPI_SHADERS
     "./src/Vang/GraphicsAPI/Generic/Shaders/ShaderProgram.h"
-)
 
-set(Vang_GRAPHICSAPI_GRAPHICSVULKAN
-    "./src/Vang/GraphicsAPI/GraphicsVulkan/GraphicsVulkan.h"
-    "./src/Vang/GraphicsAPI/GraphicsVulkan/GraphicsVulkan.cpp"
-)
-
-set(Vang_GRAPHICSAPI_GRAPHICSVULKAN_VULKANHELPERS
-    "./src/Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers/VulkanInstance.h"
-    "./src/Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers/VulkanInstance.cpp"
-    "./src/Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers/VulkanSurface.h"
-    "./src/Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers/VulkanSurface.cpp"
-)
-
-set(Vang_GRAPHICSAPI_GRAPHICSOPENGL
     "./src/Vang/GraphicsAPI/GraphicsOpenGL/GraphicsOpenGL.h"
     "./src/Vang/GraphicsAPI/GraphicsOpenGL/GraphicsOpenGL.cpp"
-)
 
-set(Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADERS
     "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/Shader.h"
     "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/Shader.cpp"
     "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/ShaderProgram.h"
@@ -129,9 +82,7 @@ set(Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADERS
     "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/ShaderTexture.cpp"
     "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/VertexData.h"
     "./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/VertexData.cpp"
-)
 
-set(Vang_VOXEL
     "./src/Vang/Voxel/Block.h"
     "./src/Vang/Voxel/Block.cpp"
     "./src/Vang/Voxel/BlockBlueprint.h"
@@ -144,31 +95,4 @@ set(Vang_VOXEL
     "./src/Vang/Voxel/UniverseManager.cpp"
     "./src/Vang/Voxel/World.h"
     "./src/Vang/Voxel/World.cpp"
-)
-
-set(Vang_FILES
-    ${Vang_Vang}
-    ${Vang_UTILITY_BLUEPRINTCONTAINER}
-    ${Vang_UTILITY_CAMERA}
-    ${Vang_UTILITY_EVENTS}
-    ${Vang_UTILITY_FILEIO}
-    ${Vang_UTILITY_INPUT}
-    ${Vang_UTILITY_LAYERS}
-    ${Vang_UTILITY_LOGGING}
-    ${Vang_UTILITY_PLAYER}
-    ${Vang_UTILITY_TEXTURES}
-    ${Vang_UTILITY_TIME}
-    ${Vang_ITEMS}
-    ${Vang_ITEMS_USABILITY}
-    ${Vang_MODDING}
-    ${Vang_WINDOW}
-    ${Vang_WINDOW_WINDOWGLFW}
-    ${Vang_GRAPHICSAPI}
-    ${Vang_GRAPHICSAPI_SHADERS}
-    ${Vang_GRAPHICSAPI_SHADERPROGRAM}
-    ${Vang_GRAPHICSAPI_GRAPHICSVULKAN}
-    ${Vang_GRAPHICSAPI_GRAPHICSVULKAN_VULKANHELPERS}
-    ${Vang_GRAPHICSAPI_GRAPHICSOPENGL}
-    ${Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADERS}
-    ${Vang_VOXEL}
 )

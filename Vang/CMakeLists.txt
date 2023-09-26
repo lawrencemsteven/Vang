@@ -4,30 +4,6 @@ add_library(Vang STATIC ${Vang_FILES})
 
 target_compile_features(Vang PUBLIC cxx_std_20)
 
-source_group("Vang" FILES ${Vang_Vang})
-source_group("Vang/Utility/BlueprintContainer" FILES ${Vang_UTILITY_BLUEPRINTCONTAINER})
-source_group("Vang/Utility/Camera" FILES ${Vang_UTILITY_CAMERA})
-source_group("Vang/Utility/Events" FILES ${Vang_UTILITY_EVENTS})
-source_group("Vang/Utility/FileIO" FILES ${Vang_UTILITY_FILEIO})
-source_group("Vang/Utility/Input" FILES ${Vang_UTILITY_INPUT})
-source_group("Vang/Utility/Layers" FILES ${Vang_UTILITY_LAYERS})
-source_group("Vang/Utility/Logging" FILES ${Vang_UTILITY_LOGGING})
-source_group("Vang/Utility/Player" FILES ${Vang_UTILITY_PLAYER})
-source_group("Vang/Utility/Textures" FILES ${Vang_UTILITY_TEXTURES})
-source_group("Vang/Utility/Time" FILES ${Vang_UTILITY_TIME})
-source_group("Vang/Items/" FILES ${Vang_ITEMS})
-source_group("Vang/Items/Usability" FILES ${Vang_ITEMS_USABILITY})
-source_group("Vang/Modding" FILES ${Vang_MODDING})
-source_group("Vang/Window" FILES ${Vang_WINDOW})
-source_group("Vang/Window/WindowGLFW" FILES ${Vang_WINDOW_WINDOWGLFW})
-source_group("Vang/GraphicsAPI/Generic" FILES ${Vang_GRAPHICSAPI})
-source_group("Vang/GraphicsAPI/Generic/Shaders" FILES ${Vang_GRAPHICSAPI_SHADERS})
-source_group("Vang/GraphicsAPI/GraphicsVulkan" FILES ${Vang_GRAPHICSAPI_GRAPHICSVULKAN})
-source_group("Vang/GraphicsAPI/GraphicsVulkan/VulkanHelpers" FILES ${Vang_GRAPHICSAPI_GRAPHICSVULKAN_VULKANHELPERS})
-source_group("Vang/GraphicsAPI/GraphicsOpenGL" FILES ${Vang_GRAPHICSAPI_GRAPHICSOPENGL})
-source_group("Vang/GraphicsAPI/GraphicsOpenGL/Shaders" FILES ${Vang_GRAPHICSAPI_GRAPHICSOPENGL_SHADERS})
-source_group("Vang/Voxel" FILES ${Vang_VOXEL})
-
 # WINDOW API'S:
 #   VANG_WINDOW_GLFW
 

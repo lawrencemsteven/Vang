@@ -10,8 +10,8 @@ namespace Vang::Windowing {
 	public:
 		WindowGLFW(const std::string& title, uint32_t width, uint32_t height);
 		~WindowGLFW();
-		WindowGLFW(const WindowGLFW&)	  = delete;
-		WindowGLFW(WindowGLFW&&)		  = delete;
+		WindowGLFW(const WindowGLFW&)			 = delete;
+		WindowGLFW(WindowGLFW&&)				 = delete;
 		WindowGLFW& operator=(const WindowGLFW&) = delete;
 		WindowGLFW& operator=(WindowGLFW&&)		 = delete;
 
@@ -22,7 +22,6 @@ namespace Vang::Windowing {
 
 		void setTitle(const std::string& title) override;
 		void setResolution(uint32_t width, uint32_t height) override;
-		void setEventCallback(const EventCallbackFn& callback) override;
 		void setVSync(bool enabled) override;
 
 		void* getNativeWindow() const override;

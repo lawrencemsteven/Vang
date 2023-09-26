@@ -42,7 +42,7 @@ namespace Vang::gfx::OpenGL {
 
 	void GraphicsOpenGL::initialize() {
 		initializeOpenGL();
-		Vang::Windowing::Window& window = VangInst::Get().getWindow();
+		Vang::Windowing::Window& window = Vang::getWindow();
 		m_shaderProgramManager.initialize(DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER,
 										  DEFAULT_COMPUTE_SHADER, window.getWidth(),
 										  window.getHeight());
@@ -59,7 +59,7 @@ namespace Vang::gfx::OpenGL {
 
 		glClearColor(0.0f, 0.4f, 0.0f, 1.0f);
 
-		Vang::Windowing::Window& window = VangInst::Get().getWindow();
+		Vang::Windowing::Window& window = Vang::getWindow();
 		windowResize(window.getWidth(), window.getHeight());
 	}
 

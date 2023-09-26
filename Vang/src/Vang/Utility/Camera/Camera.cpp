@@ -7,30 +7,30 @@ namespace Vang::Objects {
 
 	void Camera::setPosition(const glm::vec3& position) {
 		m_position = position;
-		VangInst::Get().getGraphicsAPI().displayCamera(*this);
+		Vang::getGraphicsAPI().displayCamera(*this);
 	}
 
 	void Camera::setFOV(float fov) {
 		m_fov = fov;
-		VangInst::Get().getGraphicsAPI().displayCamera(*this);
+		Vang::getGraphicsAPI().displayCamera(*this);
 	}
 
 	void Camera::setLookSensitivity(float lookSensitivity) {
 		m_lookSensitivity = lookSensitivity;
-		VangInst::Get().getGraphicsAPI().displayCamera(*this);
+		Vang::getGraphicsAPI().displayCamera(*this);
 	}
 
 	void Camera::rotateRight(float x_offset) {
 		m_yaw -= x_offset;
 		recalculateForward();
-		VangInst::Get().getGraphicsAPI().displayCamera(*this);
+		Vang::getGraphicsAPI().displayCamera(*this);
 	}
 
 	void Camera::rotateUp(float y_offset) {
 		m_pitch += y_offset;
 		m_pitch = std::clamp(m_pitch, -89.0f, 89.0f);
 		recalculateForward();
-		VangInst::Get().getGraphicsAPI().displayCamera(*this);
+		Vang::getGraphicsAPI().displayCamera(*this);
 	}
 
 	void Camera::mouseRotate(double x_pos, double y_pos) {
@@ -51,14 +51,14 @@ namespace Vang::Objects {
 
 		rotateRight(x_offset);
 		rotateUp(y_offset);
-		VangInst::Get().getGraphicsAPI().displayCamera(*this);
+		Vang::getGraphicsAPI().displayCamera(*this);
 	}
 
 	void Camera::lookAt(const glm::vec3& look_at) {
 		VANG_ERROR("Camera::lookAt has not been implemented yet!");
 		// This can most likely be done with glm::lookat function, just needs to be implemented and
 		// tested.
-		VangInst::Get().getGraphicsAPI().displayCamera(*this);
+		Vang::getGraphicsAPI().displayCamera(*this);
 	}
 
 	glm::vec3 Camera::getPosition() const {

@@ -9,13 +9,13 @@ namespace Vang::Utility::Layers {
 		LayerStack();
 		~LayerStack();
 
+		void update();
+		void onEvent(Vang::Windowing::Event& e);
+
 		void pushLayer(Layer* layer);
 		void pushOverlay(Layer* overlay);
 		void popLayer(Layer* layer);
 		void popOverlay(Layer* overlay);
-
-		std::vector<Layer*>::iterator begin();
-		std::vector<Layer*>::iterator end();
 
 	private:
 		std::vector<Layer*> m_layers;
