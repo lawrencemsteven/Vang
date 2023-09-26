@@ -4,29 +4,30 @@ class PlayerMovementLayer : public Vang::Utility::Layers::Layer {
 public:
 	PlayerMovementLayer()
 		: Layer{"Player Movement"} {}
-	
+
 	void onUpdate() override {
 		const auto& inputCache = Vang::getInputCache();
+		auto& player		   = Vang::getPlayer();
 
 		if (inputCache.isKeyPressed(Vang::Input::KEY::W)) {
-			Vang::getPlayer().moveForward(Vang::Utility::Time::deltaTime());
+			player.moveForward(Vang::Utility::Time::deltaTime());
 		}
 		else if (inputCache.isKeyPressed(Vang::Input::KEY::S)) {
-			Vang::getPlayer().moveForward(-Vang::Utility::Time::deltaTime());
+			player.moveForward(-Vang::Utility::Time::deltaTime());
 		}
 
 		if (inputCache.isKeyPressed(Vang::Input::KEY::D)) {
-			Vang::getPlayer().moveRight(Vang::Utility::Time::deltaTime());
+			player.moveRight(Vang::Utility::Time::deltaTime());
 		}
 		else if (inputCache.isKeyPressed(Vang::Input::KEY::A)) {
-			Vang::getPlayer().moveRight(-Vang::Utility::Time::deltaTime());
+			player.moveRight(-Vang::Utility::Time::deltaTime());
 		}
 
 		if (inputCache.isKeyPressed(Vang::Input::KEY::SPACE)) {
-			Vang::getPlayer().moveUp(Vang::Utility::Time::deltaTime());
+			player.moveUp(Vang::Utility::Time::deltaTime());
 		}
 		else if (inputCache.isKeyPressed(Vang::Input::KEY::LEFT_SHIFT)) {
-			Vang::getPlayer().moveUp(-Vang::Utility::Time::deltaTime());
+			player.moveUp(-Vang::Utility::Time::deltaTime());
 		}
 	}
 
@@ -37,7 +38,9 @@ public:
 	}
 
 	bool mouseMovedHandler(Vang::Utility::Events::MouseMovedEvent& e) {
-		Vang::getPlayer().getCamera().mouseRotate(e.getX(), -e.getY());
+		auto& playerCamera = Vang::getPlayer().getCamera();
+
+		playerCamera.mouseRotate(e.getX(), -e.getY());
 		return true;
 	}
 };
@@ -46,6 +49,7 @@ int main() {
 	Vang::getLayerStack().pushLayer(new PlayerMovementLayer());
 
 	while (Vang::getRunning()) {
+		auto previousFrameTime = std::chrono::system_clock::now();
 		Vang::update();
 	}
 }

@@ -25,14 +25,14 @@ namespace Vang {
 	}
 
 	void update() {
+		Vang::Utility::Time::updateDeltaTime();
+
 		s_window.update();
 		s_layerStack.update();
 		s_graphicsAPI.update();
 
-		Vang::Utility::Time::updateDeltaTime();
-
 		if (!s_running) {
-			cleanup;
+			cleanup();
 		}
 	}
 
