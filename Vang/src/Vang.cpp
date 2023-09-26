@@ -2,8 +2,6 @@
 
 namespace Vang {
 
-	// TODO: All classes should follow rule of 5 and should have copy constructors deleted!
-
 	static bool s_running{true};
 	static std::string s_applicationName{};
 	static VANG_CURRENT_WINDOW s_window{s_applicationName, DEFAULT_WIDTH, DEFAULT_HEIGHT};

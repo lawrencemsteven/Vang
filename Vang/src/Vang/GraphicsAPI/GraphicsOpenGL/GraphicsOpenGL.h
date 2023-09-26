@@ -12,10 +12,6 @@ namespace Vang::gfx::OpenGL {
 		GraphicsOpenGL();
 		GraphicsOpenGL(std::string_view applicationName);
 		~GraphicsOpenGL();
-		GraphicsOpenGL(const GraphicsOpenGL&)			 = delete;
-		GraphicsOpenGL(GraphicsOpenGL&&)				 = delete;
-		GraphicsOpenGL& operator=(const GraphicsOpenGL&) = delete;
-		GraphicsOpenGL& operator=(GraphicsOpenGL&&)		 = delete;
 
 		void update() override;
 

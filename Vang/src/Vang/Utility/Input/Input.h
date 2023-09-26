@@ -158,6 +158,13 @@ namespace Vang::Input {
 
 	class InputCache {
 	public:
+		InputCache()							 = default;
+		~InputCache()							 = default;
+		InputCache(const InputCache&)			 = delete;
+		InputCache(InputCache&&)				 = delete;
+		InputCache& operator=(const InputCache&) = delete;
+		InputCache& operator=(InputCache&&)		 = delete;
+
 		virtual bool isKeyPressed(KEY keycode) const			 = 0;
 		virtual bool isMouseButtonPressed(MOUSE button) const	 = 0;
 		virtual std::pair<float, float> getMousePosition() const = 0;

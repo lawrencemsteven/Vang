@@ -6,6 +6,13 @@ namespace Vang::Blueprints {
 	class BlueprintContainer {
 
 	public:
+		BlueprintContainer()									 = default;
+		~BlueprintContainer()									 = default;
+		BlueprintContainer(const BlueprintContainer&)			 = delete;
+		BlueprintContainer(BlueprintContainer&&)				 = delete;
+		BlueprintContainer& operator=(const BlueprintContainer&) = delete;
+		BlueprintContainer& operator=(BlueprintContainer&&)		 = delete;
+
 		void addBlueprint(T blueprint);
 		T& getBlueprint(uint32_t blueprint_id);
 		std::optional<uint32_t> getBlueprintId(const std::string& name);

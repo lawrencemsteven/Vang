@@ -8,6 +8,10 @@ namespace Vang::Utility::Layers {
 	public:
 		LayerStack();
 		~LayerStack();
+		LayerStack(const LayerStack&)			 = delete;
+		LayerStack(LayerStack&&)				 = delete;
+		LayerStack& operator=(const LayerStack&) = delete;
+		LayerStack& operator=(LayerStack&&)		 = delete;
 
 		void update();
 		void onEvent(Vang::Utility::Events::Event& e);

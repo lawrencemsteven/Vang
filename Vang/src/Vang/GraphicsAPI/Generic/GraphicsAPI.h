@@ -8,6 +8,10 @@ namespace Vang::gfx {
 	public:
 		GraphicsAPI();
 		GraphicsAPI(std::string_view application_name);
+		GraphicsAPI(const GraphicsAPI&)			   = delete;
+		GraphicsAPI(GraphicsAPI&&)				   = delete;
+		GraphicsAPI& operator=(const GraphicsAPI&) = delete;
+		GraphicsAPI& operator=(GraphicsAPI&&)	   = delete;
 
 		virtual void update() = 0;
 
