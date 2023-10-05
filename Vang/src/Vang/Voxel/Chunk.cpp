@@ -1,6 +1,6 @@
 #include "Chunk.h"
 
-namespace Vang {
+namespace Vang::Voxel {
 
 
 

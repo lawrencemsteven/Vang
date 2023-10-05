@@ -1,6 +1,10 @@
 #pragma once
 
+#include "glm/glm.hpp"
+
 namespace Vang::Voxel {
+
+	inline const glm::uvec3 chunkSize{16, 16, 16};
 
 	class Chunk {
 	public:
