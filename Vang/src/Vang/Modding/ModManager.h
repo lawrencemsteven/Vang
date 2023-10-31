@@ -20,7 +20,7 @@ namespace Vang::Modding {
 
 	private:
 		std::vector<Mod> m_allMods;
-		bool m_initialized;
+		bool m_initialized{false};
 	};
 
 }
