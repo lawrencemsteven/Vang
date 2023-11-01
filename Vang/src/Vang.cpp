@@ -13,6 +13,9 @@ namespace Vang {
 	static Vang::Utility::Layers::LayerStack s_layerStack{};
 	static Vang::Utility::Events::EventHandler s_eventHandler{};
 	static VANG_CURRENT_WINDOW_INPUT s_inputCache{};
+	
+	static std::unordered_map<uint32_t, std::reference_wrapper<Vang::Voxel::ChunkLoader>> s_chunkLoaders;
+	static uint32_t s_chunkLoaderCount{0};
 
 	void cleanup() {
 		s_window.close();
@@ -28,6 +31,10 @@ namespace Vang {
 		s_window.update();
 		s_layerStack.update();
 		s_graphicsAPI.update();
+
+		for (const auto& [chunkLoaderId, chunkLoader] : s_chunkLoaders) {
+			chunkLoader.get().update();
+		}
 
 		if (!s_running) {
 			cleanup();
@@ -68,4 +75,19 @@ namespace Vang {
 	Vang::Input::InputCache& getInputCache() {
 		return s_inputCache;
 	}
+}
+
+
+namespace Vang::detail {
+
+	uint32_t addChunkLoader(Vang::Voxel::ChunkLoader& chunkLoader) {
+		s_chunkLoaders.emplace(s_chunkLoaderCount, chunkLoader);
+		return ++s_chunkLoaderCount;
+	}
+
+	void removeChunkLoader(uint32_t chunkLoaderId) {
+		const auto it = s_chunkLoaders.find(chunkLoaderId);
+		s_chunkLoaders.erase(it);
+	}
+
 }

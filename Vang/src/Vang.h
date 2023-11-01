@@ -28,6 +28,7 @@
 #include "Vang/Utility/Player/Player.h"
 #include "Vang/Utility/Time/Time.h"
 #include "Vang/Voxel/BlockBlueprint.h"
+#include "Vang/Voxel/ChunkLoader.h"
 #include "Vang/Voxel/Universe.h"
 #include "Vang/Window/Window.h"
 
@@ -46,4 +47,9 @@ namespace Vang {
 	Vang::Utility::Layers::LayerStack& getLayerStack();
 	Vang::Utility::Events::EventHandler& getEventHandler();
 	Vang::Input::InputCache& getInputCache();
+
+	namespace detail {
+		uint32_t addChunkLoader(Vang::Voxel::ChunkLoader& chunkLoader);
+		void removeChunkLoader(uint32_t chunkLoaderId);
+	}
 };

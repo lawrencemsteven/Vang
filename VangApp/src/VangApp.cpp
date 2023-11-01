@@ -49,7 +49,6 @@ int main() {
 	Vang::getLayerStack().pushLayer(new PlayerMovementLayer());
 
 	while (Vang::getRunning()) {
-		auto previousFrameTime = std::chrono::system_clock::now();
 		Vang::update();
 	}
 }

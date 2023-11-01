@@ -1,25 +1,28 @@
 #pragma once
 
-#include "Vang/Voxel/Chunk.h"
+#include "Vang/Voxel/World.h"
 
 namespace Vang::Voxel {
 
 	class ChunkLoader {
 	public:
-		ChunkLoader()							   = default;
-		~ChunkLoader()							   = default;
+		ChunkLoader();
+		~ChunkLoader();
 		ChunkLoader(const ChunkLoader&)			   = delete;
 		ChunkLoader(ChunkLoader&&)				   = delete;
 		ChunkLoader& operator=(const ChunkLoader&) = delete;
 		ChunkLoader& operator=(ChunkLoader&&)	   = delete;
 
-		virtual void update() = 0;
+		void update();
 
 		uint32_t getTotalLoadedChunks() const;
 
-	private:
-		uint32_t m_totalLoadedChunks{0};
+	protected:
+		uint32_t m_totalLoadedChunks{0U};
 		std::vector<std::reference_wrapper<Chunk>> m_chunks;
+
+	private:
+		uint32_t m_chunkLoaderId{};
 	};
 
 }

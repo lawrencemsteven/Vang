@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vang/Utility/Camera/Camera.h"
+#include "Vang/Voxel/ChunkRenderer.h"
 
 namespace Vang::Objects {
 
