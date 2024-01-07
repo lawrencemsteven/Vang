@@ -13,8 +13,9 @@ namespace Vang {
 	static Vang::Utility::Layers::LayerStack s_layerStack{};
 	static Vang::Utility::Events::EventHandler s_eventHandler{};
 	static VANG_CURRENT_WINDOW_INPUT s_inputCache{};
-	
-	static std::unordered_map<uint32_t, std::reference_wrapper<Vang::Voxel::ChunkLoader>> s_chunkLoaders;
+
+	static std::unordered_map<uint32_t, std::reference_wrapper<Vang::Voxel::ChunkLoader>>
+		s_chunkLoaders;
 	static uint32_t s_chunkLoaderCount{0};
 
 	void cleanup() {

@@ -1,6 +1,5 @@
 #pragma once
 
-
 #ifdef VANG_DEBUG
 #	define VANG_FATAL(message) Vang::Utility::Log::Fatal(message);
 #	define VANG_ERROR(message) Vang::Utility::Log::Error(message);
@@ -40,8 +39,9 @@ namespace Vang::Utility {
 						  const std::source_location location = std::source_location::current());
 		static void Fatal(const std::string_view message,
 						  const std::source_location location = std::source_location::current());
-		static void FatalExceptionOnly(const std::string_view message,
-						  const std::source_location location = std::source_location::current());
+		static void
+		FatalExceptionOnly(const std::string_view message,
+						   const std::source_location location = std::source_location::current());
 
 	private:
 		static inline void Print(std::string_view color, std::string_view message,

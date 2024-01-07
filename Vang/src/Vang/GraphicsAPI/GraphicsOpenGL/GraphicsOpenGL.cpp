@@ -8,9 +8,12 @@
 #	include "GLFW/glfw3.h"
 #endif
 
-#define DEFAULT_VERTEX_SHADER "../../../Vang/shaders/main.vert.glsl"
-#define DEFAULT_FRAGMENT_SHADER "../../../Vang/shaders/main.frag.glsl"
-#define DEFAULT_COMPUTE_SHADER "../../../Vang/shaders/voxelRayMarcher.glsl"
+#define DEFAULT_VERTEX_SHADER                                                                      \
+	static_cast<std::string>(VANG_SHADERS_FOLDER).append("/main.vert.glsl")
+#define DEFAULT_FRAGMENT_SHADER                                                                    \
+	static_cast<std::string>(VANG_SHADERS_FOLDER).append("/main.frag.glsl")
+#define DEFAULT_COMPUTE_SHADER                                                                     \
+	static_cast<std::string>(VANG_SHADERS_FOLDER).append("/voxelRayMarcher.glsl")
 
 namespace Vang::gfx::OpenGL {
 
@@ -66,5 +69,4 @@ namespace Vang::gfx::OpenGL {
 	void GraphicsOpenGL::cleanup() {
 		VANG_DEBUG("Closing OpenGL");
 	}
-
 }

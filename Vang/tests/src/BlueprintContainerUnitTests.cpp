@@ -4,7 +4,8 @@
 #include "Vang/Items/ItemBlueprint.h"
 #include "Vang/Modding/Mod.h"
 
-using namespace Vang;
+using namespace Vang::Blueprints;
+using namespace Vang::Modding;
 
 TEST_CASE("BlueprintContainer.addBlueprint()") {
 	SECTION("addBlueprint() with many blueprints") {
