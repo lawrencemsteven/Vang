@@ -10,7 +10,10 @@ namespace Vang::Voxel {
 	public:
 		Universe();
 		Universe(std::string seed);
-		Universe operator=(const Universe&);
+		Universe(const Universe&)			 = delete;
+		Universe(Universe&&)				 = delete;
+		Universe& operator=(const Universe&) = delete;
+		Universe& operator=(Universe&&)		 = delete;
 
 		worldID createWorld();
 		World& getWorld(worldID id);

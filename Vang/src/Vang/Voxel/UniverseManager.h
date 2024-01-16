@@ -4,8 +4,8 @@
 
 namespace Vang::Voxel::UniverseManager {
 
-	const Universe& createUniverse(const std::string& seed);
+	const std::shared_ptr<Universe> createUniverse(const std::string& seed);
 
-	const Universe& getCurrentUniverse();
+	const std::shared_ptr<Universe> getCurrentUniverse();
 
 }

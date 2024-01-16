@@ -74,6 +74,13 @@
         "xtr1common": "cpp",
         "xtree": "cpp",
         "xutility": "cpp",
-        "*.rh": "cpp"
+        "*.rh": "cpp",
+        "deque": "cpp",
+        "future": "cpp",
+        "regex": "cpp",
+        "condition_variable": "cpp",
+        "cstdarg": "cpp",
+        "numeric": "cpp",
+        "stack": "cpp"
     }
 }

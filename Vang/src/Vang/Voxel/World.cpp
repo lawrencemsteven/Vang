@@ -3,7 +3,7 @@
 namespace Vang::Voxel {
 
 	glm::ivec3 World::convertWorldPosToChunkCoord(glm::vec3 worldPos) {
-		return static_cast<glm::ivec3>(worldPos) / static_cast<glm::ivec3>(chunkSize);
+		return convertWorldPosToChunkCoord(static_cast<glm::ivec3>(worldPos));
 	}
 	glm::ivec3 World::convertWorldPosToChunkCoord(glm::ivec3 worldPos) {
 		return worldPos / static_cast<glm::ivec3>(chunkSize);
@@ -50,7 +50,8 @@ namespace Vang::Voxel {
 	}
 
 	Chunk& World::initializeChunk(const glm::ivec3& chunkPosition) {
-		m_loadedChunks.emplace(std::make_pair(chunkPosition, std::make_pair(1U, std::make_unique<Chunk>(chunkPosition))));
+		m_loadedChunks.emplace(std::make_pair(
+			chunkPosition, std::make_pair(1U, std::make_unique<Chunk>(chunkPosition))));
 		return *m_loadedChunks[chunkPosition].second;
 	}
 
