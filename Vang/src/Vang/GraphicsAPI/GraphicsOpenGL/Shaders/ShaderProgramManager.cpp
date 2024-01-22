@@ -28,6 +28,28 @@ namespace Vang::gfx::OpenGL {
 
 		m_computeShaderProgram.setUniform("iResolution", static_cast<int>(width),
 										  static_cast<int>(height));
+
+		// TEMP SHADER BUFFER ATTEMPT
+		std::vector<uint32_t> testData{};
+		testData.resize(524288);
+		std::fill(testData.begin(), testData.end(), 1);
+		for (uint32_t i = 0; i < 10; i++) {
+			testData[i] = i;
+		}
+
+		GLint chunkBlockLocation;
+		GLuint chunkBuffer;
+		GLuint chunkBufferBindingPoint = 0;
+
+		chunkBlockLocation = glGetUniformBlockIndex(m_computeShaderProgram.getID(), "ChunkBlock");
+
+		glGenBuffers(1, &chunkBuffer);
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, chunkBuffer);
+		glBufferData(GL_SHADER_STORAGE_BUFFER, testData.size() * sizeof(uint32_t), testData.data(),
+					 GL_DYNAMIC_DRAW);
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, chunkBufferBindingPoint, chunkBuffer);
+		glShaderStorageBlockBinding(m_computeShaderProgram.getID(), chunkBlockLocation,
+									chunkBufferBindingPoint);
 	}
 
 	void ShaderProgramManager::update() {

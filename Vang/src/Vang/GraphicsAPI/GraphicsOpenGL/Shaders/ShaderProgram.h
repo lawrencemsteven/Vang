@@ -22,6 +22,8 @@ namespace Vang::gfx::OpenGL {
 
 		bool attachShader(Shader shader);
 
+		GLuint getID() const;
+
 		void use();
 
 		void setUniform(const std::string& name, glm::float32_t val1);

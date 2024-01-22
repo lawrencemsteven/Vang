@@ -56,6 +56,10 @@ namespace Vang::gfx::OpenGL {
 		return true;
 	}
 
+	GLuint ShaderProgram::getID() const {
+		return m_shaderProgram;
+	}
+
 	void ShaderProgram::use() {
 		glUseProgram(m_shaderProgram);
 	}

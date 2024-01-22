@@ -10,6 +10,10 @@ struct Camera {
     float fov;
 };
 
+layout(std430) buffer Chunk {
+    uint blocks[131072];
+};
+
 uniform ivec2 iResolution;
 uniform float iTime;
 uniform Camera camera;
@@ -87,7 +91,9 @@ void main() {
     float dif = getLight(p);
     col = vec3(dif);
 
-    // col *= vec3(1.0f, 0.0f, 0.0f);
+    if (blocks[1] == 1) {
+        col *= vec3(1.0f, 0.0f, 0.0f);
+    }
 
     imageStore(screen, pixel_coords, vec4(col, 1.0f));
 }

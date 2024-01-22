@@ -4,7 +4,10 @@
 
 namespace Vang::Voxel {
 
-	typedef int worldID;
+	struct PlayerData {
+		worldID world{};
+		glm::ivec3 position{};
+	};
 
 	class Universe {
 	public:
@@ -19,8 +22,9 @@ namespace Vang::Voxel {
 		World& getWorld(worldID id);
 
 	private:
-		const std::string m_seed;
-		std::vector<World> m_worlds;
+		const std::string m_seed{};
+		std::vector<World> m_worlds{};
+		std::unordered_map<std::string, PlayerData> playerData{};
 	};
 
 }
