@@ -32,9 +32,11 @@ namespace Vang::gfx::OpenGL {
 		// TEMP SHADER BUFFER ATTEMPT
 		std::vector<uint32_t> testData{};
 		testData.resize(524288);
-		std::fill(testData.begin(), testData.end(), 1);
-		for (uint32_t i = 0; i < 10; i++) {
-			testData[i] = i;
+		std::fill(testData.begin(), testData.end(), 0);
+		for (uint32_t x = 0; x < 64; x++) {
+			for (uint32_t z = 0; z < 64; z++) {
+				testData[z * 64 + x] = 1;
+			}
 		}
 
 		GLint chunkBlockLocation;

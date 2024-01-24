@@ -11,7 +11,7 @@ struct Camera {
 };
 
 layout(std430) buffer Chunk {
-    uint blocks[131072];
+    uint blocks[262144];
 };
 
 uniform ivec2 iResolution;
@@ -69,6 +69,20 @@ float getLight(vec3 p) {
     return dif;
 }
 
+uint getBlock(vec3 pos) {
+    ivec3 blockCoords = ivec3(round(pos.x), round(pos.y), round(pos.z));
+    return getBlock(blockCoords);
+    
+}
+uint getBlock(ivec3 coord) {
+    // TODO: Add more chunks
+    coord = clamp(coord, 0, 63);
+
+    uint index = coord.x + (64 * coord.z) + (64 * 64 * coord.y);
+
+    return blocks[index];
+}
+
 void main() {
     ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
 
@@ -91,7 +105,9 @@ void main() {
     float dif = getLight(p);
     col = vec3(dif);
 
-    if (blocks[1] == 1) {
+    if (blocks[262143] == 0) {
+        col *= vec3(0.0f, 1.0f, 0.0f);
+    } else {
         col *= vec3(1.0f, 0.0f, 0.0f);
     }
 
