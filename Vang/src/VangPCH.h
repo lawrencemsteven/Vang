@@ -15,6 +15,7 @@
 #include <stdexcept>
 #include <string_view>
 #include <sstream>
+#include <thread>
 #include <variant>
 #include <vector>
 

@@ -33,11 +33,16 @@ namespace Vang::gfx::OpenGL {
 		std::vector<uint32_t> testData{};
 		testData.resize(524288);
 		std::fill(testData.begin(), testData.end(), 0);
+
+		// Ground plane
 		for (uint32_t x = 0; x < 64; x++) {
 			for (uint32_t z = 0; z < 64; z++) {
 				testData[z * 64 + x] = 1;
 			}
 		}
+
+		// [1, 5, 1]
+		testData[1 + 1 * 64 + 5 * 64 * 64] = 1;
 
 		GLint chunkBlockLocation;
 		GLuint chunkBuffer;

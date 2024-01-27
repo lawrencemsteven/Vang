@@ -32,11 +32,11 @@ float getDist(vec3 p) {
     return dist;
 }
 
-float rayMarch(vec3 ro, vec3 rd) {
+float rayMarch(vec3 rayOrigin, vec3 rayDirection) {
     float dO = 0.0f;
     
     for (int i = 0; i < MAX_STEPS; i++) {
-        vec3 p = ro + rd*dO;
+        vec3 p = rayOrigin + rayDirection*dO;
         float dS = getDist(p);
         dO += dS;
         if (dO > MAX_DIST || dS < SURF_DIST) break;
@@ -69,18 +69,37 @@ float getLight(vec3 p) {
     return dif;
 }
 
-uint getBlock(vec3 pos) {
-    ivec3 blockCoords = ivec3(round(pos.x), round(pos.y), round(pos.z));
-    return getBlock(blockCoords);
-    
+ivec3 getBlockCoords(vec3 pos) {
+    return ivec3(round(pos.x), round(pos.y), round(pos.z));
+}
+vec3 getBlockCoordsFloat(vec3 pos) {
+    return vec3(round(pos.x), round(pos.y), round(pos.z));
 }
 uint getBlock(ivec3 coord) {
     // TODO: Add more chunks
-    coord = clamp(coord, 0, 63);
+    if (coord.x > 63 || coord.x < 0 ||coord.y > 63 || coord.y < 0 || coord.z > 63 || coord.z < 0) {
+        return 2;
+    }
 
     uint index = coord.x + (64 * coord.z) + (64 * 64 * coord.y);
 
     return blocks[index];
+}
+uint getBlock(vec3 pos) {
+    return getBlock(getBlockCoords(pos));
+    
+}
+
+float planeIntersectionDistance(vec3 rayOrigin, vec3 rayDirection, vec3 planeOrigin, vec3 planeNormal) {
+    float denom = dot(planeNormal, rayDirection);
+    if (abs(denom) > 0.0f) {
+        vec3 pointDist = planeOrigin - rayOrigin;
+        float dist = dot(pointDist, planeNormal) / denom;
+        return dist;
+    }
+    // Large enough for a miss
+    // Might never be reached???
+    return 100.0f;
 }
 
 void main() {
@@ -96,19 +115,48 @@ void main() {
 
     vec3 col = vec3(0);
 
-    vec3 ro = camera.position;
-    vec3 rd = normalize(uv.x*camera.right + uv.y*camera.up + (90/camera.fov)*camera.forward);
+    vec3 rayOrigin = camera.position;
+    vec3 rayDirection = normalize(uv.x*camera.right + uv.y*camera.up + (90/camera.fov)*camera.forward);
     
-    float d = rayMarch(ro, rd);
+    float d = rayMarch(rayOrigin, rayDirection);
 
-    vec3 p = ro + rd * d;
+    vec3 p = rayOrigin + rayDirection * d;
     float dif = getLight(p);
     col = vec3(dif);
 
-    if (blocks[262143] == 0) {
-        col *= vec3(0.0f, 1.0f, 0.0f);
+
+    // Positive X to the right
+    // Positive Y up
+    // Positive Z forward
+    // Plane-Assisted Ray Marching
+    uint currentBlock = 0;
+    ivec3 currentBlockPos = getBlockCoords(rayOrigin);
+    while (currentBlock == 0) {
+        vec3 signedDirection = sign(rayDirection);
+
+        ivec3 distDir = ivec3(round(signedDirection.x), 0, 0);
+        float minDist = planeIntersectionDistance(rayOrigin, rayDirection, vec3(currentBlockPos.x + 0.5f * signedDirection.x, currentBlockPos.yz), vec3(-sign(rayDirection.x), 0.0f, 0.0f));
+
+        float newDist = planeIntersectionDistance(rayOrigin, rayDirection, vec3(currentBlockPos.x, currentBlockPos.y + 0.5f * signedDirection.y, currentBlockPos.z), vec3(0.0f, -sign(rayDirection.y), 0.0f));
+        if (newDist < minDist) {
+            distDir = ivec3(0, round(signedDirection.y), 0);
+            minDist = newDist;
+        }
+        newDist = planeIntersectionDistance(rayOrigin, rayDirection, vec3(currentBlockPos.xy, currentBlockPos.z + 0.5f * signedDirection.z), vec3(0.0f, 0.0f, -sign(rayDirection.z)));
+        if (newDist < minDist) {
+            distDir = ivec3(0, 0, round(signedDirection.z));
+            minDist = newDist;
+        }
+
+        currentBlockPos += distDir;
+        currentBlock = getBlock(currentBlockPos);
+        rayOrigin += rayDirection * minDist;
+    }
+
+    if (currentBlock == 1) {
+        col = vec3(0.0f, 1.0f, 0.0f);
     } else {
-        col *= vec3(1.0f, 0.0f, 0.0f);
+        col = vec3(0.53f, 0.81f, 0.92f);
     }
 
     imageStore(screen, pixel_coords, vec4(col, 1.0f));

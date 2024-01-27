@@ -32,6 +32,8 @@ namespace Vang {
 		if (!s_running) {
 			cleanup();
 		}
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 
 	void close() {
