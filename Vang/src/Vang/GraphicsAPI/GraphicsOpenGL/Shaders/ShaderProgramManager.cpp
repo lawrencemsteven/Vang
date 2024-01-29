@@ -44,6 +44,24 @@ namespace Vang::gfx::OpenGL {
 		// [1, 5, 1]
 		testData[1 + 1 * 64 + 5 * 64 * 64] = 1;
 
+		for (uint32_t y = 25; y < 30; y++) {
+			for (uint32_t x = 10; x < 15; x++) {
+				for (uint32_t z = 10; z < 15; z++) {
+					testData[x + z * 64 + y * 64 * 64] = 3;
+				}
+			}
+		}
+		for (uint32_t x = 11; x < 14; x++) {
+			for (uint32_t z = 11; z < 14; z++) {
+				testData[x + z * 64 + 30 * 64 * 64] = 3;
+			}
+		}
+		for (uint32_t x = 12; x < 13; x++) {
+			for (uint32_t z = 12; z < 13; z++) {
+				testData[x + z * 64 + 31 * 64 * 64] = 3;
+			}
+		}
+
 		GLint chunkBlockLocation;
 		GLuint chunkBuffer;
 		GLuint chunkBufferBindingPoint = 0;

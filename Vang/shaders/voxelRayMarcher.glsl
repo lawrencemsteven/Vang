@@ -29,7 +29,14 @@ uint getBlock(ivec3 coord) {
     // if (coord.x > 63 || coord.x < 0 ||coord.y > 63 || coord.y < 0 || coord.z > 63 || coord.z < 0) {
     //     return 2;
     // }
-    coord = clamp(coord, 0, 63);
+    
+    // coord = clamp(coord, 0, 63);
+
+    if (coord.y == 63) {
+        return 2;
+    }
+    coord = coord % 63;
+
 
     uint index = coord.x + (64 * coord.z) + (64 * 64 * coord.y);
 
@@ -75,7 +82,8 @@ void main() {
     uint currentBlock = 0;
     ivec3 currentBlockPos = getBlockCoords(rayOrigin);
     int blockSteps = 0;
-    while (currentBlock == 0 && blockSteps < 1000) {
+    float fogAmount = 0.0f;
+    while ((currentBlock == 0 || currentBlock == 3) && blockSteps < 1000) {
         vec3 signedDirection = sign(rayDirection);
 
         ivec3 distDir = ivec3(round(signedDirection.x), 0, 0);
@@ -92,6 +100,10 @@ void main() {
             minDist = newDist;
         }
 
+        if (currentBlock == 3) {
+            fogAmount += minDist;
+        }
+
         currentBlockPos += distDir;
         currentBlock = getBlock(currentBlockPos);
         rayOrigin += rayDirection * minDist;
@@ -99,10 +111,13 @@ void main() {
     }
 
     if (currentBlock == 1) {
-        col = vec3(0.0f, 1.0f, 0.0f);
+        col = vec3(0.0f, 0.6f, 0.0f);
     } else {
         col = vec3(0.53f, 0.81f, 0.92f);
     }
+
+    //col = mix(col, vec3(0.8, 0.8, 0.8), clamp(fogAmount / 8.0f, 0.0f, 1.0f));
+    col = mix(col, vec3(0.8, 0.0, 0.0), fogAmount / 16.0f);
 
     imageStore(screen, pixel_coords, vec4(col, 1.0f));
 }
