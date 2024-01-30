@@ -31,7 +31,7 @@ namespace Vang::gfx::OpenGL {
 
 		// TEMP SHADER BUFFER ATTEMPT
 		std::vector<uint32_t> testData{};
-		testData.resize(524288);
+		testData.resize(67108864);
 		std::fill(testData.begin(), testData.end(), 0);
 
 		// Ground plane
