@@ -33,7 +33,8 @@ namespace Vang {
 			cleanup();
 		}
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		// TODO: Yield to the operating system which is removed since it caps framerate significantly
+		// std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 
 	void close() {
