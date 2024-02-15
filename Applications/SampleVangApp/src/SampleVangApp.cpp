@@ -9,6 +9,14 @@ public:
 		const auto& inputCache = Vang::getInputCache();
 		auto& player		   = Vang::getPlayer();
 
+		if (inputCache.isKeyPressed(Vang::Input::KEY::LEFT_CONTROL) ||
+			inputCache.isMouseButtonPressed(Vang::Input::MOUSE::BUTTON_5)) {
+			player.setSpeed(6.0f);
+		}
+		else {
+			player.setSpeed(3.0f);
+		}
+
 		if (inputCache.isKeyPressed(Vang::Input::KEY::W)) {
 			player.moveForward(Vang::Utility::Time::deltaTime());
 		}
