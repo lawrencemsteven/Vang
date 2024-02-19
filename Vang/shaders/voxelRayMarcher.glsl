@@ -1,7 +1,7 @@
 #version 460 core
 layout(local_size_x = 16, local_size_y = 8, local_size_z = 1) in;
-layout(rgba32f, binding = 0) uniform image2D screen;
-layout(r32ui, binding = 1) uniform uimage3D blocks;
+layout(rgba32f, binding = 0) uniform writeonly image2D screen;
+layout(r32ui, binding = 1) uniform readonly uimage3D blocks;
 
 struct Camera {
     vec3 position;
@@ -123,10 +123,10 @@ void main() {
 
     
 
-    if (getBlock(ivec3(0, 0, 0)) == 0) {
-        //col *= vec3(0, 1.0, 0);
+    if (imageLoad(blocks, ivec3(0, 0, 0)).r == 1) {
+        col *= vec3(0.5, 1.0, 0.5);
     } else {
-        col *= vec3(1.0, 0, 0);
+        col *= vec3(1.0, 0.5, 0.5);
     }
 
     imageStore(screen, pixel_coords, vec4(col, 1.0f));

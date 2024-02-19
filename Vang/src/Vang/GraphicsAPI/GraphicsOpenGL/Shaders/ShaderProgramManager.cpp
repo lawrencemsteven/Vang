@@ -38,7 +38,7 @@ namespace Vang::gfx::OpenGL {
 
 		// TEMP SHADER BUFFER ATTEMPT
 		std::vector<uint32_t> testData{};
-		testData.resize(67108864);
+		testData.resize(262144);
 		std::fill(testData.begin(), testData.end(), 0);
 
 		// Ground plane
@@ -69,14 +69,14 @@ namespace Vang::gfx::OpenGL {
 			}
 		}
 
+		testData[0] = 1;
+
 		GLuint m_texture{};
 		glGenTextures(1, &m_texture);
-		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_3D, m_texture);
-		// The next line is causing some silly issues!
-		glTexImage3D(GL_TEXTURE_3D, 0, GL_R32UI, 64, 64, 64, 0, GL_RED, GL_UNSIGNED_INT,
+		glTexImage3D(GL_TEXTURE_3D, 0, GL_R32UI, 64, 64, 64, 0, GL_RED_INTEGER, GL_UNSIGNED_INT,
 					 testData.data());
-		// glBindImageTexture(1, m_texture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
+		glBindImageTexture(1, m_texture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
 
 		GLenum err{};
 		if ((err = glGetError()) != GL_NO_ERROR) {
