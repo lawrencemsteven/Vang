@@ -3,6 +3,10 @@ layout(local_size_x = 16, local_size_y = 8, local_size_z = 1) in;
 layout(rgba32f, binding = 0) uniform writeonly image2D screen;
 layout(r32ui, binding = 1) uniform readonly uimage3D blocks;
 
+// layout(std430) buffer Chunk {
+//     uint blocks[262144];
+// };
+
 struct Camera {
     vec3 position;
     vec3 forward;
@@ -27,9 +31,9 @@ vec3 getBlockCoordsFloat(vec3 pos) {
 }
 uint getBlock(ivec3 coord) {
     // TODO: Add more chunks
-    // if (coord.x > 63 || coord.x < 0 ||coord.y > 63 || coord.y < 0 || coord.z > 63 || coord.z < 0) {
-    //     return 2;
-    // }
+    if (coord.x > 63 || coord.x < 0 ||coord.y > 63 || coord.y < 0 || coord.z > 63 || coord.z < 0) {
+        return 2;
+    }
     
     // coord = clamp(coord, 0, 63);
 
@@ -39,9 +43,11 @@ uint getBlock(ivec3 coord) {
     //coord = coord % 63;
 
 
-    uint index = coord.x + (64 * coord.z) + (64 * 64 * coord.y);
+    //uint index = coord.x + (64 * coord.z) + (64 * 64 * coord.y);
 
-    //return blocks[index];
+    coord.yz = coord.zy;
+
+    // return blocks[index];
     return imageLoad(blocks, coord).r;
 }
 uint getBlock(vec3 pos) {
@@ -121,13 +127,25 @@ void main() {
     col = mix(col, vec3(0.8, 0.8, 0.8), clamp(fogAmount / 8.0f, 0.0f, 1.0f));
     //col = mix(col, vec3(0.8, 0.0, 0.0), fogAmount / 16.0f);
 
-    
+    // int start = 0;
+    // int end = 4;
 
-    if (imageLoad(blocks, ivec3(0, 0, 0)).r == 1) {
-        col *= vec3(0.5, 1.0, 0.5);
-    } else {
-        col *= vec3(1.0, 0.5, 0.5);
-    }
+    // col = vec3(1.0, 0.0, 0.0);
+    // for (int i = start; i < end; i++) {
+    //     for (int j = start; j < end; j++) {
+    //         for (int k = start; k < end; k++) {
+    //             if (imageLoad(blocks, ivec3(i, j, k)).r != 0) {
+    //                 col = vec3(0.0, 1.0, 0.0);
+    //             }
+    //         }
+    //     }
+    // }    
+
+    // if (imageLoad(blocks, ivec3(0, 0, 0)).r == 1) {
+    //     col *= vec3(0.5, 1.0, 0.5);
+    // } else {
+    //     col *= vec3(1.0, 0.5, 0.5);
+    // }
 
     imageStore(screen, pixel_coords, vec4(col, 1.0f));
 }

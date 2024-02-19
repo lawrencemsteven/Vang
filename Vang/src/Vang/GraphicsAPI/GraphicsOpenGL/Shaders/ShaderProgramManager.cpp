@@ -69,11 +69,27 @@ namespace Vang::gfx::OpenGL {
 			}
 		}
 
-		testData[0] = 1;
+		// GLint chunkBlockLocation;
+		// GLuint chunkBuffer;
+		// GLuint chunkBufferBindingPoint = 0;
+		// chunkBlockLocation = glGetUniformBlockIndex(m_computeShaderProgram.getID(), "ChunkBlock");
+		// glGenBuffers(1, &chunkBuffer);
+		// glBindBuffer(GL_SHADER_STORAGE_BUFFER, chunkBuffer);
+		// glBufferData(GL_SHADER_STORAGE_BUFFER, testData.size() * sizeof(uint32_t), testData.data(),
+		// 			 GL_DYNAMIC_DRAW);
+		// glBindBufferBase(GL_SHADER_STORAGE_BUFFER, chunkBufferBindingPoint, chunkBuffer);
+		// glShaderStorageBlockBinding(m_computeShaderProgram.getID(), chunkBlockLocation,
+		// 							chunkBufferBindingPoint);
 
 		GLuint m_texture{};
 		glGenTextures(1, &m_texture);
+		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_3D, m_texture);
+		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexImage3D(GL_TEXTURE_3D, 0, GL_R32UI, 64, 64, 64, 0, GL_RED_INTEGER, GL_UNSIGNED_INT,
 					 testData.data());
 		glBindImageTexture(1, m_texture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
