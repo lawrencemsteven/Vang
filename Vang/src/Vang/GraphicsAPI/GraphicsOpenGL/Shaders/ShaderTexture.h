@@ -19,4 +19,19 @@ namespace Vang::gfx::OpenGL {
 		GLuint m_texture{};
 	};
 
+	class ShaderTexture3D {
+	public:
+		ShaderTexture3D() = default;
+		~ShaderTexture3D();
+		ShaderTexture3D(const ShaderTexture3D&)			   = delete;
+		ShaderTexture3D(ShaderTexture3D&&)				   = delete;
+		ShaderTexture3D& operator=(const ShaderTexture3D&) = delete;
+		ShaderTexture3D& operator=(ShaderTexture3D&&)	   = delete;
+
+		void initialize(unsigned int width, unsigned int height, unsigned int depth);
+
+	private:
+		GLuint m_texture{};
+	};
+
 }

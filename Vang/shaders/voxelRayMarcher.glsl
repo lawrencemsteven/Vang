@@ -1,6 +1,7 @@
 #version 460 core
 layout(local_size_x = 16, local_size_y = 8, local_size_z = 1) in;
 layout(rgba32f, binding = 0) uniform image2D screen;
+layout(r32ui, binding = 1) uniform uimage3D blocks;
 
 struct Camera {
     vec3 position;
@@ -10,54 +11,9 @@ struct Camera {
     float fov;
 };
 
-layout(std430) buffer Chunk {
-    uint blocks[1048576];
-};
-layout(std430) buffer Chunk1 {
-    uint blocks1[1048576];
-};
-layout(std430) buffer Chunk2 {
-    uint blocks2[1048576];
-};
-layout(std430) buffer Chunk3 {
-    uint blocks3[1048576];
-};
-layout(std430) buffer Chunk4 {
-    uint blocks4[1048576];
-};
-layout(std430) buffer Chunk5 {
-    uint blocks5[1048576];
-};
-layout(std430) buffer Chunk6 {
-    uint blocks6[1048576];
-};
-layout(std430) buffer Chunk7 {
-    uint blocks7[1048576];
-};
-layout(std430) buffer Chunk8 {
-    uint blocks8[1048576];
-};
-layout(std430) buffer Chunk9 {
-    uint blocks9[1048576];
-};
-layout(std430) buffer Chunk10 {
-    uint blocks10[1048576];
-};
-layout(std430) buffer Chunk11 {
-    uint blocks11[1048576];
-};
-layout(std430) buffer Chunk12 {
-    uint blocks12[1048576];
-};
-layout(std430) buffer Chunk13 {
-    uint blocks13[1048576];
-};
-layout(std430) buffer Chunk14 {
-    uint blocks14[1048576];
-};
-layout(std430) buffer Chunk15 {
-    uint blocks15[1048576];
-};
+//layout(std430) buffer Chunk {
+//    uint blocks[8388608];
+//};
 
 uniform ivec2 iResolution;
 uniform float iTime;
@@ -85,7 +41,8 @@ uint getBlock(ivec3 coord) {
 
     uint index = coord.x + (64 * coord.z) + (64 * 64 * coord.y);
 
-    return blocks[index];
+    //return blocks[index];
+    return imageLoad(blocks, coord).r;
 }
 uint getBlock(vec3 pos) {
     return getBlock(getBlockCoords(pos));
@@ -164,53 +121,12 @@ void main() {
     col = mix(col, vec3(0.8, 0.8, 0.8), clamp(fogAmount / 8.0f, 0.0f, 1.0f));
     //col = mix(col, vec3(0.8, 0.0, 0.0), fogAmount / 16.0f);
 
-    if (blocks[1048575] == 0) {
-        col = vec3(0.0f, 1.0f, 0.0f);
-    }
-    if (blocks1[1048575] == 0) {
-        col = vec3(0.0f, 1.0f, 0.0f);
-    }
-    if (blocks2[1048575] == 0) {
-        col = vec3(0.0f, 1.0f, 0.0f);
-    }
-    if (blocks3[1048575] == 0) {
-        col = vec3(0.0f, 1.0f, 0.0f);
-    }
-    if (blocks4[1048575] == 0) {
-        col = vec3(0.0f, 1.0f, 0.0f);
-    }
-    if (blocks5[1048575] == 0) {
-        col = vec3(0.0f, 1.0f, 0.0f);
-    }
-    if (blocks6[1048575] == 0) {
-        col = vec3(0.0f, 1.0f, 0.0f);
-    }
-    if (blocks7[1048575] == 0) {
-        col = vec3(0.0f, 1.0f, 0.0f);
-    }
-    if (blocks8[1048575] == 0) {
-        col = vec3(0.0f, 1.0f, 0.0f);
-    }
-    if (blocks9[1048575] == 0) {
-        col = vec3(0.0f, 1.0f, 0.0f);
-    }
-    if (blocks10[1048575] == 0) {
-        col = vec3(0.0f, 1.0f, 0.0f);
-    }
-    if (blocks11[1048575] == 0) {
-        col = vec3(0.0f, 1.0f, 0.0f);
-    }
-    if (blocks12[1048575] == 0) {
-        col = vec3(0.0f, 1.0f, 0.0f);
-    }
-    if (blocks13[1048575] == 0) {
-        col = vec3(0.0f, 1.0f, 0.0f);
-    }
-    if (blocks14[1048575] == 0) {
-        col = vec3(0.0f, 1.0f, 0.0f);
-    }
-    if (blocks15[1048575] == 0) {
-        col = vec3(0.0f, 1.0f, 0.0f);
+    
+
+    if (getBlock(ivec3(0, 0, 0)) == 0) {
+        //col *= vec3(0, 1.0, 0);
+    } else {
+        col *= vec3(1.0, 0, 0);
     }
 
     imageStore(screen, pixel_coords, vec4(col, 1.0f));
