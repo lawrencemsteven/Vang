@@ -38,6 +38,12 @@ namespace Vang::gfx::OpenGL {
 						glm::int32_t val3);
 		void setUniform(const std::string& name, glm::int32_t val1, glm::int32_t val2,
 						glm::int32_t val3, glm::int32_t val4);
+		void setUniform(const std::string& name, glm::uint32_t val1);
+		void setUniform(const std::string& name, glm::uint32_t val1, glm::uint32_t val2);
+		void setUniform(const std::string& name, glm::uint32_t val1, glm::uint32_t val2,
+						glm::uint32_t val3);
+		void setUniform(const std::string& name, glm::uint32_t val1, glm::uint32_t val2,
+						glm::uint32_t val3, glm::uint32_t val4);
 		void setUniform(const std::string& name, bool val1);
 
 	private:

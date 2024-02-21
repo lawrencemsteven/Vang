@@ -21,6 +21,7 @@ struct Camera {
 
 uniform ivec2 iResolution;
 uniform float iTime;
+uniform uint iRenderDistance;
 uniform Camera camera;
 
 ivec3 getBlockCoords(vec3 pos) {
@@ -71,10 +72,10 @@ void main() {
     ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
 
     // Center Pixel
-    /*if (pixel_coords*2 == iResolution) {
-        imageStore(screen, pixel_coords, vec4(0.0f, 1.0f, 0.0f, 1.0f));
+    if (pixel_coords*2 == iResolution) {
+        imageStore(screen, pixel_coords, vec4(1.0f, 0.0f, 0.0f, 1.0f));
         return;
-    }*/
+    }
 
     vec2 uv = (pixel_coords - 0.5*iResolution) / iResolution.y;
 

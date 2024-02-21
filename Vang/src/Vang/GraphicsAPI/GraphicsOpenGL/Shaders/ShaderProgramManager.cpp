@@ -1,6 +1,7 @@
 #include "ShaderProgramManager.h"
 
 #include "Vang/Utility/Time/Time.h"
+#include "Vang/Voxel/Chunk.h"
 
 namespace Vang::gfx::OpenGL {
 
@@ -81,6 +82,15 @@ namespace Vang::gfx::OpenGL {
 		// glShaderStorageBlockBinding(m_computeShaderProgram.getID(), chunkBlockLocation,
 		// 							chunkBufferBindingPoint);
 
+		uint32_t renderDistance = 1;
+		uint32_t viewDistance = 2 * (renderDistance-1) + 1;
+		glm::uvec3 chunkDistance{};
+		for (uint32_t i = 0; i < 3; i++) {
+			chunkDistance[i] = viewDistance * Vang::Voxel::chunkSize[i];
+		}
+
+		m_computeShaderProgram.setUniform("iRenderDistance", renderDistance);
+
 		GLuint m_texture{};
 		glGenTextures(1, &m_texture);
 		glActiveTexture(GL_TEXTURE1);
@@ -94,9 +104,21 @@ namespace Vang::gfx::OpenGL {
 					 testData.data());
 		glBindImageTexture(1, m_texture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
 
+		GLuint m_texture2{};
+		glGenTextures(1, &m_texture2);
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_3D, m_texture);
+		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexImage3D(GL_TEXTURE_3D, 0, GL_R32UI, std::max(viewDistance, 64u), std::max(viewDistance, 64u), std::max(viewDistance, 64u), 0, GL_RED_INTEGER, GL_UNSIGNED_INT, NULL);
+		glBindImageTexture(1, m_texture2, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
+
 		GLenum err{};
 		if ((err = glGetError()) != GL_NO_ERROR) {
-			std::cout << "Uh oh 2! " << err << std::endl;
+			std::cout << "OpenGL Error: " << err << std::endl;
 		}
 	}
 
