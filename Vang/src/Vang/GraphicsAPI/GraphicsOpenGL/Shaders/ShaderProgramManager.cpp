@@ -52,6 +52,9 @@ namespace Vang::gfx::OpenGL {
 		// [1, 5, 1]
 		testData[1 + 1 * 64 + 5 * 64 * 64] = 1;
 
+		// [5, 5, 5]
+		testData[5 + 5 * 64 + 5 * 64 * 64] = 4;
+
 		for (uint32_t y = 25; y < 30; y++) {
 			for (uint32_t x = 10; x < 15; x++) {
 				for (uint32_t z = 10; z < 15; z++) {
@@ -69,19 +72,21 @@ namespace Vang::gfx::OpenGL {
 				testData[x + z * 64 + 31 * 64 * 64] = 3;
 			}
 		}
-
-		// GLint chunkBlockLocation;
-		// GLuint chunkBuffer;
-		// GLuint chunkBufferBindingPoint = 0;
-		// chunkBlockLocation = glGetUniformBlockIndex(m_computeShaderProgram.getID(), "ChunkBlock");
-		// glGenBuffers(1, &chunkBuffer);
-		// glBindBuffer(GL_SHADER_STORAGE_BUFFER, chunkBuffer);
+		
+		// SSBO
+		// GLint lightsLocation;
+		// GLuint lightsBuffer;
+		// GLuint lightsBufferBindingPoint = 0;
+		// lightsLocation = glGetUniformBlockIndex(m_computeShaderProgram.getID(), "Lights");
+		// glGenBuffers(1, &lightsBuffer);
+		// glBindBuffer(GL_SHADER_STORAGE_BUFFER, lightsBuffer);
 		// glBufferData(GL_SHADER_STORAGE_BUFFER, testData.size() * sizeof(uint32_t), testData.data(),
 		// 			 GL_DYNAMIC_DRAW);
-		// glBindBufferBase(GL_SHADER_STORAGE_BUFFER, chunkBufferBindingPoint, chunkBuffer);
-		// glShaderStorageBlockBinding(m_computeShaderProgram.getID(), chunkBlockLocation,
-		// 							chunkBufferBindingPoint);
+		// glBindBufferBase(GL_SHADER_STORAGE_BUFFER, lightsBufferBindingPoint, lightsBuffer);
+		// glShaderStorageBlockBinding(m_computeShaderProgram.getID(), lightsLocation,
+		// 							lightsBufferBindingPoint);
 
+		// 3D Textures
 		uint32_t renderDistance = 1;
 		uint32_t viewDistance = 2 * (renderDistance-1) + 1;
 		glm::uvec3 chunkDistance{};

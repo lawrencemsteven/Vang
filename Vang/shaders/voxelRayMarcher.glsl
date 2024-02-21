@@ -15,9 +15,24 @@ struct Camera {
     float fov;
 };
 
-//layout(std430) buffer Chunk {
-//    uint blocks[8388608];
-//};
+struct Light {
+    vec3 position;
+    uint range;
+    uint intensity;
+};
+
+struct Entity {
+    vec3 position;
+    uint radius;
+};
+
+layout(std430) buffer Lights {
+    Light lights[];
+};
+
+layout(std430) buffer Entities {
+    Entity entities[];
+};
 
 uniform ivec2 iResolution;
 uniform float iTime;
@@ -121,6 +136,8 @@ void main() {
 
     if (currentBlock == 1) {
         col = vec3(0.0f, 0.6f, 0.0f);
+    } else if (currentBlock == 4) {
+        col = vec3(1.0f, 1.0f, 0.0f);
     } else {
         col = vec3(0.53f, 0.81f, 0.92f);
     }
@@ -142,7 +159,7 @@ void main() {
     //     }
     // }    
 
-    // if (imageLoad(blocks, ivec3(0, 0, 0)).r == 1) {
+    // if (lights.length() == 0) {
     //     col *= vec3(0.5, 1.0, 0.5);
     // } else {
     //     col *= vec3(1.0, 0.5, 0.5);
