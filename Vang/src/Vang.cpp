@@ -12,6 +12,7 @@ namespace Vang {
 	static Vang::Modding::ModManager s_modManager{};
 	static Vang::Utility::Layers::LayerStack s_layerStack{};
 	static Vang::Utility::Events::EventHandler s_eventHandler{};
+	static Vang::Utility::Behaviors::BehaviorTree s_behaviorTree{"./src/test.xml"};
 	static VANG_CURRENT_WINDOW_INPUT s_inputCache{};
 
 	void cleanup() {
@@ -28,6 +29,7 @@ namespace Vang {
 		s_window.update();
 		s_layerStack.update();
 		s_graphicsAPI.update();
+		s_behaviorTree.update();
 
 		if (!s_running) {
 			cleanup();
@@ -35,6 +37,15 @@ namespace Vang {
 
 		// TODO: Yield to the operating system which is removed since it caps framerate significantly
 		// std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}
+
+	void behaviorTreeUpdate()
+	{
+		s_behaviorTree.update();
+
+		if (!s_running) {
+			cleanup();
+		}
 	}
 
 	void close() {
