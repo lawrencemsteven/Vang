@@ -99,19 +99,19 @@ namespace Vang::gfx::OpenGL {
 					 testData.data());
 		glBindImageTexture(1, m_texture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
 
-		GLuint m_texture2{};
-		glGenTextures(1, &m_texture2);
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_3D, m_texture);
-		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexImage3D(GL_TEXTURE_3D, 0, GL_R32UI, std::max(viewDistance, 64u),
-					 std::max(viewDistance, 64u), std::max(viewDistance, 64u), 0, GL_RED_INTEGER,
-					 GL_UNSIGNED_INT, NULL);
-		glBindImageTexture(1, m_texture2, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
+		// GLuint m_texture2{};
+		// glGenTextures(1, &m_texture2);
+		// glActiveTexture(GL_TEXTURE2);
+		// glBindTexture(GL_TEXTURE_3D, m_texture);
+		// glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+		// glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		// glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		// glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		// glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		// glTexImage3D(GL_TEXTURE_3D, 0, GL_R32UI, std::max(viewDistance, 64u),
+		// 			 std::max(viewDistance, 64u), std::max(viewDistance, 64u), 0, GL_RED_INTEGER,
+		// 			 GL_UNSIGNED_INT, NULL);
+		// glBindImageTexture(1, m_texture2, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
 
 
 

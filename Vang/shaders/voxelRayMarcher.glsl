@@ -2,6 +2,7 @@
 layout(local_size_x = 16, local_size_y = 8, local_size_z = 1) in;
 layout(rgba32f, binding = 0) uniform writeonly image2D screen;
 layout(r32ui, binding = 1) uniform readonly uimage3D blocks;
+// layout(r32ui, binding = 2) uniform readonly uimage3D chunks;
 
 // layout(std430) buffer Chunk {
 //     uint blocks[262144];
@@ -103,6 +104,7 @@ void main() {
     // Positive Y up
     // Positive Z forward
     // Plane-Assisted Ray Marching
+    float totalDistance = 0.0f;
     uint currentBlock = 0;
     ivec3 currentBlockPos = getBlockCoords(rayOrigin);
     int blockSteps = 0;
@@ -131,6 +133,7 @@ void main() {
         currentBlockPos += distDir;
         currentBlock = getBlock(currentBlockPos);
         rayOrigin += rayDirection * minDist;
+        totalDistance += minDist;
         blockSteps += 1;
     }
 
@@ -159,11 +162,13 @@ void main() {
     //     }
     // }    
 
-    if (lights.length() != 0) {
-        col *= vec3(0.5, 1.0, 0.5);
-    } else {
-        col *= vec3(1.0, 0.5, 0.5);
-    }
+    // if (lights.length() != 0) {
+    //     col *= vec3(0.5, 1.0, 0.5);
+    // } else {
+    //     col *= vec3(1.0, 0.5, 0.5);
+    // }
+
+    col = mix(col, col* 0.4, clamp(totalDistance / 20.0f, 0.0f, 1.0f));
 
     imageStore(screen, pixel_coords, vec4(col, 1.0f));
 }
