@@ -72,23 +72,13 @@ namespace Vang::gfx::OpenGL {
 				testData[x + z * 64 + 31 * 64 * 64] = 3;
 			}
 		}
-		
-		// SSBO
-		// GLint lightsLocation;
-		// GLuint lightsBuffer;
-		// GLuint lightsBufferBindingPoint = 0;
-		// lightsLocation = glGetUniformBlockIndex(m_computeShaderProgram.getID(), "Lights");
-		// glGenBuffers(1, &lightsBuffer);
-		// glBindBuffer(GL_SHADER_STORAGE_BUFFER, lightsBuffer);
-		// glBufferData(GL_SHADER_STORAGE_BUFFER, testData.size() * sizeof(uint32_t), testData.data(),
-		// 			 GL_DYNAMIC_DRAW);
-		// glBindBufferBase(GL_SHADER_STORAGE_BUFFER, lightsBufferBindingPoint, lightsBuffer);
-		// glShaderStorageBlockBinding(m_computeShaderProgram.getID(), lightsLocation,
-		// 							lightsBufferBindingPoint);
+
+
+
 
 		// 3D Textures
 		uint32_t renderDistance = 1;
-		uint32_t viewDistance = 2 * (renderDistance-1) + 1;
+		uint32_t viewDistance	= 2 * (renderDistance - 1) + 1;
 		glm::uvec3 chunkDistance{};
 		for (uint32_t i = 0; i < 3; i++) {
 			chunkDistance[i] = viewDistance * Vang::Voxel::chunkSize[i];
@@ -118,8 +108,41 @@ namespace Vang::gfx::OpenGL {
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexImage3D(GL_TEXTURE_3D, 0, GL_R32UI, std::max(viewDistance, 64u), std::max(viewDistance, 64u), std::max(viewDistance, 64u), 0, GL_RED_INTEGER, GL_UNSIGNED_INT, NULL);
+		glTexImage3D(GL_TEXTURE_3D, 0, GL_R32UI, std::max(viewDistance, 64u),
+					 std::max(viewDistance, 64u), std::max(viewDistance, 64u), 0, GL_RED_INTEGER,
+					 GL_UNSIGNED_INT, NULL);
 		glBindImageTexture(1, m_texture2, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
+
+
+
+
+		// Lights
+		struct Light {
+			// glm::vec3 position;
+			// float range;
+			float intensity;
+		};
+
+		Light light{};
+		// light.position	= glm::vec3{5.0f, 5.0f, 5.0f};
+		// light.range		= 20.0f;
+		light.intensity = 1.0f;
+
+		std::vector<Light> lights{};
+		lights.push_back(light);
+
+		GLint lightsLocation;
+		GLuint lightsBuffer;
+		GLuint lightsBufferBindingPoint = 0;
+		lightsLocation = glGetUniformBlockIndex(m_computeShaderProgram.getID(), "Lights");
+		std::cout << "LightsLocation: " << lightsLocation << std::endl;
+		glGenBuffers(1, &lightsBuffer);
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, lightsBuffer);
+		glBufferData(GL_SHADER_STORAGE_BUFFER, lights.size() * sizeof(Light), lights.data(),
+					 GL_DYNAMIC_DRAW);
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, lightsBufferBindingPoint, lightsBuffer);
+		glShaderStorageBlockBinding(m_computeShaderProgram.getID(), lightsLocation,
+									lightsBufferBindingPoint);
 
 		GLenum err{};
 		if ((err = glGetError()) != GL_NO_ERROR) {

@@ -16,9 +16,9 @@ struct Camera {
 };
 
 struct Light {
-    vec3 position;
-    uint range;
-    uint intensity;
+    //vec3 position;
+    //float range;
+    float intensity;
 };
 
 struct Entity {
@@ -26,7 +26,7 @@ struct Entity {
     uint radius;
 };
 
-layout(std430) buffer Lights {
+layout(std430, binding = 2) buffer Lights {
     Light lights[];
 };
 
@@ -159,11 +159,11 @@ void main() {
     //     }
     // }    
 
-    // if (lights.length() == 0) {
-    //     col *= vec3(0.5, 1.0, 0.5);
-    // } else {
-    //     col *= vec3(1.0, 0.5, 0.5);
-    // }
+    if (lights.length() != 0) {
+        col *= vec3(0.5, 1.0, 0.5);
+    } else {
+        col *= vec3(1.0, 0.5, 0.5);
+    }
 
     imageStore(screen, pixel_coords, vec4(col, 1.0f));
 }
