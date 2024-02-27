@@ -48,16 +48,16 @@ vec3 getBlockCoordsFloat(vec3 pos) {
 }
 uint getBlock(ivec3 coord) {
     // TODO: Add more chunks
-    if (coord.x > 63 || coord.x < 0 ||coord.y > 63 || coord.y < 0 || coord.z > 63 || coord.z < 0) {
-        return 2;
-    }
+    // if (coord.x > 63 || coord.x < 0 ||coord.y > 63 || coord.y < 0 || coord.z > 63 || coord.z < 0) {
+    //     return 2;
+    // }
     
     // coord = clamp(coord, 0, 63);
 
-    //if (coord.y == 63) {
-    //    return 2;
-    //}
-    //coord = coord % 63;
+    if (coord.y == 63) {
+       return 2;
+    }
+    coord = coord % 63;
 
 
     //uint index = coord.x + (64 * coord.z) + (64 * 64 * coord.y);
