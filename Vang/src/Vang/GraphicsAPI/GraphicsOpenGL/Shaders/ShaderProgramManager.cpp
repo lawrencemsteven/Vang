@@ -116,38 +116,38 @@ namespace Vang::gfx::OpenGL {
 
 
 
-		// Lights
-		struct Light {
-			// glm::vec3 position;
-			// float range;
-			float intensity;
-		};
+		// // Lights
+		// struct Light {
+		// 	// glm::vec3 position;
+		// 	// float range;
+		// 	float intensity;
+		// };
 
-		Light light{};
-		// light.position	= glm::vec3{5.0f, 5.0f, 5.0f};
-		// light.range		= 20.0f;
-		light.intensity = 1.0f;
+		// Light light{};
+		// // light.position	= glm::vec3{5.0f, 5.0f, 5.0f};
+		// // light.range		= 20.0f;
+		// light.intensity = 1.0f;
 
-		std::vector<Light> lights{};
-		lights.push_back(light);
+		// std::vector<Light> lights{};
+		// lights.push_back(light);
 
-		GLint lightsLocation;
-		GLuint lightsBuffer;
-		GLuint lightsBufferBindingPoint = 0;
-		lightsLocation = glGetUniformBlockIndex(m_computeShaderProgram.getID(), "Lights");
-		std::cout << "LightsLocation: " << lightsLocation << std::endl;
-		glGenBuffers(1, &lightsBuffer);
-		glBindBuffer(GL_SHADER_STORAGE_BUFFER, lightsBuffer);
-		glBufferData(GL_SHADER_STORAGE_BUFFER, lights.size() * sizeof(Light), lights.data(),
-					 GL_DYNAMIC_DRAW);
-		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, lightsBufferBindingPoint, lightsBuffer);
-		glShaderStorageBlockBinding(m_computeShaderProgram.getID(), lightsLocation,
-									lightsBufferBindingPoint);
+		// GLint lightsLocation;
+		// GLuint lightsBuffer;
+		// GLuint lightsBufferBindingPoint = 0;
+		// lightsLocation = glGetUniformBlockIndex(m_computeShaderProgram.getID(), "Lights");
+		// std::cout << "LightsLocation: " << lightsLocation << std::endl;
+		// glGenBuffers(1, &lightsBuffer);
+		// glBindBuffer(GL_SHADER_STORAGE_BUFFER, lightsBuffer);
+		// glBufferData(GL_SHADER_STORAGE_BUFFER, lights.size() * sizeof(Light), lights.data(),
+		// 			 GL_DYNAMIC_DRAW);
+		// glBindBufferBase(GL_SHADER_STORAGE_BUFFER, lightsBufferBindingPoint, lightsBuffer);
+		// glShaderStorageBlockBinding(m_computeShaderProgram.getID(), lightsLocation,
+		// 							lightsBufferBindingPoint);
 
-		GLenum err{};
-		if ((err = glGetError()) != GL_NO_ERROR) {
-			std::cout << "OpenGL Error: " << err << std::endl;
-		}
+		// GLenum err{};
+		// if ((err = glGetError()) != GL_NO_ERROR) {
+		// 	std::cout << "OpenGL Error: " << err << std::endl;
+		// }
 	}
 
 	void ShaderProgramManager::update() {
