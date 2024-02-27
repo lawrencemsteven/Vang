@@ -8,8 +8,8 @@
 #	define VANG_CURRENT_GRAPHICSAPI Vang::gfx::OpenGL::GraphicsOpenGL
 #endif
 
-#define DEFAULT_WIDTH 240
-#define DEFAULT_HEIGHT 135
+#define DEFAULT_WIDTH 1280
+#define DEFAULT_HEIGHT 720
 
 #ifdef VANG_WINDOW_GLFW
 #	include "Vang/Window/WindowGLFW/WindowGLFW.h"

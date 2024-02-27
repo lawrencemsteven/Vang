@@ -58,6 +58,6 @@ int main() {
 
 	while (Vang::getRunning()) {
 		Vang::update();
-		//std::cout << "FPS: " << (1.0f / Vang::Utility::Time::deltaTime()) << std::endl;
+		// std::cout << "FPS: " << (1.0f / Vang::Utility::Time::deltaTime()) << std::endl;
 	}
 }
