@@ -66,7 +66,7 @@ namespace Vang::Utility::Behaviors {
             return new WaitBehavior(node.attribute("time").as_float());
         }
 
-        cout << "Error: could not find behavior for " << node.name() << endl;
+        //cout << "Error: could not find behavior for " << node.name() << endl;
         current_status = FAILURE;
         return NULL;
     }
