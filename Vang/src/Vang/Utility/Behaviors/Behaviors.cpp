@@ -7,7 +7,7 @@ using namespace pugi;
 namespace Vang::Utility::Behaviors {
 
     BehaviorTree::BehaviorTree(string xml_path) {
-        xml_parse_result result = tree.load_file("test.xml");
+        xml_parse_result result = tree.load_file(static_cast<string>(VANG_XML_FOLDER).append("/test.xml").c_str());
 
         if (!result)
         {
