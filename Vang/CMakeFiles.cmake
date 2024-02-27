@@ -3,6 +3,9 @@ set(Vang_FILES
 	"./src/Vang.cpp"
 	"./src/VangPCH.h"
 
+	"./src/Vang/Utility/Behaviors/Behaviors.cpp"
+	"./src/Vang/Utility/Behaviors/Behaviors.h"
+
 	"./src/Vang/Utility/BlueprintContainer/BlueprintContainer.h"
 
 	"./src/Vang/Utility/Camera/Camera.h"
@@ -93,4 +96,8 @@ set(Vang_FILES
 	"./src/Vang/Voxel/UniverseManager.cpp"
 	"./src/Vang/Voxel/World.h"
 	"./src/Vang/Voxel/World.cpp"
+
+	"./src/Vang/PugiXML/pugiconfig.hpp"
+	"./src/Vang/PugiXML/pugixml.cpp"
+	"./src/Vang/PugiXML/pugixml.hpp"
 )
