@@ -2,7 +2,7 @@
 <Tree>
     <Sequence>
         <Print str="Hello" />
-        <Wait time="5000" />
+        <Wait time="5" />
         <Print str="Goodbye" />
     </Sequence>
 </Tree>

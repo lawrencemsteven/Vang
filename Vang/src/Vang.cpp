@@ -35,12 +35,11 @@ namespace Vang {
 			cleanup();
 		}
 
-		// TODO: Yield to the operating system which is removed since it caps framerate significantly
-		// std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		// TODO: Figure something out for this to not kill framerate
+		std::this_thread::sleep_for(std::chrono::microseconds(100));
 	}
 
-	void behaviorTreeUpdate()
-	{
+	void behaviorTreeUpdate() {
 		s_behaviorTree.update();
 
 		if (!s_running) {

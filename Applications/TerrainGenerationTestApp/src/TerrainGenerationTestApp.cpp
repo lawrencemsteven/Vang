@@ -132,8 +132,8 @@ std::vector<int> makeDungeon(int height, int width, int lifeRate, int iterations
 
 int main() {
 
-	int height = 200;
-	int width  = 200;
+	int height = 180;
+	int width  = 180;
 	// lifeRate is percent chance representation
 	int lifeRate   = 45;
 	int iterations = 8;
