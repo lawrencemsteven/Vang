@@ -2,7 +2,7 @@
 layout(local_size_x = 16, local_size_y = 8, local_size_z = 1) in;
 layout(rgba32f, binding = 0) uniform writeonly image2D screen;
 layout(r32ui, binding = 1) uniform readonly uimage3D blocks;
-// layout(r32ui, binding = 2) uniform readonly uimage3D chunks;
+layout(r32ui, binding = 2) uniform readonly uimage3D chunks;
 
 // layout(std430) buffer Chunk {
 //     uint blocks[262144];
@@ -17,17 +17,17 @@ struct Camera {
 };
 
 struct Light {
-    //vec3 position;
-    //float range;
+    vec3 position;
+    float range;
     float intensity;
 };
 
 struct Entity {
     vec3 position;
-    uint radius;
+    float radius;
 };
 
-layout(std430, binding = 2) buffer Lights {
+layout(std430) buffer Lights {
     Light lights[];
 };
 
@@ -162,13 +162,13 @@ void main() {
     //     }
     // }    
 
-    // if (lights.length() != 0) {
-    //     col *= vec3(0.5, 1.0, 0.5);
-    // } else {
-    //     col *= vec3(1.0, 0.5, 0.5);
-    // }
+    if (imageLoad(chunks, ivec3(0,0,0)).r == 2u) {
+        col *= vec3(0.5, 1.0, 0.5);
+    } else {
+        col *= vec3(1.0, 0.5, 0.5);
+    }
 
-    col = mix(col, col* 0.4, clamp(totalDistance / 20.0f, 0.0f, 1.0f));
+    // col = mix(col, col* 0.4, clamp(totalDistance / 20.0f, 0.0f, 1.0f));
 
     imageStore(screen, pixel_coords, vec4(col, 1.0f));
 }
