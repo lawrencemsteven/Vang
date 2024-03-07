@@ -155,8 +155,8 @@ namespace Vang::gfx::OpenGL {
 		};
 
 		std::vector<Entity> entities{};
-		entities.push_back(Entity{glm::vec3{5.0f, 6.0f, 7.0f}, 1.0f});
-		entities.push_back(Entity{glm::vec3{15.0f, 6.0f, 7.0f}, 1.0f});
+		entities.push_back(Entity{glm::vec3{5.0f, 6.0f, 7.0f}, 0.5f});
+		entities.push_back(Entity{glm::vec3{5.0f, 7.0f, 7.0f}, 0.5f});
 
 		GLint entitiesLocation;
 		GLuint entitiesBuffer;

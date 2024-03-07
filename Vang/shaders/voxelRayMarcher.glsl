@@ -27,11 +27,11 @@ struct Entity {
     float radius;
 };
 
-layout(std430) buffer Lights {
+layout(std430) readonly buffer Lights {
     Light lights[];
 };
 
-layout(std430) buffer Entities {
+layout(std430) readonly buffer Entities {
     Entity entities[];
 };
 
@@ -84,6 +84,26 @@ float planeIntersectionDistance(vec3 rayOrigin, vec3 rayDirection, vec3 planeOri
     return 100.0f;
 }
 
+float distanceToNearestEntity(const vec3 rayOrigin) {
+    float minDist = 1024.0f;
+    for (int i = 0; i < 2; i++) {
+        minDist = min(minDist, length(entities[i].position - rayOrigin) - entities[i].radius);
+    }
+    return minDist;
+}
+
+bool entityCheck(vec3 rayOrigin, const vec3 rayDirection, float minBlockDist) {
+    while (minBlockDist > 0.0f) {
+        float dist = distanceToNearestEntity(rayOrigin);
+        minBlockDist -= dist;
+        rayOrigin += rayDirection * dist;
+        if (dist < 0.01f) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void main() {
     ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
 
@@ -109,7 +129,8 @@ void main() {
     ivec3 currentBlockPos = getBlockCoords(rayOrigin);
     int blockSteps = 0;
     float fogAmount = 0.0f;
-    while ((currentBlock == 0 || currentBlock == 3) && blockSteps < 1000) {
+    bool entityHit = false;
+    while ((currentBlock == 0 || currentBlock == 3) && blockSteps < 1000 && !entityHit) {
         vec3 signedDirection = sign(rayDirection);
 
         ivec3 distDir = ivec3(round(signedDirection.x), 0, 0);
@@ -130,6 +151,8 @@ void main() {
             fogAmount += minDist;
         }
 
+        entityHit = entityCheck(rayOrigin, rayDirection, minDist);
+
         currentBlockPos += distDir;
         currentBlock = getBlock(currentBlockPos);
         rayOrigin += rayDirection * minDist;
@@ -141,8 +164,10 @@ void main() {
         col = vec3(0.0f, 0.6f, 0.0f);
     } else if (currentBlock == 4) {
         col = vec3(1.0f, 1.0f, 0.0f);
-    } else {
+    } else if (currentBlock == 3) {
         col = vec3(0.53f, 0.81f, 0.92f);
+    } else if (entityHit) {
+        col = vec3(1.0f, 0.0f, 1.0f);
     }
 
     col = mix(col, vec3(0.8, 0.8, 0.8), clamp(fogAmount / 8.0f, 0.0f, 1.0f));
@@ -162,13 +187,13 @@ void main() {
     //     }
     // }    
 
-    if (imageLoad(chunks, ivec3(0,0,0)).r == 2u) {
-        col *= vec3(0.5, 1.0, 0.5);
-    } else {
-        col *= vec3(1.0, 0.5, 0.5);
-    }
+    // if (entities[1].radius < 0.4f) {
+    //     col *= vec3(0.5, 1.0, 0.5);
+    // } else {
+    //     col *= vec3(1.0, 0.5, 0.5);
+    // }
 
-    // col = mix(col, col* 0.4, clamp(totalDistance / 20.0f, 0.0f, 1.0f));
+    col = mix(col, col* 0.4, clamp(totalDistance / 20.0f, 0.0f, 1.0f));
 
     imageStore(screen, pixel_coords, vec4(col, 1.0f));
 }
