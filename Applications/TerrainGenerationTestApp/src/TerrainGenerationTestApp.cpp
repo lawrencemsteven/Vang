@@ -1,9 +1,14 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
+#include <Vang.h>
 
 int convert2Dto1D(int x, int y, int width) {
 	return x + y * width;
+}
+
+glm::ivec2 convert1Dto2D(const int index, const int width) {
+	return glm::ivec2{index % width, index / width};
 }
 
 void printDungeon(std::vector<int>& dungeon, int height, int width) {
@@ -49,7 +54,7 @@ int livingNeighbors(std::vector<int>& dungeon, int height, int width, int x, int
 	while (loopX <= (x + 1)) {
 		while (loopY <= (y + 1)) {
 			if (!inGrid(height, width, loopX, loopY)) {
-				living += 1;
+				living += 0;
 			}
 			else {
 				living += dungeon[convert2Dto1D(loopX, loopY, width)];
@@ -111,8 +116,8 @@ void iteration(std::vector<int>& dungeon, std::vector<int>& reference, int heigh
 	}
 }
 
-void iterator(std::vector<int>& dungeon, int height, int width, int birthT, int surviveT,
-			  int iterations) {
+void runStep(std::vector<int>& dungeon, int height, int width, int birthT, int surviveT,
+			 int iterations) {
 	int i = 0;
 	while (i < iterations) {
 		std::vector<int> reference{dungeon};
@@ -126,7 +131,7 @@ std::vector<int> makeDungeon(int height, int width, int lifeRate, int iterations
 	std::vector<int> output{};
 	output.resize(width * height);
 	firstPass(output, height, width, lifeRate);
-	iterator(output, height, width, birthT, surviveT, iterations);
+	runStep(output, height, width, birthT, surviveT, iterations);
 	return output;
 }
 
