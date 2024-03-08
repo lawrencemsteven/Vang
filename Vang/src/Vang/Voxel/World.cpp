@@ -68,7 +68,11 @@ namespace Vang::Voxel {
 	std::shared_ptr<Chunk> World::loadChunk(const glm::ivec3& chunkPosition) {
 		const auto chunkOptional = isChunkLoaded(chunkPosition);
 
-		return chunkOptional.value_or(initializeChunk(chunkPosition));
+		if (chunkOptional.has_value()) {
+			return chunkOptional.value();
+		}
+
+		return initializeChunk(chunkPosition);
 	}
 
 	std::optional<std::shared_ptr<Chunk>>
