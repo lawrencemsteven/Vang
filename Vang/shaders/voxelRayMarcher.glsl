@@ -17,13 +17,13 @@ struct Camera {
 };
 
 struct Light {
-    vec3 position;
+    vec4 position;
     float range;
     float intensity;
 };
 
 struct Entity {
-    vec3 position;
+    vec4 position;
     float radius;
 };
 
@@ -86,8 +86,9 @@ float planeIntersectionDistance(vec3 rayOrigin, vec3 rayDirection, vec3 planeOri
 
 float distanceToNearestEntity(const vec3 rayOrigin) {
     float minDist = 1024.0f;
-    for (int i = 0; i < 2; i++) {
-        minDist = min(minDist, length(entities[i].position - rayOrigin) - entities[i].radius);
+    // TODO: Use Number Of Entities
+    for (int i = 0; i < 1; i++) {
+        minDist = min(minDist, length(entities[i].position.xyz - rayOrigin) - entities[i].radius);
     }
     return minDist;
 }
@@ -152,12 +153,13 @@ void main() {
         }
 
         entityHit = entityCheck(rayOrigin, rayDirection, minDist);
-
-        currentBlockPos += distDir;
-        currentBlock = getBlock(currentBlockPos);
-        rayOrigin += rayDirection * minDist;
-        totalDistance += minDist;
-        blockSteps += 1;
+        if (!entityHit) {
+            currentBlockPos += distDir;
+            currentBlock = getBlock(currentBlockPos);
+            rayOrigin += rayDirection * minDist;
+            totalDistance += minDist;
+            blockSteps += 1;
+        }
     }
 
     if (currentBlock == 1) {
