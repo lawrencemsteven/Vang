@@ -3,6 +3,8 @@
 #include "Vang/Utility/Time/Time.h"
 #include "Vang/Voxel/Chunk.h"
 
+#include "glm/glm.hpp"
+
 namespace Vang::gfx::OpenGL {
 
 	void ShaderProgramManager::initialize(std::filesystem::path vertexShaderFile,
@@ -35,7 +37,65 @@ namespace Vang::gfx::OpenGL {
 		// glGetIntegerv(GL_MAX_3D_TEXTURE_SIZE, &max_layers);
 		// std::cout << "Max 3D Texture Size: " << max_layers << std::endl;
 
-		// TODO: NEED TO USE 3D TEXTURES INSTEAD OF AN SSBO
+		// Old Blocks
+		// 0 - Air
+		// 1 - Green
+		// 4 - Yellow
+		// 3 - Fog
+
+		// Blocks
+		// 0  - Air
+		// 1  - Fog
+		// 2  - Black
+		// 3  - Gray
+		// 4  - Light Gray
+		// 5  - White
+		// 6  - Red
+		// 7  - Orange
+		// 8  - Yellow
+		// 9  - Green
+		// 10 - Blue
+		// 11 - Purple
+
+		enum class Blocks {
+			Air,
+			Fog,
+			Black,
+			Gray,
+			LightGray,
+			White,
+			Red,
+			Orange,
+			Yellow,
+			Green,
+			Blue,
+			Purple,
+		};
+
+		// {x, y, z}
+		// y - up
+
+		// Logan
+		// World& world = Vang::Voxel::getCurrentWorld();
+		// void world.setBlock(glm::ivec3 position, Blocks block);
+		// void world.setBlock(glm::ivec3{28, 1, 28}, 6);
+		// world.generateDungion(startx, starty, length, width, height, Blocks living, Blocks Dead);
+
+		// Ryan
+		// World& world = Vang::Voxel::getCurrentWorld();
+		// Blocks world.getBlock(glm::ivec3 position);
+		// bool world.getSolid(glm::ivec3 position);
+		// EntityManager& entityManager = Vang::getEntityManager();
+		// entityManager.setEntityPosition(0, glm::vec3 position);
+		// glm::mix(glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{1.0f, 1.0f, 1.0f}, 0.1f);
+		// Vang::getPlayer().getCamera().getPosition();
+
+		// Steven
+		// Hook up world update functions
+		// Entity Manager
+		// getBlock function
+		// getSolid function
+		// Make world 256x256x256
 
 		// TEMP SHADER BUFFER ATTEMPT
 		std::vector<uint32_t> testData{};
@@ -127,13 +187,13 @@ namespace Vang::gfx::OpenGL {
 
 		// Lights
 		struct Light {
-			glm::vec3 position;
+			glm::vec4 position;
 			float range;
 			float intensity;
 		};
 
 		std::vector<Light> lights{};
-		lights.push_back(Light{glm::vec3{5.0f, 6.0f, 7.0f}, 15.0f, 1.0f});
+		lights.push_back(Light{glm::vec4{5.0f, 6.0f, 7.0f, 1.0f}, 15.0f, 1.0f});
 
 		GLint lightsLocation;
 		GLuint lightsBuffer;
@@ -150,13 +210,13 @@ namespace Vang::gfx::OpenGL {
 
 		// Entities
 		struct Entity {
-			glm::vec3 position;
+			glm::vec4 position;
 			float radius;
 		};
 
 		std::vector<Entity> entities{};
-		entities.push_back(Entity{glm::vec3{5.0f, 6.0f, 7.0f}, 0.5f});
-		entities.push_back(Entity{glm::vec3{5.0f, 7.0f, 7.0f}, 0.5f});
+		entities.push_back(Entity{glm::vec4{5.5f, 5.5f, 5.5f, 1.0f}, 0.5f});
+		// entities.push_back(Entity{glm::vec4{5.0f, 5.0f, 8.0f, 1.0f}, 0.5f});
 
 		GLint entitiesLocation;
 		GLuint entitiesBuffer;
