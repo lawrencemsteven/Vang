@@ -14,6 +14,8 @@ namespace Vang {
 	static Vang::Utility::Events::EventHandler s_eventHandler{};
 	static Vang::Utility::Behaviors::BehaviorTree s_behaviorTree{"./src/test.xml"};
 	static VANG_CURRENT_WINDOW_INPUT s_inputCache{};
+	static Vang::Voxel::World s_currentWorld{};
+	static Vang::Utility::EntityManager s_entityManager{};
 
 	void cleanup() {
 		s_window.close();
@@ -80,5 +82,11 @@ namespace Vang {
 	}
 	Vang::Input::InputCache& getInputCache() {
 		return s_inputCache;
+	}
+	Vang::Voxel::World& getCurrentWorld() {
+		return s_currentWorld;
+	}
+	Vang::Utility::EntityManager& getEntityManager() {
+		return s_entityManager;
 	}
 }

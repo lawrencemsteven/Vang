@@ -11,6 +11,11 @@ set(Vang_FILES
 	"./src/Vang/Utility/Camera/Camera.h"
 	"./src/Vang/Utility/Camera/Camera.cpp"
 
+	"./src/Vang/Utility/Entities/Entity.h"
+	"./src/Vang/Utility/Entities/Entity.cpp"
+	"./src/Vang/Utility/Entities/EntityManager.h"
+	"./src/Vang/Utility/Entities/EntityManager.cpp"
+
 	"./src/Vang/Utility/Events/ApplicationEvent.h"
 	"./src/Vang/Utility/Events/Event.h"
 	"./src/Vang/Utility/Events/KeyEvent.h"

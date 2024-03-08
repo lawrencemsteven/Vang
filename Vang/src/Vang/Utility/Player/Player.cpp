@@ -36,7 +36,7 @@ namespace Vang::Objects {
 		return m_camera;
 	}
 
-	const glm::vec3& Player::getPosition() {
+	const glm::vec3& Player::getPosition() const {
 		return m_position;
 	}
 

@@ -6,12 +6,19 @@
 #elif VANG_GRAPHICSAPI_OPENGL
 #	include "Vang/GraphicsAPI/GraphicsOpenGL/GraphicsOpenGL.h"
 #	define VANG_CURRENT_GRAPHICSAPI Vang::gfx::OpenGL::GraphicsOpenGL
+#else
+#	include "Vang/GraphicsAPI/GraphicsOpenGL/GraphicsOpenGL.h"
+#	define VANG_CURRENT_GRAPHICSAPI Vang::gfx::OpenGL::GraphicsOpenGL
 #endif
 
 #define DEFAULT_WIDTH 1280
 #define DEFAULT_HEIGHT 720
 
 #ifdef VANG_WINDOW_GLFW
+#	include "Vang/Window/WindowGLFW/WindowGLFW.h"
+#	define VANG_CURRENT_WINDOW Vang::Windowing::WindowGLFW
+#	define VANG_CURRENT_WINDOW_INPUT Vang::Input::GLFWInputCache
+#else
 #	include "Vang/Window/WindowGLFW/WindowGLFW.h"
 #	define VANG_CURRENT_WINDOW Vang::Windowing::WindowGLFW
 #	define VANG_CURRENT_WINDOW_INPUT Vang::Input::GLFWInputCache
@@ -23,6 +30,7 @@
 #include "Vang/Modding/ModManager.h"
 #include "Vang/Utility/BlueprintContainer/BlueprintContainer.h"
 #include "Vang/Utility/Behaviors/Behaviors.h"
+#include "Vang/Utility/Entities/EntityManager.h"
 #include "Vang/Utility/Events/Event.h"
 #include "Vang/Utility/Events/EventHandler.h"
 #include "Vang/Utility/Events/MouseEvent.h"
@@ -48,4 +56,6 @@ namespace Vang {
 	Vang::Utility::Layers::LayerStack& getLayerStack();
 	Vang::Utility::Events::EventHandler& getEventHandler();
 	Vang::Input::InputCache& getInputCache();
+	Vang::Voxel::World& getCurrentWorld();
+	Vang::Utility::EntityManager& getEntityManager();
 };
