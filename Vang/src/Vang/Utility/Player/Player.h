@@ -22,7 +22,7 @@ namespace Vang::Objects {
 
 		Camera& getCamera();
 		const Camera& getCamera() const;
-		const glm::vec3& getPosition();
+		const glm::vec3& getPosition() const;
 		float getSpeed();
 
 	private:
