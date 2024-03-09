@@ -9,8 +9,8 @@ namespace Vang::Utility::Behaviors {
 			tree.load_file(static_cast<std::string>(VANG_XML_FOLDER).append("/test.xml").c_str());
 
 		if (!result) {
-			std::cout << "Parse error: " << result.description() << ", character pos= " << result.offset
-				 << std::endl;
+			std::cout << "Parse error: " << result.description()
+					  << ", character pos= " << result.offset << std::endl;
 		}
 
 		current_xml_node	  = tree.first_child().first_child().first_child();
@@ -66,8 +66,8 @@ namespace Vang::Utility::Behaviors {
 	}
 
 	NodeStatus WaitBehavior::onRunning() {
-		playerPosition = Vang::getPlayer().getCamera().getPosition();
-		entityPosition = Vang::getEntityManager().getEntity(0).getPosition();
+		playerPosition	   = Vang::getPlayer().getCamera().getPosition();
+		entityPosition	   = Vang::getEntityManager().getEntity(0).getPosition();
 		distanceFromPlayer = glm::distance(playerPosition, entityPosition);
 
 		if (distanceFromPlayer <= triggerDistance) {
@@ -85,7 +85,7 @@ namespace Vang::Utility::Behaviors {
 	NodeStatus PursueBehavior::onRunning() {
 		playerPosition = Vang::getPlayer().getCamera().getPosition();
 		entityPosition = Vang::getEntityManager().getEntity(0).getPosition();
-		lerpPosition = glm::mix(entityPosition, playerPosition, moveSpeed);
+		lerpPosition   = glm::mix(entityPosition, playerPosition, moveSpeed);
 		Vang::getEntityManager().getEntity(0).setPosition(lerpPosition);
 
 		return Vang::Utility::Behaviors::NodeStatus::RUNNING;
