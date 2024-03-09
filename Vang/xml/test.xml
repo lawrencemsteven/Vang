@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<Tree>
-    <Sequence>
-        <Print str="Hello" />
-        <Wait time="5" />
-        <Print str="Goodbye" />
-    </Sequence>
-</Tree>

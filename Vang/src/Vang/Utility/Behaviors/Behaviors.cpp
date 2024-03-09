@@ -1,23 +1,21 @@
+#include "Vang.h"
 #include "./Vang/PugiXML/pugixml.hpp"
 #include "Behaviors.h"
 
-using namespace std;
-using namespace pugi;
-
 namespace Vang::Utility::Behaviors {
 
-	BehaviorTree::BehaviorTree(string xml_path) {
-		xml_parse_result result =
-			tree.load_file(static_cast<string>(VANG_XML_FOLDER).append("/test.xml").c_str());
+	BehaviorTree::BehaviorTree(std::string xml_path) {
+		pugi::xml_parse_result result =
+			tree.load_file(static_cast<std::string>(VANG_XML_FOLDER).append("/test.xml").c_str());
 
 		if (!result) {
-			cout << "Parse error: " << result.description() << ", character pos= " << result.offset
-				 << endl;
+			std::cout << "Parse error: " << result.description() << ", character pos= " << result.offset
+				 << std::endl;
 		}
 
 		current_xml_node	  = tree.first_child().first_child().first_child();
 		current_behavior_node = createBehaviorNodeFromXML(current_xml_node);
-		current_status		  = SUCCESS;
+		current_status		  = Vang::Utility::Behaviors::NodeStatus::SUCCESS;
 	}
 
 	void BehaviorTree::update() {
@@ -44,45 +42,52 @@ namespace Vang::Utility::Behaviors {
 		}
 	}
 
-	BehaviorNode* BehaviorTree::createBehaviorNodeFromXML(xml_node node) {
+	BehaviorNode* BehaviorTree::createBehaviorNodeFromXML(pugi::xml_node node) {
 		if (strcmp(node.name(), "Sequence") == 0) {
 			return createBehaviorNodeFromXML(node.first_child());
 		}
 
-		else if (strcmp(node.name(), "Print") == 0) {
-			return new PrintBehavior(node.attribute("str").value());
+		else if (strcmp(node.name(), "Pursue") == 0) {
+			return new PursueBehavior();
 		}
 
 		else if (strcmp(node.name(), "Wait") == 0) {
-			return new WaitBehavior(node.attribute("time").as_float());
+			return new WaitBehavior();
 		}
 
 		// cout << "Error: could not find behavior for " << node.name() << endl;
-		current_status = FAILURE;
+		current_status = Vang::Utility::Behaviors::NodeStatus::FAILURE;
 		return NULL;
 	}
 
-	NodeStatus PrintBehavior::onStart() {
-		cout << message << endl;
-		return SUCCESS;
-	}
-
-	NodeStatus PrintBehavior::onRunning() {
-		return SUCCESS;
-	}
-
 	NodeStatus WaitBehavior::onStart() {
-		currentTime = time;
-		return RUNNING;
+		triggerDistance = 5.0f;
+		return Vang::Utility::Behaviors::NodeStatus::RUNNING;
 	}
 
 	NodeStatus WaitBehavior::onRunning() {
-		currentTime -= Vang::Utility::Time::deltaTime();
+		playerPosition = Vang::getPlayer().getCamera().getPosition();
+		entityPosition = Vang::getEntityManager().getEntity(0).getPosition();
+		distanceFromPlayer = glm::distance(playerPosition, entityPosition);
 
-		if (currentTime <= 0) {
-			return SUCCESS;
+		if (distanceFromPlayer <= triggerDistance) {
+			return Vang::Utility::Behaviors::NodeStatus::SUCCESS;
 		}
 
-		return RUNNING;
+		return Vang::Utility::Behaviors::NodeStatus::RUNNING;
+	}
+
+	NodeStatus PursueBehavior::onStart() {
+		moveSpeed = 0.1f;
+		return Vang::Utility::Behaviors::NodeStatus::RUNNING;
+	}
+
+	NodeStatus PursueBehavior::onRunning() {
+		playerPosition = Vang::getPlayer().getCamera().getPosition();
+		entityPosition = Vang::getEntityManager().getEntity(0).getPosition();
+		lerpPosition = glm::mix(entityPosition, playerPosition, moveSpeed);
+		Vang::getEntityManager().getEntity(0).setPosition(lerpPosition);
+
+		return Vang::Utility::Behaviors::NodeStatus::RUNNING;
 	}
 }

@@ -7,16 +7,16 @@ namespace Vang::Utility {
 	class Entity {
 	public:
 		Entity() = default;
-		Entity(glm::vec4 position, const float radius);
+		Entity(glm::vec3 position, const float radius);
 
-		const glm::vec4& getPosition() const;
+		const glm::vec3& getPosition() const;
 		float getRadius() const;
 
-		void setPosition(glm::vec4 position);
+		void setPosition(glm::vec3 position);
 		void setRadius(const float radius);
 
 	private:
-		glm::vec4 m_position{};
+		glm::vec3 m_position{};
 		float m_radius{};
 	};
 
