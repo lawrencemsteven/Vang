@@ -71,7 +71,7 @@ namespace Vang::Utility::Behaviors {
 
 	NodeStatus WaitBehavior::onStart() {
 		triggerDistance = 5.0f;
-		Vang::getEntityManager().createEntity(glm::vec4(5.0f, 5.0f, 5.0f, 0.0f), 5.0f);
+		Vang::getEntityManager().createEntity(glm::vec4(5.0f, 5.0f, 5.0f, 0.0f), 1.0f);
 		return Vang::Utility::Behaviors::NodeStatus::RUNNING;
 	}
 
