@@ -17,6 +17,8 @@ namespace Vang::gfx::OpenGL {
 	}
 
 	EntityBuffer::EntityBuffer(ShaderProgram& shaderProgram) {
+		// TODO: Currently, only 1 entity will work at a time. The data is not being correctly sent
+		// to the GPU.
 		shaderProgram.setUniform("entityCount", 0u);
 
 		m_bufferLocation =
