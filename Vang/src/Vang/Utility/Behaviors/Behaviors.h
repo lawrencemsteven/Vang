@@ -1,62 +1,61 @@
+#pragma once
 #include "./Vang/PugiXML/pugixml.hpp"
-
-using namespace std;
-using namespace pugi;
 
 namespace Vang::Utility::Behaviors {
 
-    enum NodeStatus {
-        SUCCESS,
-        RUNNING,
-        FAILURE
-    };
+	enum NodeStatus { SUCCESS, RUNNING, FAILURE };
 
-    class BehaviorNode {
-        public:
-            BehaviorNode() {};
+	class BehaviorNode {
+	public:
+		BehaviorNode(){};
 
-            virtual NodeStatus onStart() = 0;
+		virtual NodeStatus onStart() = 0;
 
-            virtual NodeStatus onRunning() = 0;
-    };
+		virtual NodeStatus onRunning() = 0;
+	};
 
-    class PrintBehavior : public BehaviorNode {
-        public:
-            PrintBehavior(const string msg) : message(msg) {};
+	class WaitBehavior : public BehaviorNode {
+	public:
+		WaitBehavior(){};
 
-            NodeStatus onStart() override;
+		NodeStatus onStart() override;
 
-            NodeStatus onRunning() override;
+		NodeStatus onRunning() override;
 
-        private:
-            const string message;
-    };
+	private:
+		float distanceFromPlayer;
+		float triggerDistance;
+		glm::vec3 playerPosition;
+		glm::vec3 entityPosition;
+	};
 
-    class WaitBehavior : public BehaviorNode {
-        public:
-            WaitBehavior(const float t) : time(t) {};
+	class PursueBehavior : public BehaviorNode {
+	public:
+		PursueBehavior(){};
 
-            NodeStatus onStart() override;
+		NodeStatus onStart() override;
 
-            NodeStatus onRunning() override;
+		NodeStatus onRunning() override;
 
-        private:
-            float time;
-            float currentTime;
-    };
+	private:
+		float moveSpeed;
+		glm::vec3 playerPosition;
+		glm::vec3 entityPosition;
+		glm::vec3 lerpPosition;
+	};
 
-    class BehaviorTree {
-        public:
-            BehaviorTree(std::string xml_path);
+	class BehaviorTree {
+	public:
+		BehaviorTree(std::string xml_path);
 
-            void update();
+		void update();
 
-            BehaviorNode* createBehaviorNodeFromXML(xml_node node);
+		BehaviorNode* createBehaviorNodeFromXML(pugi::xml_node node);
 
-        private:
-            xml_document tree;
-            xml_node current_xml_node;
-            BehaviorNode* current_behavior_node;
-            NodeStatus current_status;
-    };
+	private:
+		pugi::xml_document tree;
+		pugi::xml_node current_xml_node;
+		BehaviorNode* current_behavior_node;
+		NodeStatus current_status;
+	};
 }
