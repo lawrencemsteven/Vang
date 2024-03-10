@@ -10,15 +10,19 @@ namespace Vang::Utility {
 
 		EntityManager() = default;
 
-		const std::vector<Entity>& getEntities();
+		std::vector<Entity>& getEntities();
+		const std::vector<Entity>& getEntities() const;
 		Entity& getEntity(const EntityID entityID);
 		const Entity& getEntity(const EntityID entityID) const;
+		bool getDirty();
 
 		EntityID createEntity();
-		EntityID createEntity(const glm::vec4 position, const float radius);
+		EntityID createEntity(const glm::vec3 position, const float radius);
+		void setDirty(bool dirty);
 
 	private:
 		std::vector<Entity> m_entities{};
+		bool m_dirty{false};
 	};
 
 }

@@ -82,6 +82,9 @@ set(Vang_FILES
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/GraphicsOpenGL.h"
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/GraphicsOpenGL.cpp"
 
+	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Buffers/EntityBuffer.h"
+	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Buffers/EntityBuffer.cpp"
+
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/Shader.h"
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/Shader.cpp"
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/ShaderProgram.h"

@@ -40,6 +40,8 @@ uniform float iTime;
 uniform uint iRenderDistance;
 uniform Camera camera;
 
+uniform uint entityCount;
+
 ivec3 getBlockCoords(vec3 pos) {
     return ivec3(round(pos.x), round(pos.y), round(pos.z));
 }
@@ -86,8 +88,7 @@ float planeIntersectionDistance(vec3 rayOrigin, vec3 rayDirection, vec3 planeOri
 
 float distanceToNearestEntity(const vec3 rayOrigin) {
     float minDist = 1024.0f;
-    // TODO: Use Number Of Entities
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < entityCount; i++) {
         minDist = min(minDist, length(entities[i].position.xyz - rayOrigin) - entities[i].radius);
     }
     return minDist;

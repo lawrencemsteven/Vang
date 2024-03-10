@@ -2,7 +2,12 @@
 
 namespace Vang::Utility {
 
-	const std::vector<Entity>& Vang::Utility::EntityManager::getEntities() {
+	std::vector<Entity>& Vang::Utility::EntityManager::getEntities() {
+		m_dirty = true;
+		return m_entities;
+	}
+
+	const std::vector<Entity>& Vang::Utility::EntityManager::getEntities() const {
 		return m_entities;
 	}
 
@@ -14,14 +19,24 @@ namespace Vang::Utility {
 		return m_entities[entityID];
 	}
 
-	EntityManager::EntityID EntityManager::createEntity() {
-		m_entities.push_back(Entity{});
-		return m_entities.size() - 1;
+	bool EntityManager::getDirty() {
+		return m_dirty;
 	}
 
-	EntityManager::EntityID EntityManager::createEntity(const glm::vec4 position,
+	EntityManager::EntityID EntityManager::createEntity() {
+		m_entities.push_back(Entity{});
+		setDirty(true);
+		return static_cast<EntityManager::EntityID>(m_entities.size() - 1);
+	}
+
+	EntityManager::EntityID EntityManager::createEntity(const glm::vec3 position,
 														const float radius) {
 		m_entities.push_back(Entity{position, radius});
-		return m_entities.size() - 1;
+		setDirty(true);
+		return static_cast<EntityManager::EntityID>(m_entities.size() - 1);
+	}
+
+	void EntityManager::setDirty(bool dirty) {
+		m_dirty = dirty;
 	}
 }
