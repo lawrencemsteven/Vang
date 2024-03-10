@@ -2,6 +2,7 @@
 
 #include "Vang/Utility/Camera/Camera.h"
 
+#include "Vang/GraphicsAPI/GraphicsOpenGL/Buffers/EntityBuffer.h"
 #include "ShaderProgram.h"
 #include "ShaderTexture.h"
 #include "VertexData.h"
@@ -13,9 +14,9 @@ namespace Vang::gfx::OpenGL {
 		ShaderProgramManager() = default;
 
 		void initialize(std::filesystem::path vertexShaderFile,
-							 std::filesystem::path fragmentShaderFile,
-							 std::filesystem::path computeShaderFile, unsigned int width,
-							 unsigned int height);
+						std::filesystem::path fragmentShaderFile,
+						std::filesystem::path computeShaderFile, unsigned int width,
+						unsigned int height);
 
 		void update();
 		void displayCamera(const Vang::Objects::Camera& camera);
@@ -29,6 +30,7 @@ namespace Vang::gfx::OpenGL {
 		ShaderProgram m_rasterShaderProgram;
 		ShaderProgram m_computeShaderProgram;
 		ShaderTexture m_screenTexture;
+		EntityBuffer m_entityBuffer;
 		VertexData m_vertexData;
 	};
 

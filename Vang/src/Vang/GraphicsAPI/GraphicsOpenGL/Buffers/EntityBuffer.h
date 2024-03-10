@@ -11,6 +11,7 @@ namespace Vang::gfx::OpenGL {
 
 	class EntityBuffer {
 	public:
+		EntityBuffer() = default;
 		EntityBuffer(ShaderProgram& shader);
 		~EntityBuffer();
 

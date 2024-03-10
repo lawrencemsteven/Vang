@@ -208,33 +208,36 @@ namespace Vang::gfx::OpenGL {
 
 
 
-		// Entities
-		struct Entity {
-			glm::vec4 position;
-			float radius;
-		};
+		// // Entities
+		// struct Entity {
+		// 	glm::vec4 position;
+		// 	float radius;
+		// };
 
-		std::vector<Entity> entities{};
-		entities.push_back(Entity{glm::vec4{5.5f, 5.5f, 5.5f, 1.0f}, 0.5f});
-		// entities.push_back(Entity{glm::vec4{5.0f, 5.0f, 8.0f, 1.0f}, 0.5f});
+		// std::vector<Entity> entities{};
+		// entities.push_back(Entity{glm::vec4{5.5f, 5.5f, 5.5f, 1.0f}, 0.5f});
+		// // entities.push_back(Entity{glm::vec4{5.0f, 5.0f, 8.0f, 1.0f}, 0.5f});
 
-		GLint entitiesLocation;
-		GLuint entitiesBuffer;
-		entitiesLocation = glGetProgramResourceIndex(m_computeShaderProgram.getID(),
-													 GL_SHADER_STORAGE_BLOCK, "Entities");
-		glGenBuffers(1, &entitiesBuffer);
-		glBindBuffer(GL_SHADER_STORAGE_BUFFER, entitiesBuffer);
-		glBufferData(GL_SHADER_STORAGE_BUFFER, entities.size() * sizeof(Entity), entities.data(),
-					 GL_DYNAMIC_DRAW);
-		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, entitiesLocation, entitiesBuffer);
+		// GLint entitiesLocation;
+		// GLuint entitiesBuffer;
+		// entitiesLocation = glGetProgramResourceIndex(m_computeShaderProgram.getID(),
+		// 											 GL_SHADER_STORAGE_BLOCK, "Entities");
+		// glGenBuffers(1, &entitiesBuffer);
+		// glBindBuffer(GL_SHADER_STORAGE_BUFFER, entitiesBuffer);
+		// glBufferData(GL_SHADER_STORAGE_BUFFER, entities.size() * sizeof(Entity), entities.data(),
+		// 			 GL_DYNAMIC_DRAW);
+		// glBindBufferBase(GL_SHADER_STORAGE_BUFFER, entitiesLocation, entitiesBuffer);
+		m_entityBuffer = EntityBuffer{m_computeShaderProgram};
 	}
 
 	void ShaderProgramManager::update() {
 		m_computeShaderProgram.setUniform("iTime", Vang::Utility::Time::timeSinceStart());
 
 		m_computeShaderProgram.use();
-		glDispatchCompute(floor(m_screenWidth / 16.0f), floor(m_screenHeight / 8.0f), 1);
+		glDispatchCompute(static_cast<GLuint>(floor(m_screenWidth / 16.0f)),
+						  static_cast<GLuint>(floor(m_screenHeight / 8.0f)), 1);
 		glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+		m_entityBuffer.update(m_computeShaderProgram);
 		m_rasterShaderProgram.use();
 		m_vertexData.update();
 	}
