@@ -2,6 +2,7 @@
 
 #include "Vang/Utility/Camera/Camera.h"
 
+#include "Vang/GraphicsAPI/GraphicsOpenGL/Buffers/BlockBuffer.h"
 #include "Vang/GraphicsAPI/GraphicsOpenGL/Buffers/EntityBuffer.h"
 #include "ShaderProgram.h"
 #include "ShaderTexture.h"
@@ -31,6 +32,7 @@ namespace Vang::gfx::OpenGL {
 		ShaderProgram m_computeShaderProgram;
 		ShaderTexture m_screenTexture;
 		EntityBuffer m_entityBuffer;
+		BlockBuffer m_blockBuffer{};
 		VertexData m_vertexData;
 	};
 

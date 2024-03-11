@@ -59,8 +59,22 @@ public:
 int main() {
 	Vang::getLayerStack().pushLayer(new PlayerMovementLayer());
 
-	// auto& entityManager = Vang::getEntityManager();
-	// entityManager.createEntity();
+	auto& world = Vang::getCurrentWorld();
+
+	// Set bottom level to rainbow blocks
+	for (uint32_t x = 0; x < 256; x++) {
+		for (uint32_t z = 0; z < 256; z++) {
+			world.setBlock({x, 0, z}, Vang::Voxel::Blocks::Green);
+		}
+	}
+
+	// Demo block tower
+	for (uint32_t i = 2; i < 15; i++) {
+		world.setBlock({10, i - 1, 20}, static_cast<Vang::Voxel::Blocks>(i));
+	}
+
+	Vang::Utility::Structure::generateStructure(28, 28, 180, 180, 6, Vang::Voxel::Blocks::Gray,
+												Vang::Voxel::Blocks::Air);
 
 	while (Vang::getRunning()) {
 		Vang::update();

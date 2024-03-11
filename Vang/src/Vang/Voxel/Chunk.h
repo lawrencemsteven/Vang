@@ -7,6 +7,7 @@ namespace Vang::Voxel {
 	inline const glm::uvec3 chunkSize{64, 64, 64};
 
 	enum class Blocks : uint32_t {
+		None,
 		Air,
 		Fog,
 		Black,
@@ -19,6 +20,8 @@ namespace Vang::Voxel {
 		Green,
 		Blue,
 		Purple,
+		Pink,
+		Rainbow,
 	};
 
 	class Chunk {

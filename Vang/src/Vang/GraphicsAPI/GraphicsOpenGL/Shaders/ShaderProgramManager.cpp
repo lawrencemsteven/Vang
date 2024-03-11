@@ -37,41 +37,6 @@ namespace Vang::gfx::OpenGL {
 		// glGetIntegerv(GL_MAX_3D_TEXTURE_SIZE, &max_layers);
 		// std::cout << "Max 3D Texture Size: " << max_layers << std::endl;
 
-		// Old Blocks
-		// 0 - Air
-		// 1 - Green
-		// 4 - Yellow
-		// 3 - Fog
-
-		// Blocks
-		// 0  - Air
-		// 1  - Fog
-		// 2  - Black
-		// 3  - Gray
-		// 4  - Light Gray
-		// 5  - White
-		// 6  - Red
-		// 7  - Orange
-		// 8  - Yellow
-		// 9  - Green
-		// 10 - Blue
-		// 11 - Purple
-
-		enum class Blocks {
-			Air,
-			Fog,
-			Black,
-			Gray,
-			LightGray,
-			White,
-			Red,
-			Orange,
-			Yellow,
-			Green,
-			Blue,
-			Purple,
-		};
-
 		// {x, y, z}
 		// y - up
 
@@ -150,18 +115,7 @@ namespace Vang::gfx::OpenGL {
 						 std::max(viewDistance, 64u));
 		std::fill(testData2.begin(), testData2.end(), 2u);
 
-		GLuint m_texture{};
-		glGenTextures(1, &m_texture);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_3D, m_texture);
-		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexImage3D(GL_TEXTURE_3D, 0, GL_R32UI, 64, 64, 64, 0, GL_RED_INTEGER, GL_UNSIGNED_INT,
-					 testData.data());
-		glBindImageTexture(1, m_texture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
+		m_blockBuffer.initialize();
 
 		GLuint m_texture2{};
 		glGenTextures(1, &m_texture2);
@@ -205,28 +159,6 @@ namespace Vang::gfx::OpenGL {
 					 GL_DYNAMIC_DRAW);
 		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, lightsLocation, lightsBuffer);
 
-
-
-
-		// // Entities
-		// struct Entity {
-		// 	glm::vec4 position;
-		// 	float radius;
-		// };
-
-		// std::vector<Entity> entities{};
-		// entities.push_back(Entity{glm::vec4{5.5f, 5.5f, 5.5f, 1.0f}, 0.5f});
-		// // entities.push_back(Entity{glm::vec4{5.0f, 5.0f, 8.0f, 1.0f}, 0.5f});
-
-		// GLint entitiesLocation;
-		// GLuint entitiesBuffer;
-		// entitiesLocation = glGetProgramResourceIndex(m_computeShaderProgram.getID(),
-		// 											 GL_SHADER_STORAGE_BLOCK, "Entities");
-		// glGenBuffers(1, &entitiesBuffer);
-		// glBindBuffer(GL_SHADER_STORAGE_BUFFER, entitiesBuffer);
-		// glBufferData(GL_SHADER_STORAGE_BUFFER, entities.size() * sizeof(Entity), entities.data(),
-		// 			 GL_DYNAMIC_DRAW);
-		// glBindBufferBase(GL_SHADER_STORAGE_BUFFER, entitiesLocation, entitiesBuffer);
 		m_entityBuffer = EntityBuffer{m_computeShaderProgram};
 	}
 
@@ -237,7 +169,10 @@ namespace Vang::gfx::OpenGL {
 		glDispatchCompute(static_cast<GLuint>(floor(m_screenWidth / 16.0f)),
 						  static_cast<GLuint>(floor(m_screenHeight / 8.0f)), 1);
 		glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
+		m_blockBuffer.update();
 		m_entityBuffer.update(m_computeShaderProgram);
+
 		m_rasterShaderProgram.use();
 		m_vertexData.update();
 	}

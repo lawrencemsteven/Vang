@@ -4,6 +4,7 @@ namespace Vang::Voxel {
 
 	Chunk::Chunk() {
 		m_blocks.resize(chunkSize[0] * chunkSize[1] * chunkSize[2]);
+		std::fill(m_blocks.begin(), m_blocks.end(), static_cast<uint32_t>(Blocks::Air));
 	}
 
 	void Chunk::setBlock(const uint32_t x, const uint32_t y, const uint32_t z, const Blocks block) {

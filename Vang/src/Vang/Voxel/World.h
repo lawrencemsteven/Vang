@@ -26,9 +26,11 @@ namespace Vang::Voxel {
 
 		void setBlock(const int32_t x, const int32_t y, const int32_t z, const Blocks block);
 		void setBlock(glm::ivec3 worldPos, const Blocks block);
+		void setDirty(const bool dirty);
 
 		Blocks getBlock(const int32_t x, const int32_t y, const int32_t z);
 		bool getSolid(const int32_t x, const int32_t y, const int32_t z);
+		bool getDirty() const;
 
 		std::shared_ptr<Chunk> loadChunk(const glm::ivec3& chunkPosition);
 
@@ -37,6 +39,8 @@ namespace Vang::Voxel {
 
 		std::optional<std::shared_ptr<Chunk>> isChunkLoaded(const glm::ivec3& chunkPosition) const;
 		std::shared_ptr<Chunk> initializeChunk(const glm::ivec3& chunkPosition);
+
+		bool m_dirty{true};
 	};
 
 }

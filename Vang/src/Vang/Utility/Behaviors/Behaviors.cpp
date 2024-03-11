@@ -6,8 +6,8 @@
 namespace Vang::Utility::Behaviors {
 
 	BehaviorTree::BehaviorTree(std::string xml_path) {
-		pugi::xml_parse_result result =
-			tree.load_file(static_cast<std::string>(VANG_XML_FOLDER).append("/BasicEntity.xml").c_str());
+		pugi::xml_parse_result result = tree.load_file(
+			static_cast<std::string>(VANG_XML_FOLDER).append("/BasicEntity.xml").c_str());
 
 		if (!result) {
 			std::cout << "Parse error: " << result.description()
@@ -32,7 +32,7 @@ namespace Vang::Utility::Behaviors {
 			current_status = current_behavior_node->onStart();
 		}
 		else {
-			std::cout << "running node status" << std::endl;
+			// std::cout << "running node status" << std::endl;
 			current_status = current_behavior_node->onRunning();
 		}
 
@@ -48,7 +48,7 @@ namespace Vang::Utility::Behaviors {
 			current_behavior_node = createBehaviorNodeFromXML(current_xml_node);
 		}
 
-		std::cout << "tree updating" << std::endl;
+		// std::cout << "tree updating" << std::endl;
 	}
 
 	BehaviorNode* BehaviorTree::createBehaviorNodeFromXML(pugi::xml_node node) {
@@ -76,18 +76,16 @@ namespace Vang::Utility::Behaviors {
 	}
 
 	NodeStatus WaitBehavior::onRunning() {
-		if (Vang::getEntityManager().getEntities().size() <= 0)
-		{
+		if (Vang::getEntityManager().getEntities().size() <= 0) {
 			return Vang::Utility::Behaviors::NodeStatus::FAILURE;
 		}
 
 		playerPosition	   = Vang::getPlayer().getCamera().getPosition();
-		std::cout << Vang::getEntityManager().getEntities().size() << std::endl;
 		entityPosition	   = Vang::getEntityManager().getEntity(0).getPosition();
 		distanceFromPlayer = glm::distance(playerPosition, entityPosition);
 
-		std::cout << "Entity: " << glm::to_string(entityPosition) << std::endl;
-		std::cout << "Player: " << glm::to_string(playerPosition) << std::endl;
+		// std::cout << "Entity: " << glm::to_string(entityPosition) << std::endl;
+		// std::cout << "Player: " << glm::to_string(playerPosition) << std::endl;
 
 		if (distanceFromPlayer <= triggerDistance) {
 			return Vang::Utility::Behaviors::NodeStatus::SUCCESS;
@@ -106,19 +104,19 @@ namespace Vang::Utility::Behaviors {
 		entityPosition = Vang::getEntityManager().getEntity(0).getPosition();
 
 		const glm::vec3 distance = playerPosition - entityPosition;
-		glm::vec3 direction = glm::normalize(distance);
-		if (distance == glm::vec3(0.0f, 0.0f, 0.0f))
-		{
+		glm::vec3 direction		 = glm::normalize(distance);
+		if (distance == glm::vec3(0.0f, 0.0f, 0.0f)) {
 			direction = glm::vec3(0.0f, 0.0f, 0.0f);
 		}
-		const glm::vec3 entityDisplacement = direction * moveSpeed * Vang::Utility::Time::deltaTime();
+		const glm::vec3 entityDisplacement =
+			direction * moveSpeed * Vang::Utility::Time::deltaTime();
 
 		glm::vec3 newEntityPosition = entityPosition + entityDisplacement;
 
 		Vang::getEntityManager().getEntity(0).setPosition(newEntityPosition);
 
-		std::cout << "Entity: " << glm::to_string(entityPosition) << std::endl;
-		std::cout << "Player: " << glm::to_string(playerPosition) << std::endl;
+		// std::cout << "Entity: " << glm::to_string(entityPosition) << std::endl;
+		// std::cout << "Player: " << glm::to_string(playerPosition) << std::endl;
 
 		return Vang::Utility::Behaviors::NodeStatus::RUNNING;
 	}

@@ -36,6 +36,7 @@
 #include "Vang/Utility/Events/MouseEvent.h"
 #include "Vang/Utility/Layers/LayerStack.h"
 #include "Vang/Utility/Player/Player.h"
+#include "Vang/Utility/Structures/Structure.h"
 #include "Vang/Utility/Time/Time.h"
 #include "Vang/Voxel/Universe.h"
 #include "Vang/Window/Window.h"

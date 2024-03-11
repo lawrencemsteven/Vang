@@ -39,6 +39,9 @@ set(Vang_FILES
 	"./src/Vang/Utility/Player/Player.h"
 	"./src/Vang/Utility/Player/Player.cpp"
 
+	"./src/Vang/Utility/Structures/Structure.h"
+	"./src/Vang/Utility/Structures/Structure.cpp"
+
 	"./src/Vang/Utility/Textures/TextureBlueprint.h"
 	"./src/Vang/Utility/Textures/TextureBlueprint.cpp"
 
@@ -82,6 +85,8 @@ set(Vang_FILES
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/GraphicsOpenGL.h"
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/GraphicsOpenGL.cpp"
 
+	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Buffers/BlockBuffer.h"
+	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Buffers/BlockBuffer.cpp"
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Buffers/EntityBuffer.h"
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Buffers/EntityBuffer.cpp"
 

@@ -22,7 +22,7 @@ namespace Vang::Utility {
 
 	private:
 		std::vector<Entity> m_entities{};
-		bool m_dirty{false};
+		bool m_dirty{true};
 	};
 
 }
