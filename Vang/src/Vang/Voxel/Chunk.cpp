@@ -2,30 +2,37 @@
 
 namespace Vang::Voxel {
 
-	Chunk::Chunk(const glm::ivec3& chunkPosition)
-		: m_chunkPosition{chunkPosition},
-		  m_blocks{} {}
-
-	Chunk::Chunk(int32_t chunkX, int32_t chunkY, int32_t chunkZ)
-		: Chunk{glm::ivec3{chunkX, chunkY, chunkZ}} {}
-
-	void Chunk::update() {
-		// TODO: HANDLE BLOCK INTERACTIONS
+	Chunk::Chunk() {
+		m_blocks.resize(chunkSize[0] * chunkSize[1] * chunkSize[2]);
+		std::fill(m_blocks.begin(), m_blocks.end(), static_cast<uint32_t>(Blocks::Air));
 	}
 
-	void Chunk::generateChunk() {
-		srand((unsigned)time(NULL));
+	void Chunk::setBlock(const uint32_t x, const uint32_t y, const uint32_t z, const Blocks block) {
+		const auto loc = convert3DTo1D(x, y, z);
 
-		int random{};
-		for (std::size_t i = 0; i < m_blocks.size(); i++) {
-			random = rand() % 100;
-			if (random < 30) {
-				m_blocks[i] = 1;
-			}
-			else {
-				m_blocks[i] = 0;
-			}
-		}
+		m_blocks[loc] = static_cast<uint32_t>(block);
+	}
+
+	void Chunk::setBlock(const glm::uvec3& coords, const Blocks block) {
+		setBlock(coords[0], coords[1], coords[2], block);
+	}
+
+	Blocks Chunk::getBlock(uint32_t x, uint32_t y, uint32_t z) const {
+		const auto loc = convert3DTo1D(x, y, z);
+
+		return static_cast<Blocks>(m_blocks[loc]);
+	}
+
+	Blocks Chunk::getBlock(const glm::uvec3& coords) const {
+		return getBlock(coords[0], coords[1], coords[2]);
+	}
+
+	const std::vector<uint32_t>& Chunk::getAllBlocks() const {
+		return m_blocks;
+	}
+
+	std::size_t Chunk::convert3DTo1D(const uint32_t x, const uint32_t y, const uint32_t z) const {
+		return x + (chunkSize[2] * z) + (chunkSize[1] * chunkSize[1] * y);
 	}
 
 }

@@ -56,6 +56,10 @@ namespace Vang::gfx::OpenGL {
 		return true;
 	}
 
+	GLuint ShaderProgram::getID() const {
+		return m_shaderProgram;
+	}
+
 	void ShaderProgram::use() {
 		glUseProgram(m_shaderProgram);
 	}
@@ -95,6 +99,24 @@ namespace Vang::gfx::OpenGL {
 	void ShaderProgram::setUniform(const std::string& name, glm::int32_t val1, glm::int32_t val2,
 								   glm::int32_t val3, glm::int32_t val4) {
 		glProgramUniform4i(m_shaderProgram, getVarLocation(name), val1, val2, val3, val4);
+	}
+
+	void ShaderProgram::setUniform(const std::string& name, glm::uint32_t val1) {
+		glProgramUniform1ui(m_shaderProgram, getVarLocation(name), val1);
+	}
+
+	void ShaderProgram::setUniform(const std::string& name, glm::uint32_t val1, glm::uint32_t val2) {
+		glProgramUniform2ui(m_shaderProgram, getVarLocation(name), val1, val2);
+	}
+
+	void ShaderProgram::setUniform(const std::string& name, glm::uint32_t val1, glm::uint32_t val2,
+								   glm::uint32_t val3) {
+		glProgramUniform3ui(m_shaderProgram, getVarLocation(name), val1, val2, val3);
+	}
+
+	void ShaderProgram::setUniform(const std::string& name, glm::uint32_t val1, glm::uint32_t val2,
+								   glm::uint32_t val3, glm::uint32_t val4) {
+		glProgramUniform4ui(m_shaderProgram, getVarLocation(name), val1, val2, val3, val4);
 	}
 
 	void ShaderProgram::setUniform(const std::string& name, bool val1) {

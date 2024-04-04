@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Vang/Utility/Camera/Camera.h"
-#include "Vang/Voxel/ChunkRenderer.h"
 
 namespace Vang::Objects {
 
@@ -23,7 +22,7 @@ namespace Vang::Objects {
 
 		Camera& getCamera();
 		const Camera& getCamera() const;
-		const glm::vec3& getPosition();
+		const glm::vec3& getPosition() const;
 		float getSpeed();
 
 	private:

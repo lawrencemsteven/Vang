@@ -15,10 +15,12 @@
 #include <stdexcept>
 #include <string_view>
 #include <sstream>
+#include <thread>
 #include <variant>
 #include <vector>
 
 #include "Vang/Utility/Logging/Log.h"
+#include "Vang/Utility/Time/Time.h"
 
 // TODO: Move this somewhere else for helper defines
 #define BIT(x) (1 << x)

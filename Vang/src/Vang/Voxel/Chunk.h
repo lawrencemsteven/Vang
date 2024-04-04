@@ -4,30 +4,46 @@
 
 namespace Vang::Voxel {
 
-	inline const glm::uvec3 chunkSize{16, 16, 16};
+	inline const glm::uvec3 chunkSize{64, 64, 64};
+
+	enum class Blocks : uint32_t {
+		None,
+		Air,
+		Fog,
+		Black,
+		Gray,
+		LightGray,
+		White,
+		Red,
+		Orange,
+		Yellow,
+		Green,
+		Blue,
+		Purple,
+		Pink,
+		Rainbow,
+	};
 
 	class Chunk {
 	public:
 		Chunk();
-		Chunk(const glm::ivec3& chunkPosition);
-		Chunk(int32_t chunkX, int32_t chunkY, int32_t chunkZ);
-		Chunk(const Chunk&)						 = delete;
-		Chunk(Chunk&&)							 = delete;
-		Chunk& operator=(const Chunk&)			 = default;
-		Chunk& operator=(Chunk&&)				 = default;
+		~Chunk()					   = default;
+		Chunk(const Chunk&)			   = delete;
+		Chunk(Chunk&&)				   = delete;
+		Chunk& operator=(const Chunk&) = delete;
+		Chunk& operator=(Chunk&&)	   = delete;
 
-		void setBlock(uint32_t x, uint32_t y, uint32_t z, uint32_t block);
-		void setBlock(const glm::uvec3& coords, uint32_t block);
-		uint32_t getBlock(uint32_t x, uint32_t y, uint32_t z) const;
-		uint32_t getBlock(const glm::uvec3& coords) const;
+		void setBlock(const uint32_t x, const uint32_t y, const uint32_t z, const Blocks block);
+		void setBlock(const glm::uvec3& coords, const Blocks block);
+		Blocks getBlock(uint32_t x, uint32_t y, uint32_t z) const;
+		Blocks getBlock(const glm::uvec3& coords) const;
 
-		void update();
+		const std::vector<uint32_t>& getAllBlocks() const;
 
 	private:
-		glm::ivec3 m_chunkPosition{};
-		std::array<uint32_t, 4096> m_blocks{};
+		std::vector<uint32_t> m_blocks{};
 
-		void generateChunk();
+		std::size_t convert3DTo1D(const uint32_t x, const uint32_t y, const uint32_t z) const;
 	};
 
 }

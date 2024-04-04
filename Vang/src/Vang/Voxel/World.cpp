@@ -2,56 +2,111 @@
 
 namespace Vang::Voxel {
 
-	glm::ivec3 World::convertWorldPosToChunkCoord(glm::vec3 worldPos) {
-		return static_cast<glm::ivec3>(worldPos) / static_cast<glm::ivec3>(chunkSize);
+	World::World() {
+		// // TODO: Make world bigger than 256x64x256
+		for (std::size_t x = 0; x < 4; x++) {
+			for (std::size_t z = 0; z < 4; z++) {
+				loadChunk({x, 0, z});
+			}
+		}
+
+		for (std::size_t x = 0; x < 256; x++) {
+			for (std::size_t z = 0; z < 256; z++) {
+				setBlock({x, 0, z}, Blocks::Green);
+			}
+		}
 	}
+
 	glm::ivec3 World::convertWorldPosToChunkCoord(glm::ivec3 worldPos) {
 		return worldPos / static_cast<glm::ivec3>(chunkSize);
 	}
 
-	Chunk& World::loadChunk(const glm::ivec3& chunkPosition) {
-		if (chunkAlreadyLoaded(chunkPosition)) {
-			return incrementChunk(chunkPosition);
+	glm::ivec3 World::convertWorldPosToChunkCoord(const int32_t x, const int32_t y,
+												  const int32_t z) {
+		return convertWorldPosToChunkCoord(glm::ivec3{x, y, z});
+	}
+
+	glm::ivec3 World::convertWorldPosToChunkCoord(const glm::vec3& worldPos) {
+		return convertWorldPosToChunkCoord(static_cast<glm::ivec3>(worldPos));
+	}
+
+	glm::ivec3 World::convertWorldPosToChunkCoord(const float x, const float y, const float z) {
+		const int32_t newX = static_cast<int32_t>(x);
+		const int32_t newY = static_cast<int32_t>(y);
+		const int32_t newZ = static_cast<int32_t>(z);
+		return convertWorldPosToChunkCoord(glm::ivec3{newX, newY, newZ});
+	}
+
+	void World::setBlock(const int32_t x, const int32_t y, const int32_t z, const Blocks block) {
+		const auto chunkPos = convertWorldPosToChunkCoord(x, y, z);
+
+		const auto chunk = loadChunk(chunkPos);
+
+		chunk->setBlock(x - chunkPos.x, y - chunkPos.y, z - chunkPos.z, block);
+
+		setDirty(true);
+	}
+
+	void World::setBlock(glm::ivec3 worldPos, Blocks block) {
+		const auto chunkPos = convertWorldPosToChunkCoord(worldPos);
+
+		const auto chunk = loadChunk(chunkPos);
+
+		chunk->setBlock(worldPos - chunkPos * glm::ivec3{chunkSize}, block);
+
+		setDirty(true);
+	}
+
+	void World::setDirty(const bool dirty) {
+		m_dirty = dirty;
+	}
+
+	Blocks World::getBlock(const int32_t x, const int32_t y, const int32_t z) {
+		const auto chunkPos = convertWorldPosToChunkCoord(x, y, z);
+
+		const auto chunk = loadChunk(chunkPos);
+
+		return chunk->getBlock(x - chunkPos.x, y - chunkPos.y, z - chunkPos.z);
+	}
+
+	bool World::getSolid(const int32_t x, const int32_t y, const int32_t z) {
+		return getBlock(x, y, z) < Blocks::Black;
+	}
+
+	bool World::getDirty() const {
+		return m_dirty;
+	}
+
+	std::shared_ptr<Chunk> World::loadChunk(const glm::ivec3& chunkPosition) {
+		const auto chunkOptional = isChunkLoaded(chunkPosition);
+
+		if (chunkOptional.has_value()) {
+			return chunkOptional.value();
 		}
+
+		setDirty(true);
 
 		return initializeChunk(chunkPosition);
 	}
 
-	Chunk& World::loadChunk(const int32_t chunkX, const int32_t chunkY, const int32_t chunkZ) {
-		return loadChunk(glm::ivec3{chunkX, chunkY, chunkZ});
-	}
+	std::optional<std::shared_ptr<Chunk>>
+	World::isChunkLoaded(const glm::ivec3& chunkPosition) const {
+		auto chunkSearch = m_loadedChunks.find(chunkPosition);
 
-	void World::unloadChunk(const glm::ivec3& chunkPosition) {
-		if (!chunkAlreadyLoaded(chunkPosition)) {
-			return;
+		if (chunkSearch != m_loadedChunks.end()) {
+			return chunkSearch->second;
 		}
 
-		decrementChunk(chunkPosition);
+		return std::nullopt;
 	}
 
-	void World::unloadChunk(const int32_t chunkX, const int32_t chunkY, const int32_t chunkZ) {
-		return unloadChunk(glm::ivec3{chunkX, chunkY, chunkZ});
-	}
+	std::shared_ptr<Chunk> World::initializeChunk(const glm::ivec3& chunkPosition) {
+		std::shared_ptr<Chunk> chunk = std::make_shared<Chunk>();
 
-	bool World::chunkAlreadyLoaded(const glm::ivec3& chunkPosition) {
-		return m_loadedChunks.count(chunkPosition) > 0;
-	}
+		m_loadedChunks[chunkPosition] = chunk;
 
-	Chunk& World::incrementChunk(const glm::ivec3& chunkPosition) {
-		m_loadedChunks[chunkPosition].first += 1;
-		return *m_loadedChunks[chunkPosition].second;
-	}
-
-	void World::decrementChunk(const glm::ivec3& chunkPosition) {
-		m_loadedChunks[chunkPosition].first -= 1;
-		if (m_loadedChunks[chunkPosition].first == 0) {
-			m_loadedChunks.erase(chunkPosition);
-		}
-	}
-
-	Chunk& World::initializeChunk(const glm::ivec3& chunkPosition) {
-		m_loadedChunks.emplace(std::make_pair(chunkPosition, std::make_pair(1U, std::make_unique<Chunk>(chunkPosition))));
-		return *m_loadedChunks[chunkPosition].second;
+		setDirty(true);
+		return chunk;
 	}
 
 }
