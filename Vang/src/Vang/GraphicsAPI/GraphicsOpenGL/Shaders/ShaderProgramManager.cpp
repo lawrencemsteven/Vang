@@ -37,68 +37,6 @@ namespace Vang::gfx::OpenGL {
 		// glGetIntegerv(GL_MAX_3D_TEXTURE_SIZE, &max_layers);
 		// std::cout << "Max 3D Texture Size: " << max_layers << std::endl;
 
-		// {x, y, z}
-		// y - up
-
-		// Logan
-		// World& world = Vang::Voxel::getCurrentWorld();
-		// void world.setBlock(glm::ivec3 position, Blocks block);
-		// void world.setBlock(glm::ivec3{28, 1, 28}, 6);
-		// world.generateDungion(startx, starty, length, width, height, Blocks living, Blocks Dead);
-
-		// Ryan
-		// World& world = Vang::Voxel::getCurrentWorld();
-		// Blocks world.getBlock(glm::ivec3 position);
-		// bool world.getSolid(glm::ivec3 position);
-		// EntityManager& entityManager = Vang::getEntityManager();
-		// entityManager.setEntityPosition(0, glm::vec3 position);
-		// glm::mix(glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{1.0f, 1.0f, 1.0f}, 0.1f);
-		// Vang::getPlayer().getCamera().getPosition();
-
-		// Steven
-		// Hook up world update functions
-		// Entity Manager
-		// getBlock function
-		// getSolid function
-		// Make world 256x256x256
-
-		// TEMP SHADER BUFFER ATTEMPT
-		std::vector<uint32_t> testData{};
-		std::vector<uint32_t> testData2{};
-		testData.resize(262144);
-		std::fill(testData.begin(), testData.end(), 0);
-
-		// Ground plane
-		for (uint32_t x = 0; x < 64; x++) {
-			for (uint32_t z = 0; z < 64; z++) {
-				testData[z * 64 + x] = 1;
-			}
-		}
-
-		// [1, 5, 1]
-		testData[1 + 1 * 64 + 5 * 64 * 64] = 1;
-
-		// [5, 5, 5]
-		testData[5 + 5 * 64 + 5 * 64 * 64] = 4;
-
-		for (uint32_t y = 25; y < 30; y++) {
-			for (uint32_t x = 10; x < 15; x++) {
-				for (uint32_t z = 10; z < 15; z++) {
-					testData[x + z * 64 + y * 64 * 64] = 3;
-				}
-			}
-		}
-		for (uint32_t x = 11; x < 14; x++) {
-			for (uint32_t z = 11; z < 14; z++) {
-				testData[x + z * 64 + 30 * 64 * 64] = 3;
-			}
-		}
-		for (uint32_t x = 12; x < 13; x++) {
-			for (uint32_t z = 12; z < 13; z++) {
-				testData[x + z * 64 + 31 * 64 * 64] = 3;
-			}
-		}
-
 
 
 
