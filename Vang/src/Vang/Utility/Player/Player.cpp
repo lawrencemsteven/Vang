@@ -4,6 +4,10 @@
 
 namespace Vang::Objects {
 
+	Player::Player() {
+		updateCameraPosition();
+	}
+
 	void Player::moveForward(float amount) {
 		m_position += m_camera.getGroundedForward() * m_speed * amount;
 		updateCameraPosition();
