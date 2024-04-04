@@ -39,6 +39,7 @@ namespace Vang::gfx::OpenGL {
 
 
 
+		std::vector<uint32_t> testData2{};
 
 		// 3D Textures
 		uint32_t renderDistance = 1;
