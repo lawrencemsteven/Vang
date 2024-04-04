@@ -2,7 +2,6 @@
 layout(local_size_x = 16, local_size_y = 8, local_size_z = 1) in;
 layout(rgba32f, binding = 0) uniform writeonly image2D screen;
 layout(r32ui, binding = 1) uniform readonly uimage3D blocks;
-layout(r32ui, binding = 2) uniform readonly uimage3D chunks;
 
 // enum class Blocks : uint32_t {
 // 		Air,
@@ -61,7 +60,7 @@ vec3 getBlockCoordsFloat(vec3 pos) {
 }
 uint getBlock(ivec3 coord) {
 	// TODO: Add more chunks
-	if (coord.x > 255 || coord.x < 0 ||coord.y > 63 || coord.y < 0 || coord.z > 255 || coord.z < 0) {
+	if (coord.x > 511 || coord.x < 0 || coord.y > 511 || coord.y < 0 || coord.z > 511 || coord.z < 0) {
 		return 0;
 	}
 	
@@ -143,7 +142,7 @@ void main() {
 	int blockSteps = 0;
 	float fogAmount = 0.0f;
 	bool entityHit = false;
-	while ((currentBlock == 1 || currentBlock == 2) && blockSteps < 1000 && !entityHit) {
+	while ((currentBlock == 1 || currentBlock == 2) && blockSteps < 2048 && !entityHit) {
 		vec3 signedDirection = sign(rayDirection);
 
 		ivec3 distDir = ivec3(round(signedDirection.x), 0, 0);
@@ -233,7 +232,7 @@ void main() {
 	//     }
 	// }    
 
-	// if (entities[1].radius < 0.4f) {
+	// if (imageLoad(blocks, ivec3(0,0,64)).r == 10) {
 	//     col *= vec3(0.5, 1.0, 0.5);
 	// } else {
 	//     col *= vec3(1.0, 0.5, 0.5);
