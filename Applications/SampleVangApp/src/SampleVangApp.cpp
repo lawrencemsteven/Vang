@@ -31,6 +31,11 @@ public:
 			player.moveRight(-Vang::Utility::Time::deltaTime());
 		}
 
+		if (inputCache.isKeyPressed(Vang::Input::KEY::R)) {
+			Vang::Utility::Structure::generateStructure(
+				28, 28, 180, 180, 6, Vang::Voxel::Blocks::Gray, Vang::Voxel::Blocks::Air);
+		}
+
 		if (inputCache.isKeyPressed(Vang::Input::KEY::SPACE)) {
 			player.moveUp(Vang::Utility::Time::deltaTime());
 		}
@@ -61,7 +66,7 @@ int main() {
 
 	auto& world = Vang::getCurrentWorld();
 
-	// Set bottom level to rainbow blocks
+	// Set bottom level of blocks
 	for (uint32_t x = 0; x < 256; x++) {
 		for (uint32_t z = 0; z < 256; z++) {
 			world.setBlock({x, 0, z}, Vang::Voxel::Blocks::Green);

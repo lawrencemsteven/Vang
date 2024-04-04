@@ -11,8 +11,8 @@
 #	define VANG_CURRENT_GRAPHICSAPI Vang::gfx::OpenGL::GraphicsOpenGL
 #endif
 
-#define DEFAULT_WIDTH 1280
-#define DEFAULT_HEIGHT 720
+#define DEFAULT_WIDTH 1920
+#define DEFAULT_HEIGHT 1080
 
 #ifdef VANG_WINDOW_GLFW
 #	include "Vang/Window/WindowGLFW/WindowGLFW.h"
@@ -29,7 +29,6 @@
 #include "Vang/Items/ItemBlueprint.h"
 #include "Vang/Modding/ModManager.h"
 #include "Vang/Utility/BlueprintContainer/BlueprintContainer.h"
-#include "Vang/Utility/Behaviors/Behaviors.h"
 #include "Vang/Utility/Entities/EntityManager.h"
 #include "Vang/Utility/Events/Event.h"
 #include "Vang/Utility/Events/EventHandler.h"

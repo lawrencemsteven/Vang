@@ -12,7 +12,6 @@ namespace Vang {
 	static Vang::Modding::ModManager s_modManager{};
 	static Vang::Utility::Layers::LayerStack s_layerStack{};
 	static Vang::Utility::Events::EventHandler s_eventHandler{};
-	static Vang::Utility::Behaviors::BehaviorTree s_behaviorTree{"./src/test.xml"};
 	static VANG_CURRENT_WINDOW_INPUT s_inputCache{};
 	static Vang::Voxel::World s_currentWorld{};
 	static Vang::Utility::EntityManager s_entityManager{};
@@ -31,7 +30,6 @@ namespace Vang {
 		s_window.update();
 		s_layerStack.update();
 		s_graphicsAPI.update();
-		s_behaviorTree.update();
 
 		if (!s_running) {
 			cleanup();
@@ -39,14 +37,6 @@ namespace Vang {
 
 		// TODO: Figure something out for this to not kill framerate
 		std::this_thread::sleep_for(std::chrono::microseconds(100));
-	}
-
-	void behaviorTreeUpdate() {
-		s_behaviorTree.update();
-
-		if (!s_running) {
-			cleanup();
-		}
 	}
 
 	void close() {
