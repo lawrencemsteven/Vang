@@ -28,8 +28,6 @@ namespace Vang::Voxel {
 		const auto chunk = loadChunk(chunkPos);
 
 		chunk->setBlock(x - chunkPos.x, y - chunkPos.y, z - chunkPos.z, block);
-
-		setDirty(true);
 	}
 
 	void World::setBlock(glm::ivec3 worldPos, Blocks block) {
@@ -38,14 +36,7 @@ namespace Vang::Voxel {
 		const auto chunk = loadChunk(chunkPos);
 
 		chunk->setBlock(worldPos - chunkPos * glm::ivec3{chunkSize}, block);
-
-		setDirty(true);
 	}
-
-	void World::setDirty(const bool dirty) {
-		m_dirty = dirty;
-	}
-
 	Blocks World::getBlock(const int32_t x, const int32_t y, const int32_t z) {
 		const auto chunkPos = convertWorldPosToChunkCoord(x, y, z);
 
@@ -58,18 +49,12 @@ namespace Vang::Voxel {
 		return getBlock(x, y, z) < Blocks::Black;
 	}
 
-	bool World::getDirty() const {
-		return m_dirty;
-	}
-
 	std::shared_ptr<Chunk> World::loadChunk(const glm::ivec3& chunkPosition) {
 		const auto chunkOptional = isChunkLoaded(chunkPosition);
 
 		if (chunkOptional.has_value()) {
 			return chunkOptional.value();
 		}
-
-		setDirty(true);
 
 		return initializeChunk(chunkPosition);
 	}
@@ -90,7 +75,6 @@ namespace Vang::Voxel {
 
 		m_loadedChunks[chunkPosition] = chunk;
 
-		setDirty(true);
 		return chunk;
 	}
 
