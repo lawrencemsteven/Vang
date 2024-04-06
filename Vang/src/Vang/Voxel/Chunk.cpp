@@ -17,6 +17,10 @@ namespace Vang::Voxel {
 		setBlock(coords[0], coords[1], coords[2], block);
 	}
 
+	void Chunk::setDirty(const bool dirty) {
+		m_dirty = dirty;
+	}
+
 	Blocks Chunk::getBlock(uint32_t x, uint32_t y, uint32_t z) const {
 		const auto loc = convert3DTo1D(x, y, z);
 
@@ -25,6 +29,10 @@ namespace Vang::Voxel {
 
 	Blocks Chunk::getBlock(const glm::uvec3& coords) const {
 		return getBlock(coords[0], coords[1], coords[2]);
+	}
+
+	bool Chunk::getDirty() const {
+		return m_dirty;
 	}
 
 	const std::vector<uint32_t>& Chunk::getAllBlocks() const {

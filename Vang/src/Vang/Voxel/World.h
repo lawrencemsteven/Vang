@@ -11,18 +11,18 @@ namespace Vang::Voxel {
 
 	class World {
 	public:
-		World();
+		World()						   = default;
 		~World()					   = default;
 		World(const World&)			   = delete;
 		World(World&&)				   = delete;
 		World& operator=(const World&) = delete;
 		World& operator=(World&&)	   = delete;
 
-		static glm::ivec3 convertWorldPosToChunkCoord(glm::ivec3 worldPos);
-		static glm::ivec3 convertWorldPosToChunkCoord(const int32_t x, const int32_t y,
+		static ChunkCoord convertWorldPosToChunkCoord(glm::ivec3 worldPos);
+		static ChunkCoord convertWorldPosToChunkCoord(const int32_t x, const int32_t y,
 													  const int32_t z);
-		static glm::ivec3 convertWorldPosToChunkCoord(const glm::vec3& worldPos);
-		static glm::ivec3 convertWorldPosToChunkCoord(const float x, const float y, const float z);
+		static ChunkCoord convertWorldPosToChunkCoord(const glm::vec3& worldPos);
+		static ChunkCoord convertWorldPosToChunkCoord(const float x, const float y, const float z);
 
 		void setBlock(const int32_t x, const int32_t y, const int32_t z, const Blocks block);
 		void setBlock(glm::ivec3 worldPos, const Blocks block);

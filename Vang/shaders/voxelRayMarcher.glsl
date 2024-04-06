@@ -60,7 +60,7 @@ vec3 getBlockCoordsFloat(vec3 pos) {
 }
 uint getBlock(ivec3 coord) {
 	// TODO: Add more chunks
-	if (coord.x > 511 || coord.x < 0 || coord.y > 511 || coord.y < 0 || coord.z > 511 || coord.z < 0) {
+	if (coord.x > 575 || coord.x < 0 || coord.y > 575 || coord.y < 0 || coord.z > 575 || coord.z < 0) {
 		return 0;
 	}
 	
@@ -142,7 +142,7 @@ void main() {
 	int blockSteps = 0;
 	float fogAmount = 0.0f;
 	bool entityHit = false;
-	while ((currentBlock == 1 || currentBlock == 2) && blockSteps < 64 && !entityHit) {
+	while ((currentBlock == 1 || currentBlock == 2) && blockSteps < 2048 && !entityHit) {
 		vec3 signedDirection = sign(rayDirection);
 
 		ivec3 distDir = ivec3(round(signedDirection.x), 0, 0);

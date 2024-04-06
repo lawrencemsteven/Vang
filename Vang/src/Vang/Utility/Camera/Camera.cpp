@@ -101,6 +101,10 @@ namespace Vang::Objects {
 		return glm::lookAt(m_position, m_position - m_forward, m_up);
 	}
 
+	const Vang::Voxel::Rendering::ChunkRenderer& Camera::getChunkRenderer() const {
+		return m_chunkRenderer;
+	}
+
 	void Camera::recalculateForward() {
 		m_forward.x = cos(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
 		m_forward.y = sin(glm::radians(m_pitch));

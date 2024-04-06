@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Vang/Voxel/Rendering/ChunkRenderer.h"
 #include <glm/glm.hpp>
 
 namespace Vang::Objects {
@@ -27,6 +28,7 @@ namespace Vang::Objects {
 		float getFOV() const;
 		float getLookSensitivity() const;
 		const glm::mat4 getView() const;
+		const Vang::Voxel::Rendering::ChunkRenderer& getChunkRenderer() const;
 
 	private:
 		void recalculateForward();
@@ -40,6 +42,7 @@ namespace Vang::Objects {
 		float m_fov{90.0f};
 		std::optional<float> m_lastX;
 		std::optional<float> m_lastY;
+		Vang::Voxel::Rendering::ChunkRenderer m_chunkRenderer{4};
 	};
 
 }
