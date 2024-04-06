@@ -142,7 +142,7 @@ void main() {
 	int blockSteps = 0;
 	float fogAmount = 0.0f;
 	bool entityHit = false;
-	while ((currentBlock == 1 || currentBlock == 2) && blockSteps < 2048 && !entityHit) {
+	while ((currentBlock == 1 || currentBlock == 2) && blockSteps < 64 && !entityHit) {
 		vec3 signedDirection = sign(rayDirection);
 
 		ivec3 distDir = ivec3(round(signedDirection.x), 0, 0);

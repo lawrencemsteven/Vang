@@ -106,4 +106,7 @@ set(Vang_FILES
 	"./src/Vang/Voxel/UniverseManager.cpp"
 	"./src/Vang/Voxel/World.h"
 	"./src/Vang/Voxel/World.cpp"
+
+	"./src/Vang/Voxel/Rendering/ChunkRenderer.h"
+	"./src/Vang/Voxel/Rendering/ChunkRenderer.cpp"
 )

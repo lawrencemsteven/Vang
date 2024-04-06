@@ -69,7 +69,7 @@ int main() {
 	// Set bottom level of blocks
 	for (uint32_t x = 0; x < 512; x++) {
 		for (uint32_t z = 0; z < 512; z++) {
-			world.setBlock({x, 0, z}, Vang::Voxel::Blocks::Green);
+			world.setBlock({x, 0, z}, Vang::Voxel::Blocks::Purple);
 		}
 	}
 
@@ -85,7 +85,7 @@ int main() {
 		world.setBlock({10, i - 1, 20}, static_cast<Vang::Voxel::Blocks>(i));
 	}
 
-	Vang::Utility::Structure::generateStructure(28, 28, 456, 456, 6, Vang::Voxel::Blocks::Gray,
+	Vang::Utility::Structure::generateStructure(28, 28, 456, 456, 6, Vang::Voxel::Blocks::Pink,
 												Vang::Voxel::Blocks::Air);
 
 	while (Vang::getRunning()) {
