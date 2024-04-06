@@ -6,6 +6,7 @@ namespace Vang {
 	static std::string s_applicationName{};
 	static VANG_CURRENT_WINDOW s_window{s_applicationName, DEFAULT_WIDTH, DEFAULT_HEIGHT};
 	static VANG_CURRENT_GRAPHICSAPI s_graphicsAPI{s_applicationName};
+	static Vang::Voxel::World s_currentWorld{};
 	static Vang::Objects::Player s_player{};
 	static Vang::Blueprints::BlueprintContainer<Vang::Blueprints::BlockBlueprint> s_blockManager{};
 	static Vang::Blueprints::BlueprintContainer<Vang::Blueprints::ItemBlueprint> s_itemManager{};
@@ -13,7 +14,6 @@ namespace Vang {
 	static Vang::Utility::Layers::LayerStack s_layerStack{};
 	static Vang::Utility::Events::EventHandler s_eventHandler{};
 	static VANG_CURRENT_WINDOW_INPUT s_inputCache{};
-	static Vang::Voxel::World s_currentWorld{};
 	static Vang::Utility::EntityManager s_entityManager{};
 
 	void cleanup() {
@@ -36,7 +36,7 @@ namespace Vang {
 		}
 
 		// TODO: Figure something out for this to not kill framerate
-		std::this_thread::sleep_for(std::chrono::microseconds(100));
+		// std::this_thread::sleep_for(std::chrono::microseconds(100));
 	}
 
 	void close() {

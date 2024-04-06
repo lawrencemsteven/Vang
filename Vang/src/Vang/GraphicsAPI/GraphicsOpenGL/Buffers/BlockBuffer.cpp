@@ -13,28 +13,32 @@ namespace Vang::gfx::OpenGL {
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexImage3D(GL_TEXTURE_3D, 0, GL_R32UI, 256, 256, 64, 0, GL_RED_INTEGER, GL_UNSIGNED_INT,
+		glTexImage3D(GL_TEXTURE_3D, 0, GL_R32UI, 576, 576, 576, 0, GL_RED_INTEGER, GL_UNSIGNED_INT,
 					 NULL);
 		glBindImageTexture(1, m_texture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
 	}
 
 	void BlockBuffer::update() {
-		auto& currentWorld = Vang::getCurrentWorld();
-
-		if (!currentWorld.getDirty()) {
-			return;
-		}
-
 		glBindTexture(GL_TEXTURE_3D, m_texture);
-		for (int32_t x = 0; x < 4; x++) {
-			for (int32_t z = 0; z < 4; z++) {
-				auto chunk = currentWorld.loadChunk({x, 0, z});
-				glTexSubImage3D(GL_TEXTURE_3D, 0, x * 64, z * 64, 0, 64, 64, 64, GL_RED_INTEGER,
-								GL_UNSIGNED_INT, chunk->getAllBlocks().data());
+		const auto& chunkRenderer	  = Vang::getPlayer().getCamera().getChunkRenderer();
+		const uint32_t renderDiameter = chunkRenderer.getRenderDiameter();
+
+		const auto& chunks	  = chunkRenderer.getChunks();
+		uint32_t chunkCounter = 0;
+		for (uint32_t x = 0; x < renderDiameter; x++) {
+			for (uint32_t y = 0; y < renderDiameter; y++) {
+				for (uint32_t z = 0; z < renderDiameter; z++) {
+					const auto& chunk = chunks[chunkCounter];
+					if (chunk->getDirty()) {
+						chunk->setDirty(false);
+						glTexSubImage3D(GL_TEXTURE_3D, 0, x * 64, z * 64, y * 64, 64, 64, 64,
+										GL_RED_INTEGER, GL_UNSIGNED_INT,
+										chunk->getAllBlocks().data());
+					}
+					chunkCounter += 1;
+				}
 			}
 		}
-
-		currentWorld.setDirty(false);
 	}
 
 }

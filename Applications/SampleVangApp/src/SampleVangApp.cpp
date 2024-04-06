@@ -11,7 +11,7 @@ public:
 
 		if (inputCache.isKeyPressed(Vang::Input::KEY::LEFT_CONTROL) ||
 			inputCache.isMouseButtonPressed(Vang::Input::MOUSE::BUTTON_5)) {
-			player.setSpeed(6.0f);
+			player.setSpeed(20.0f);
 		}
 		else {
 			player.setSpeed(3.0f);
@@ -33,7 +33,7 @@ public:
 
 		if (inputCache.isKeyPressed(Vang::Input::KEY::R)) {
 			Vang::Utility::Structure::generateStructure(
-				28, 28, 180, 180, 6, Vang::Voxel::Blocks::Gray, Vang::Voxel::Blocks::Air);
+				28, 28, 456, 456, 6, Vang::Voxel::Blocks::Gray, Vang::Voxel::Blocks::Air);
 		}
 
 		if (inputCache.isKeyPressed(Vang::Input::KEY::SPACE)) {
@@ -67,9 +67,16 @@ int main() {
 	auto& world = Vang::getCurrentWorld();
 
 	// Set bottom level of blocks
-	for (uint32_t x = 0; x < 256; x++) {
-		for (uint32_t z = 0; z < 256; z++) {
+	for (uint32_t x = 0; x < 576; x++) {
+		for (uint32_t z = 0; z < 576; z++) {
 			world.setBlock({x, 0, z}, Vang::Voxel::Blocks::Green);
+		}
+	}
+
+	// Set top level of blocks
+	for (uint32_t x = 0; x < 576; x++) {
+		for (uint32_t z = 0; z < 576; z++) {
+			world.setBlock({x, 575, z}, Vang::Voxel::Blocks::Blue);
 		}
 	}
 
@@ -78,7 +85,7 @@ int main() {
 		world.setBlock({10, i - 1, 20}, static_cast<Vang::Voxel::Blocks>(i));
 	}
 
-	Vang::Utility::Structure::generateStructure(28, 28, 180, 180, 6, Vang::Voxel::Blocks::Gray,
+	Vang::Utility::Structure::generateStructure(28, 28, 456, 456, 6, Vang::Voxel::Blocks::Gray,
 												Vang::Voxel::Blocks::Air);
 
 	while (Vang::getRunning()) {

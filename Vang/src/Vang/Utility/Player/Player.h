@@ -6,7 +6,7 @@ namespace Vang::Objects {
 
 	class Player {
 	public:
-		Player()						 = default;
+		Player();
 		~Player()						 = default;
 		Player(const Player&)			 = delete;
 		Player(Player&&)				 = delete;
