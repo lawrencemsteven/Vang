@@ -4,7 +4,8 @@ namespace Vang {
 
 	static bool s_running{true};
 	static std::string s_applicationName{};
-	static VANG_CURRENT_WINDOW s_window{s_applicationName, DEFAULT_WIDTH, DEFAULT_HEIGHT};
+	static VANG_CURRENT_WINDOW s_window{s_applicationName, DEFAULT_WIDTH, DEFAULT_HEIGHT,
+										DEFAULT_FULLSCREEN};
 	static VANG_CURRENT_GRAPHICSAPI s_graphicsAPI{s_applicationName};
 	static Vang::Voxel::World s_currentWorld{};
 	static Vang::Objects::Player s_player{};

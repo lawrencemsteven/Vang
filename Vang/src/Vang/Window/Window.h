@@ -8,7 +8,7 @@ namespace Vang::Windowing {
 	public:
 		using EventCallbackFn = std::function<void(Vang::Utility::Events::Event&)>;
 
-		Window(const std::string& title, uint32_t width, uint32_t height);
+		Window(const std::string& title, uint32_t width, uint32_t height, bool fullscreen);
 
 		virtual void update() = 0;
 		virtual void close()  = 0;
@@ -18,10 +18,12 @@ namespace Vang::Windowing {
 		const std::string& getTitle() const;
 		uint32_t getWidth() const;
 		uint32_t getHeight() const;
+		bool getFullscreen() const;
 		bool getVSync() const;
 
 		virtual void setTitle(const std::string& title)				= 0;
 		virtual void setResolution(uint32_t width, uint32_t height) = 0;
+		virtual void setFullscreen(bool fullscreen)					= 0;
 		virtual void setVSync(bool enabled)							= 0;
 
 		virtual void* getNativeWindow() const = 0;
@@ -31,6 +33,7 @@ namespace Vang::Windowing {
 			std::string title{};
 			uint32_t width{};
 			uint32_t height{};
+			bool fullscreen{false};
 			bool vSync{false};
 
 			EventCallbackFn eventCallback;

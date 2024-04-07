@@ -9,7 +9,7 @@ namespace Vang::Windowing {
 
 	class WindowGLFW : public Window {
 	public:
-		WindowGLFW(const std::string& title, uint32_t width, uint32_t height);
+		WindowGLFW(const std::string& title, uint32_t width, uint32_t height, bool fullscreen);
 		~WindowGLFW();
 		WindowGLFW(const WindowGLFW&)			 = delete;
 		WindowGLFW(WindowGLFW&&)				 = delete;
@@ -23,6 +23,7 @@ namespace Vang::Windowing {
 
 		void setTitle(const std::string& title) override;
 		void setResolution(uint32_t width, uint32_t height) override;
+		void setFullscreen(bool fullscreen) override;
 		void setVSync(bool enabled) override;
 
 		void* getNativeWindow() const override;

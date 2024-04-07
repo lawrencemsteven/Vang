@@ -1,6 +1,7 @@
 #include "Vang/Window/Window.h"
 
 #include "Vang.h"
+#include "Window.h"
 
 namespace Vang::Windowing {
 
@@ -8,10 +9,11 @@ namespace Vang::Windowing {
 		Vang::getEventHandler().onEvent(e);
 	}
 
-	Window::Window(const std::string& title, uint32_t width, uint32_t height) {
-		m_data.title  = title;
-		m_data.width  = width;
-		m_data.height = height;
+	Window::Window(const std::string& title, uint32_t width, uint32_t height, bool fullscreen) {
+		m_data.title		 = title;
+		m_data.width		 = width;
+		m_data.height		 = height;
+		m_data.fullscreen	 = fullscreen;
 		m_data.eventCallback = &onEvent;
 	}
 
@@ -27,8 +29,11 @@ namespace Vang::Windowing {
 		return m_data.height;
 	}
 
+	bool Window::getFullscreen() const {
+		return m_data.fullscreen;
+	}
+
 	bool Window::getVSync() const {
 		return m_data.vSync;
 	}
-
 }
