@@ -5,11 +5,13 @@
 #include "Vang/Utility/Events/MouseEvent.h"
 #include "Vang/Utility/Events/ApplicationEvent.h"
 #include "Vang/Utility/Events/KeyEvent.h"
+#include "WindowGLFW.h"
 
 namespace Vang::Windowing {
 
-	WindowGLFW::WindowGLFW(const std::string& title, uint32_t width, uint32_t height)
-		: Window(title, width, height) {
+	WindowGLFW::WindowGLFW(const std::string& title, uint32_t width, uint32_t height,
+						   bool fullscreen)
+		: Window(title, width, height, fullscreen) {
 		initializeWindow();
 	}
 
@@ -43,6 +45,10 @@ namespace Vang::Windowing {
 		VANG_FATAL("NOT YET IMPLEMENTED!");
 	}
 
+	void WindowGLFW::setFullscreen(bool fullscreen) {
+		VANG_FATAL("NOT YET IMPLEMENTED!");
+	}
+
 	void WindowGLFW::setVSync(bool enabled) {
 		if (enabled) {
 			glfwSwapInterval(1);
@@ -73,8 +79,14 @@ namespace Vang::Windowing {
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 		glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE);
 
-		m_window =
-			glfwCreateWindow(m_data.width, m_data.height, m_data.title.data(), nullptr, nullptr);
+		if (m_data.fullscreen) {
+			m_window = glfwCreateWindow(m_data.width, m_data.height, m_data.title.data(),
+										glfwGetPrimaryMonitor(), nullptr);
+		}
+		else {
+			m_window = glfwCreateWindow(m_data.width, m_data.height, m_data.title.data(), nullptr,
+										nullptr);
+		}
 
 		if (m_window == NULL) {
 			VANG_FATAL("Failed to create GLFW Window!");
@@ -118,8 +130,7 @@ namespace Vang::Windowing {
 
 		switch (action) {
 			case GLFW_PRESS: {
-				Vang::Utility::Events::KeyPressedEvent event{static_cast<Vang::Input::KEY>(key),
-															 0};
+				Vang::Utility::Events::KeyPressedEvent event{static_cast<Vang::Input::KEY>(key), 0};
 				data.eventCallback(event);
 				break;
 			}
@@ -129,8 +140,7 @@ namespace Vang::Windowing {
 				break;
 			}
 			case GLFW_REPEAT: {
-				Vang::Utility::Events::KeyPressedEvent event{static_cast<Vang::Input::KEY>(key),
-															 1};
+				Vang::Utility::Events::KeyPressedEvent event{static_cast<Vang::Input::KEY>(key), 1};
 				data.eventCallback(event);
 				break;
 			}

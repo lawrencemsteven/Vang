@@ -11,8 +11,9 @@
 #	define VANG_CURRENT_GRAPHICSAPI Vang::gfx::OpenGL::GraphicsOpenGL
 #endif
 
-#define DEFAULT_WIDTH 1280
-#define DEFAULT_HEIGHT 720
+#define DEFAULT_WIDTH 1920
+#define DEFAULT_HEIGHT 1080
+#define DEFAULT_FULLSCREEN false
 
 #ifdef VANG_WINDOW_GLFW
 #	include "Vang/Window/WindowGLFW/WindowGLFW.h"
@@ -44,7 +45,6 @@
 namespace Vang {
 	bool getRunning();
 	void update();
-	void behaviorTreeUpdate();
 	void close();
 
 	const std::string& getApplicationName();

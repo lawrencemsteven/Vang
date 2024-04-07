@@ -50,7 +50,7 @@ public:
 				auto& camera		= Vang::getPlayer().getCamera();
 
 				const auto& raycast =
-					Vang::VMath::raycast(world, camera.getPosition(), camera.getForward(), 5.0f);
+					Vang::VMath::raycast(world, camera.getPosition(), camera.getForward(), 10.0f);
 
 				if (raycast.hit) {
 					const auto newBlockPosition = raycast.blockHitPosition - raycast.newBlockVector;
@@ -72,7 +72,7 @@ public:
 				auto& camera	   = Vang::getPlayer().getCamera();
 
 				const auto& raycast =
-					Vang::VMath::raycast(world, camera.getPosition(), camera.getForward(), 5.0f);
+					Vang::VMath::raycast(world, camera.getPosition(), camera.getForward(), 10.0f);
 
 				if (raycast.hit && raycast.blockHit != Vang::Voxel::Blocks::None) {
 					world.setBlock(raycast.blockHitPosition, Vang::Voxel::Blocks::Air);
