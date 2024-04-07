@@ -55,7 +55,8 @@ namespace Vang::Voxel {
 
 		const auto chunk = loadChunk(chunkPos);
 
-		return chunk->getBlock(x - chunkPos.x, y - chunkPos.y, z - chunkPos.z);
+		return chunk->getBlock(x - chunkPos.x * chunkSize.x, y - chunkPos.y * chunkSize.y,
+							   z - chunkPos.z * chunkSize.z);
 	}
 
 	Blocks World::getBlock(const glm::ivec3& pos) {
