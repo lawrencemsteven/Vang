@@ -17,13 +17,13 @@ AllowShortFunctionsOnASingleLine: Empty
 AlwaysBreakTemplateDeclarations: Yes
 BasedOnStyle: LLVM
 BraceWrapping:
-  AfterClass: false    # TODO: verify
-  AfterControlStatement: false    # TODO: verify
-  AfterEnum: false    # TODO: verify
-  AfterFunction: false    # TODO: verify
-  AfterNamespace: false    # TODO: verify
-  AfterStruct: false    # TODO: verify
-  AfterUnion: false    # TODO: verify
+  AfterClass: false    
+  AfterControlStatement: false    
+  AfterEnum: false    
+  AfterFunction: false    
+  AfterNamespace: false    
+  AfterStruct: false    
+  AfterUnion: false    
   BeforeCatch: true
   BeforeElse: true
   IndentBraces: false

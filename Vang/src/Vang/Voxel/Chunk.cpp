@@ -10,6 +10,7 @@ namespace Vang::Voxel {
 	void Chunk::setBlock(const uint32_t x, const uint32_t y, const uint32_t z, const Blocks block) {
 		const auto loc = convert3DTo1D(x, y, z);
 
+		setDirty(true);
 		m_blocks[loc] = static_cast<uint32_t>(block);
 	}
 

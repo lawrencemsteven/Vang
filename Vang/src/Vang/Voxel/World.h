@@ -24,10 +24,14 @@ namespace Vang::Voxel {
 		static ChunkCoord convertWorldPosToChunkCoord(const glm::vec3& worldPos);
 		static ChunkCoord convertWorldPosToChunkCoord(const float x, const float y, const float z);
 
+		static glm::ivec3 convertWorldPosToBlockCoord(const glm::vec3& worldPos);
+		static glm::ivec3 convertWorldPosToBlockCoord(const float x, const float y, const float z);
+
 		void setBlock(const int32_t x, const int32_t y, const int32_t z, const Blocks block);
 		void setBlock(glm::ivec3 worldPos, const Blocks block);
 
 		Blocks getBlock(const int32_t x, const int32_t y, const int32_t z);
+		Blocks getBlock(const glm::ivec3& pos);
 		bool getSolid(const int32_t x, const int32_t y, const int32_t z);
 
 		std::shared_ptr<Chunk> loadChunk(const glm::ivec3& chunkPosition);
