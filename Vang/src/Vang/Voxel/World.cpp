@@ -22,6 +22,14 @@ namespace Vang::Voxel {
 		return convertWorldPosToChunkCoord(glm::ivec3{newX, newY, newZ});
 	}
 
+	glm::ivec3 World::convertWorldPosToBlockCoord(const glm::vec3& worldPos) {
+		return glm::round(worldPos);
+	}
+
+	glm::ivec3 World::convertWorldPosToBlockCoord(const float x, const float y, const float z) {
+		return convertWorldPosToBlockCoord({x, y, z});
+	}
+
 	void World::setBlock(const int32_t x, const int32_t y, const int32_t z, const Blocks block) {
 		const auto chunkPos = convertWorldPosToChunkCoord(x, y, z);
 
@@ -38,11 +46,20 @@ namespace Vang::Voxel {
 		chunk->setBlock(worldPos - chunkPos * glm::ivec3{chunkSize}, block);
 	}
 	Blocks World::getBlock(const int32_t x, const int32_t y, const int32_t z) {
+		// TODO: Remove world boundaries
+		if (x > 576 || x < 0 || y > 576 || y < 0 || z > 576 || z < 0) {
+			return Blocks::None;
+		}
+
 		const auto chunkPos = convertWorldPosToChunkCoord(x, y, z);
 
 		const auto chunk = loadChunk(chunkPos);
 
 		return chunk->getBlock(x - chunkPos.x, y - chunkPos.y, z - chunkPos.z);
+	}
+
+	Blocks World::getBlock(const glm::ivec3& pos) {
+		return getBlock(pos.x, pos.y, pos.z);
 	}
 
 	bool World::getSolid(const int32_t x, const int32_t y, const int32_t z) {

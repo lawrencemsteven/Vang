@@ -42,6 +42,46 @@ public:
 		else if (inputCache.isKeyPressed(Vang::Input::KEY::LEFT_SHIFT)) {
 			player.moveUp(-Vang::Utility::Time::deltaTime());
 		}
+
+		if (inputCache.isMouseButtonPressed(Vang::Input::MOUSE::BUTTON_RIGHT)) {
+			if (!m_rightClickPressed) {
+				m_rightClickPressed = true;
+				auto& world			= Vang::getCurrentWorld();
+				auto& camera		= Vang::getPlayer().getCamera();
+
+				const auto& raycast =
+					Vang::VMath::raycast(world, camera.getPosition(), camera.getForward(), 5.0f);
+
+				if (raycast.hit) {
+					const auto newBlockPosition = raycast.blockHitPosition - raycast.newBlockVector;
+					const auto newBlock			= world.getBlock(newBlockPosition);
+					if (newBlock != Vang::Voxel::Blocks::None) {
+						world.setBlock(newBlockPosition, Vang::Voxel::Blocks::Rainbow);
+					}
+				}
+			}
+		}
+		else {
+			m_rightClickPressed = false;
+		}
+
+		if (inputCache.isMouseButtonPressed(Vang::Input::MOUSE::BUTTON_LEFT)) {
+			if (!m_leftClickPressed) {
+				m_leftClickPressed = true;
+				auto& world		   = Vang::getCurrentWorld();
+				auto& camera	   = Vang::getPlayer().getCamera();
+
+				const auto& raycast =
+					Vang::VMath::raycast(world, camera.getPosition(), camera.getForward(), 5.0f);
+
+				if (raycast.hit && raycast.blockHit != Vang::Voxel::Blocks::None) {
+					world.setBlock(raycast.blockHitPosition, Vang::Voxel::Blocks::Air);
+				}
+			}
+		}
+		else {
+			m_leftClickPressed = false;
+		}
 	}
 
 	void onEvent(Vang::Utility::Events::Event& e) override {
@@ -56,6 +96,10 @@ public:
 		playerCamera.mouseRotate(e.getX(), -e.getY());
 		return true;
 	}
+
+private:
+	bool m_rightClickPressed{false};
+	bool m_leftClickPressed{false};
 };
 
 

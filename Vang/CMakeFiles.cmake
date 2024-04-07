@@ -33,6 +33,9 @@ set(Vang_FILES
 	"./src/Vang/Utility/Logging/Log.h"
 	"./src/Vang/Utility/Logging/Log.cpp"
 
+	"./src/Vang/Utility/VMath/VMath.h"
+	"./src/Vang/Utility/VMath/VMath.cpp"
+
 	"./src/Vang/Utility/Player/Player.h"
 	"./src/Vang/Utility/Player/Player.cpp"
 
