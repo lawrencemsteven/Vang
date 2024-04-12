@@ -215,6 +215,20 @@ void main() {
 		col = vec3(1.0f, 0.0f, 1.0f);
 	}
 
+	// Vertices
+	// if (fract(rayOrigin.x) > 0.45f && fract(rayOrigin.x) < 0.55f && fract(rayOrigin.y) > 0.45f && fract(rayOrigin.y) < 0.55f && fract(rayOrigin.z) > 0.45f && fract(rayOrigin.z) < 0.55f) {
+	// 	col = vec3(0.0f, 0.0f, 0.0f);
+	// }
+
+	// Edges
+	// const float outlineWidth = 0.02f;
+	// bool xBound = fract(rayOrigin.x) > 0.5f - outlineWidth && fract(rayOrigin.x) < 0.5f + outlineWidth;
+	// bool yBound = fract(rayOrigin.y) > 0.5f - outlineWidth && fract(rayOrigin.y) < 0.5f + outlineWidth;
+	// bool zBound = fract(rayOrigin.z) > 0.5f - outlineWidth && fract(rayOrigin.z) < 0.5f + outlineWidth;
+	// if (xBound && yBound || yBound && zBound || zBound && xBound) {
+	// 	col = vec3(0.0f, 0.0f, 0.0f);
+	// }
+
 	col = mix(col, vec3(0.8, 0.8, 0.8), clamp(fogAmount / 8.0f, 0.0f, 1.0f));
 	//col = mix(col, vec3(0.8, 0.0, 0.0), fogAmount / 16.0f);
 
