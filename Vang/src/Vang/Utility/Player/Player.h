@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Vang/Utility/VMath/VMath.h"
 #include "Vang/Utility/Camera/Camera.h"
 
 namespace Vang::Objects {
@@ -19,17 +20,23 @@ namespace Vang::Objects {
 
 		void setPosition(const glm::vec3& position);
 		void setSpeed(float speed);
+		void setReachDistance(float reachDistance);
 
 		Camera& getCamera();
 		const Camera& getCamera() const;
 		const glm::vec3& getPosition() const;
 		float getSpeed();
+		float getReachDistance() const;
+		const Vang::VMath::raycastReturn& getRaycastResult() const;
 
 	private:
 		void updateCameraPosition();
+		void updateRaycastReturn();
 
 		// TODO: Make this editable, maybe somewhere to set player size or height?
 		const float cameraHeight = 1.8f;
+		float m_reachDistance{10.0f};
+		Vang::VMath::raycastReturn m_raycastResult{};
 		Camera m_camera;
 		glm::vec3 m_position{0.0f};
 		float m_speed{3.0f};

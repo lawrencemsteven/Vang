@@ -47,10 +47,7 @@ public:
 			if (!m_rightClickPressed) {
 				m_rightClickPressed = true;
 				auto& world			= Vang::getCurrentWorld();
-				auto& camera		= Vang::getPlayer().getCamera();
-
-				const auto& raycast =
-					Vang::VMath::raycast(world, camera.getPosition(), camera.getForward(), 10.0f);
+				const auto& raycast = Vang::getPlayer().getRaycastResult();
 
 				if (raycast.hit) {
 					const auto newBlockPosition = raycast.blockHitPosition - raycast.newBlockVector;
@@ -67,12 +64,9 @@ public:
 
 		if (inputCache.isMouseButtonPressed(Vang::Input::MOUSE::BUTTON_LEFT)) {
 			if (!m_leftClickPressed) {
-				m_leftClickPressed = true;
-				auto& world		   = Vang::getCurrentWorld();
-				auto& camera	   = Vang::getPlayer().getCamera();
-
-				const auto& raycast =
-					Vang::VMath::raycast(world, camera.getPosition(), camera.getForward(), 10.0f);
+				m_leftClickPressed	= true;
+				auto& world			= Vang::getCurrentWorld();
+				const auto& raycast = Vang::getPlayer().getRaycastResult();
 
 				if (raycast.hit && raycast.blockHit != Vang::Voxel::Blocks::None) {
 					world.setBlock(raycast.blockHitPosition, Vang::Voxel::Blocks::Air);
