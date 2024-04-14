@@ -1,4 +1,5 @@
 #include "ShaderProgramManager.h"
+#include "Vang.h"
 
 #include "Vang/Utility/Time/Time.h"
 #include "Vang/Voxel/Chunk.h"
@@ -104,6 +105,12 @@ namespace Vang::gfx::OpenGL {
 
 	void ShaderProgramManager::update() {
 		m_computeShaderProgram.setUniform("iTime", Vang::Utility::Time::timeSinceStart());
+
+		// TODO: Move this somewhere else
+		const auto& raycastReturn = Vang::getPlayer().getRaycastResult();
+		const glm::ivec4 selectedBlock =
+			glm::ivec4{raycastReturn.blockHitPosition, raycastReturn.hit};
+		m_computeShaderProgram.setUniform("selectedBlock", selectedBlock);
 
 		m_computeShaderProgram.use();
 		glDispatchCompute(static_cast<GLuint>(floor(m_screenWidth / 16.0f)),

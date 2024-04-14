@@ -32,7 +32,13 @@ namespace Vang::Objects {
 		m_speed = speed;
 	}
 
+	void Player::setReachDistance(float reachDistance) {
+		m_reachDistance = reachDistance;
+		updateRaycastReturn();
+	}
+
 	Camera& Player::getCamera() {
+		updateRaycastReturn();
 		return m_camera;
 	}
 
@@ -48,8 +54,25 @@ namespace Vang::Objects {
 		return m_speed;
 	}
 
+	float Player::getReachDistance() const {
+		return m_reachDistance;
+	}
+
+	const Vang::VMath::raycastReturn& Player::getRaycastResult() const {
+		return m_raycastResult;
+	}
+
 	void Player::updateCameraPosition() {
 		m_camera.setPosition(m_position + m_camera.getUp() * cameraHeight);
 		Vang::getGraphicsAPI().displayCamera(m_camera);
+		updateRaycastReturn();
+	}
+
+	void Player::updateRaycastReturn() {
+		// TODO: Replace with player's current world
+		auto& world = Vang::getCurrentWorld();
+
+		m_raycastResult = Vang::VMath::raycast(world, m_camera.getPosition(), m_camera.getForward(),
+											   m_reachDistance);
 	}
 }

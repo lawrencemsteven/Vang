@@ -53,6 +53,8 @@ uniform float iTime;
 uniform uint iRenderDistance;
 uniform Camera camera;
 
+uniform ivec4 selectedBlock;
+
 uniform uint entityCount;
 
 ivec3 getBlockCoords(vec3 pos) {
@@ -127,14 +129,20 @@ void main() {
 	ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
 
 	// Center Pixel
-	if (pixel_coords*2 == iResolution) {
-		imageStore(screen, pixel_coords, vec4(1.0f, 0.0f, 0.0f, 1.0f));
-		return;
-	}
+	// if (pixel_coords*2 == iResolution) {
+	// 	imageStore(screen, pixel_coords, vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	// 	return;
+	// }
 
 	vec2 uv = (pixel_coords - 0.5*iResolution) / iResolution.y;
 
 	vec3 col = vec3(0);
+
+	const float crosshairSize = 0.005f;
+	if (length(uv) < crosshairSize) {
+		imageStore(screen, pixel_coords, vec4(0.0f, 0.0f, 0.0f, 1.0f));
+		return;
+	}
 
 	vec3 rayOrigin = camera.position;
 	vec3 rayDirection = normalize(uv.x*camera.right + uv.y*camera.up + (90/camera.fov)*camera.forward);
@@ -222,19 +230,29 @@ void main() {
 		col = vec3(1.0f, 0.0f, 1.0f);
 	}
 
-	// Vertices
-	// if (fract(rayOrigin.x) > 0.45f && fract(rayOrigin.x) < 0.55f && fract(rayOrigin.y) > 0.45f && fract(rayOrigin.y) < 0.55f && fract(rayOrigin.z) > 0.45f && fract(rayOrigin.z) < 0.55f) {
-	// 	col = vec3(0.0f, 0.0f, 0.0f);
-	// }
+	// Selected Block Outline
+	if (selectedBlock.a == 1 && currentBlockPos == selectedBlock.xyz) {
+		const float vertexWidth = 0.05f;
+		const float outlineWidth = 0.02f;
 
-	// Edges
-	// const float outlineWidth = 0.02f;
-	// bool xBound = fract(rayOrigin.x) > 0.5f - outlineWidth && fract(rayOrigin.x) < 0.5f + outlineWidth;
-	// bool yBound = fract(rayOrigin.y) > 0.5f - outlineWidth && fract(rayOrigin.y) < 0.5f + outlineWidth;
-	// bool zBound = fract(rayOrigin.z) > 0.5f - outlineWidth && fract(rayOrigin.z) < 0.5f + outlineWidth;
-	// if (xBound && yBound || yBound && zBound || zBound && xBound) {
-	// 	col = vec3(0.0f, 0.0f, 0.0f);
-	// }
+		// Vertices
+		bool xBound = fract(rayOrigin.x) > 0.5f - vertexWidth && fract(rayOrigin.x) < 0.5f + vertexWidth;
+		bool yBound = fract(rayOrigin.y) > 0.5f - vertexWidth && fract(rayOrigin.y) < 0.5f + vertexWidth;
+		bool zBound = fract(rayOrigin.z) > 0.5f - vertexWidth && fract(rayOrigin.z) < 0.5f + vertexWidth;
+
+		if (xBound && yBound && zBound) {
+			col = vec3(0.0f, 0.0f, 0.0f);
+		}
+
+		// Edges
+		xBound = fract(rayOrigin.x) > 0.5f - outlineWidth && fract(rayOrigin.x) < 0.5f + outlineWidth;
+		yBound = fract(rayOrigin.y) > 0.5f - outlineWidth && fract(rayOrigin.y) < 0.5f + outlineWidth;
+		zBound = fract(rayOrigin.z) > 0.5f - outlineWidth && fract(rayOrigin.z) < 0.5f + outlineWidth;
+
+		if (xBound && yBound || yBound && zBound || zBound && xBound) {
+			col = vec3(0.0f, 0.0f, 0.0f);
+		}
+	}
 
 	col = mix(col, vec3(0.8, 0.8, 0.8), clamp(fogAmount / 8.0f, 0.0f, 1.0f));
 	//col = mix(col, vec3(0.8, 0.0, 0.0), fogAmount / 16.0f);

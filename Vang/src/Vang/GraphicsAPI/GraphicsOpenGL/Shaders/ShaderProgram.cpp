@@ -101,11 +101,16 @@ namespace Vang::gfx::OpenGL {
 		glProgramUniform4i(m_shaderProgram, getVarLocation(name), val1, val2, val3, val4);
 	}
 
+	void ShaderProgram::setUniform(const std::string& name, const glm::ivec4& vals) {
+		setUniform(name, vals.x, vals.y, vals.z, vals.a);
+	}
+
 	void ShaderProgram::setUniform(const std::string& name, glm::uint32_t val1) {
 		glProgramUniform1ui(m_shaderProgram, getVarLocation(name), val1);
 	}
 
-	void ShaderProgram::setUniform(const std::string& name, glm::uint32_t val1, glm::uint32_t val2) {
+	void ShaderProgram::setUniform(const std::string& name, glm::uint32_t val1,
+								   glm::uint32_t val2) {
 		glProgramUniform2ui(m_shaderProgram, getVarLocation(name), val1, val2);
 	}
 
