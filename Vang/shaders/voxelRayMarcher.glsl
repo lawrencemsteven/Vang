@@ -1,7 +1,10 @@
 #version 460 core
+precision highp float;
 layout(local_size_x = 16, local_size_y = 8, local_size_z = 1) in;
 layout(rgba32f, binding = 0) uniform writeonly image2D screen;
 layout(r32ui, binding = 1) uniform readonly uimage3D blocks;
+
+const highp float NOISE_GRANULARITY = 0.5/255.0;
 
 // enum class Blocks : uint32_t {
 // 		Air,
@@ -116,6 +119,10 @@ bool entityCheck(vec3 rayOrigin, const vec3 rayDirection, float minBlockDist) {
 	return false;
 }
 
+highp float random(highp vec2 coords) {
+   return fract(sin(dot(coords.xy, vec2(12.9898,78.233))) * 43758.5453);
+}
+
 void main() {
 	ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
 
@@ -137,8 +144,8 @@ void main() {
 	// Positive Z forward
 	// Plane-Assisted Ray Marching
 	float totalDistance = 0.0f;
-	uint currentBlock = 1;
 	ivec3 currentBlockPos = getBlockCoords(rayOrigin);
+	uint currentBlock = getBlock(currentBlockPos);
 	int blockSteps = 0;
 	float fogAmount = 0.0f;
 	bool entityHit = false;
@@ -253,6 +260,9 @@ void main() {
 	// }
 
 	col = mix(col, col* 0.4, clamp(totalDistance / 20.0f, 0.0f, 1.0f));
+
+	// Fix Color Banding
+	col += mix(-NOISE_GRANULARITY, NOISE_GRANULARITY, random(uv));
 
 	imageStore(screen, pixel_coords, vec4(col, 1.0f));
 }
