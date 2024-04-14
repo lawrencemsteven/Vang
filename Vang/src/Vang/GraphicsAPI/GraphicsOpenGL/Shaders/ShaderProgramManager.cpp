@@ -36,6 +36,7 @@ namespace Vang::gfx::OpenGL {
 		// GLint max_layers;
 		// glGetIntegerv(GL_MAX_3D_TEXTURE_SIZE, &max_layers);
 		// std::cout << "Max 3D Texture Size: " << max_layers << std::endl;
+		// std::cout << "GL_DITHER: " << (glIsEnabled(GL_DITHER) == GL_TRUE) << std::endl;
 
 
 
