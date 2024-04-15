@@ -5,6 +5,8 @@ layout(rgba32f, binding = 0) uniform writeonly image2D screen;
 layout(r32ui, binding = 1) uniform readonly uimage3D blocks;
 
 const highp float NOISE_GRANULARITY = 0.5/255.0;
+const float airRefractionIndex = 1.0;
+const float glassRefractionIndex = 1.52;
 
 // enum class Blocks : uint32_t {
 // 		Air,
@@ -125,6 +127,30 @@ highp float random(highp vec2 coords) {
    return fract(sin(dot(coords.xy, vec2(12.9898,78.233))) * 43758.5453);
 }
 
+vec3 refract(const vec3 I, const vec3 N, const float ior)
+{
+    float cosi = clamp(-1, 1, dot(I, N));
+    float etai = 1;
+	float etat = ior;
+    vec3 n = N;
+    if (cosi < 0) { 
+		cosi = -cosi; 
+	} else {
+		float temp = etai;
+		etai = etat;
+		etat = temp;
+		n = -N;
+	}
+    float eta = etai / etat;
+    float k = 1 - eta * eta * (1 - cosi * cosi);
+
+	if (k < 0) {
+		return vec3(0);
+	} else {
+		return eta * I + (eta * cosi - sqrt(k)) * n;
+	}
+}
+
 void main() {
 	ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
 
@@ -153,12 +179,24 @@ void main() {
 	// Plane-Assisted Ray Marching
 	float totalDistance = 0.0f;
 	ivec3 currentBlockPos = getBlockCoords(rayOrigin);
-	uint currentBlock = getBlock(currentBlockPos);
+	uint previousBlock = getBlock(currentBlockPos);
+	uint currentBlock = previousBlock;
 	int blockSteps = 0;
 	float fogAmount = 0.0f;
+	float glassAmount = 0.0f;
 	bool entityHit = false;
-	while ((currentBlock == 1 || currentBlock == 2) && blockSteps < 2048 && !entityHit) {
+	while ((currentBlock == 1 || currentBlock == 2 || currentBlock == 15) && blockSteps < 2048 && !entityHit) {
+		if (rayDirection.x == 0.0 && rayDirection.y == 0.0 && rayDirection.z == 0.0) {
+			imageStore(screen, pixel_coords, vec4(1.0f, 1.0f, 1.0f, 1.0f));
+			return;
+		}
+		
 		vec3 signedDirection = sign(rayDirection);
+
+		if (signedDirection.x == 0 && signedDirection.y == 0 && signedDirection.z == 0) {
+			imageStore(screen, pixel_coords, vec4(0.0f, 0.0f, 1.0f, 1.0f));
+			return;
+		}
 
 		ivec3 distDir = ivec3(round(signedDirection.x), 0, 0);
 		float minDist = planeIntersectionDistance(rayOrigin, rayDirection, vec3(currentBlockPos.x + 0.5f * signedDirection.x, currentBlockPos.yz), vec3(-sign(rayDirection.x), 0.0f, 0.0f));
@@ -179,13 +217,71 @@ void main() {
 			fogAmount += minDist;
 		}
 
+		// Glass
+		if (currentBlock == 15) {
+			glassAmount += minDist;
+		}
+
 		entityHit = entityCheck(rayOrigin, rayDirection, minDist);
 		if (!entityHit) {
 			currentBlockPos += distDir;
+			previousBlock = currentBlock;
 			currentBlock = getBlock(currentBlockPos);
 			rayOrigin += rayDirection * minDist;
 			totalDistance += minDist;
 			blockSteps += 1;
+
+			if (currentBlock == 15 && previousBlock != 15) { // Going into glass
+				// const vec3 normal = -vec3(distDir);
+				// const float angleOfIncidence = acos(dot(normal, -rayDirection));
+				// const float newAngleOfIncidence = asin(sin(angleOfIncidence) * airRefractionIndex / glassRefractionIndex);
+
+				// // Rodrigues Rotation Formula
+				// const vec3 v = -normal;
+				// const vec3 k = cross(-normal, rayDirection);
+				// const float theta = newAngleOfIncidence;
+				// rayDirection = normalize(v * cos(theta) + cross(k, v) * sin(theta) + k * dot(k, v) * (1.0 - cos(theta)));
+
+				// float n1 = airRefractionIndex;
+				// float n2 = glassRefractionIndex;
+				// float n = n1 / n2;
+				// vec3 I = rayDirection;
+				// vec3 N = -vec3(distDir);
+				// float c1 = dot(N, I);
+				// float c2 = sqrt(1.0 - (n * n) * (1.0 - c1 * c1));
+				// rayDirection = normalize(n * (I + c1 * N) - N * c2);
+
+				const vec3 normal = -vec3(distDir);
+				rayDirection = refract(rayDirection, normal, glassRefractionIndex);
+			} else if (previousBlock == 15 && currentBlock != 15) { // Coming out of glass
+				// const vec3 normal = -vec3(distDir);
+				// const float angleOfIncidence = acos(dot(normal, -rayDirection));
+				// const float newAngleOfIncidence = asin(sin(angleOfIncidence) * glassRefractionIndex / airRefractionIndex);
+
+				// // Rodrigues Rotation Formula
+				// const vec3 v = -normal;
+				// const vec3 k = cross(-normal, rayDirection);
+				// const float theta = newAngleOfIncidence;
+				// rayDirection = normalize(v * cos(theta) + cross(k, v) * sin(theta) + k * dot(k, v) * (1.0 - cos(theta)));
+
+				// float n1 = glassRefractionIndex;
+				// float n2 = airRefractionIndex;
+				// float n = n1 / n2;
+				// vec3 I = rayDirection;
+				// vec3 N = -vec3(distDir);
+				// float c1 = dot(N, I);
+				// float c2 = sqrt(1.0 - (n * n) * (1.0 - c1 * c1));
+
+				// rayDirection = normalize(n * (I + c1 * N) - N * c2);
+
+				// if (abs(dot(rayDirection, rayDirection)) <= 0.01f && abs(dot(rayDirection, rayDirection)) >= 0.0f) {
+				// 	imageStore(screen, pixel_coords, vec4(1.0f, 0.0f, 0.0f, 1.0f));
+				// 	return;
+				// }
+				
+				const vec3 normal = -vec3(distDir);
+				rayDirection = refract(rayDirection, normal, glassRefractionIndex);
+			}
 		}
 	}
 
@@ -230,6 +326,8 @@ void main() {
 		col = vec3(1.0f, 0.0f, 1.0f);
 	}
 
+	// TODO: Get to work with glass (shader marches through glass,
+	// 		 outline is selected block, glass can't be selected)
 	// Selected Block Outline
 	if (selectedBlock.a == 1 && currentBlockPos == selectedBlock.xyz) {
 		const float vertexWidth = 0.05f;
@@ -254,33 +352,27 @@ void main() {
 		}
 	}
 
+
+	// Calculate Fog Amount
 	col = mix(col, vec3(0.8, 0.8, 0.8), clamp(fogAmount / 8.0f, 0.0f, 1.0f));
 	//col = mix(col, vec3(0.8, 0.0, 0.0), fogAmount / 16.0f);
 
-	// int start = 0;
-	// int end = 4;
 
-	// col = vec3(1.0, 0.0, 0.0);
-	// for (int i = start; i < end; i++) {
-	//     for (int j = start; j < end; j++) {
-	//         for (int k = start; k < end; k++) {
-	//             if (imageLoad(blocks, ivec3(i, j, k)).r != 0) {
-	//                 col = vec3(0.0, 1.0, 0.0);
-	//             }
-	//         }
-	//     }
-	// }    
+	// Calculate Glass Amount
+	if (glassAmount > 0.0f) {
+		glassAmount += 5.0f;
+	}
+	col = mix(col, vec3(0.9, 0.0, 0.0), clamp(glassAmount / 20.0f, 0.0f, 1.0f));
+	
 
-	// if (imageLoad(blocks, ivec3(0,0,64)).r == 10) {
-	//     col *= vec3(0.5, 1.0, 0.5);
-	// } else {
-	//     col *= vec3(1.0, 0.5, 0.5);
-	// }
-
+	// Headlight
 	col = mix(col, col* 0.4, clamp(totalDistance / 20.0f, 0.0f, 1.0f));
+
 
 	// Fix Color Banding
 	col += mix(-NOISE_GRANULARITY, NOISE_GRANULARITY, random(uv));
 
+
+	// Return value
 	imageStore(screen, pixel_coords, vec4(col, 1.0f));
 }

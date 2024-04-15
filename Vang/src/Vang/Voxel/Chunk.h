@@ -24,6 +24,7 @@ namespace Vang::Voxel {
 		Purple,
 		Pink,
 		Rainbow,
+		Glass,
 	};
 
 	class Chunk {
