@@ -4,25 +4,22 @@ layout(local_size_x = 16, local_size_y = 8, local_size_z = 1) in;
 layout(rgba32f, binding = 0) uniform writeonly image2D screen;
 layout(r32ui, binding = 1) uniform readonly uimage3D blocks;
 
+
+
+
+///////////////
+// Constants //
+///////////////
 const highp float NOISE_GRANULARITY = 0.5/255.0;
 const float airRefractionIndex = 1.0;
 const float glassRefractionIndex = 1.52;
 
-// enum class Blocks : uint32_t {
-// 		Air,
-// 		Fog,
-// 		Black,
-// 		Gray,
-// 		LightGray,
-// 		White,
-// 		Red,
-// 		Orange,
-// 		Yellow,
-// 		Green,
-// 		Blue,
-// 		Purple,
-// };
 
+
+
+///////////////////////
+// Common Structures //
+///////////////////////
 struct Camera {
 	vec3 position;
 	vec3 forward;
@@ -42,6 +39,12 @@ struct Entity {
 	float radius;
 };
 
+
+
+
+///////////
+// SSBOs //
+///////////
 layout(std430) readonly buffer Lights {
 	Light lights[];
 };
@@ -50,47 +53,57 @@ layout(std430) readonly buffer Entities {
 	Entity entities[];
 };
 
+
+
+
+//////////////
+// Uniforms //
+//////////////
 uniform ivec2 iResolution;
 uniform float iTime;
 uniform uint iRenderDistance;
+
 uniform Camera camera;
 
 uniform ivec4 selectedBlock;
-
 uniform uint entityCount;
 
+
+
+
+/////////////////////////////
+// Block Helping Functions //
+/////////////////////////////
 ivec3 getBlockCoords(vec3 pos) {
 	return ivec3(round(pos.x), round(pos.y), round(pos.z));
 }
+
 vec3 getBlockCoordsFloat(vec3 pos) {
 	return vec3(round(pos.x), round(pos.y), round(pos.z));
 }
+
 uint getBlock(ivec3 coord) {
 	// TODO: Add more chunks
 	if (coord.x > 575 || coord.x < 0 || coord.y > 575 || coord.y < 0 || coord.z > 575 || coord.z < 0) {
 		return 0;
 	}
-	
-	// coord = clamp(coord, 0, 63);
 
-	// if (coord.y == 63) {
-	//    return 2;
-	// }
-	// coord = coord % 63;
-
-
-	//uint index = coord.x + (64 * coord.z) + (64 * 64 * coord.y);
-
+	// TODO: This should not be here
 	coord.yz = coord.zy;
 
-	// return blocks[index];
 	return imageLoad(blocks, coord).r;
 }
+
 uint getBlock(vec3 pos) {
 	return getBlock(getBlockCoords(pos));
-	
 }
 
+
+
+
+//////////////////
+// Ray Marching //
+//////////////////
 float planeIntersectionDistance(vec3 rayOrigin, vec3 rayDirection, vec3 planeOrigin, vec3 planeNormal) {
 	float denom = dot(planeNormal, rayDirection);
 	if (abs(denom) > 0.0f) {
@@ -103,6 +116,12 @@ float planeIntersectionDistance(vec3 rayOrigin, vec3 rayDirection, vec3 planeOri
 	return 100.0f;
 }
 
+
+
+
+//////////////
+// Entities //
+//////////////
 float distanceToNearestEntity(const vec3 rayOrigin) {
 	float minDist = 1024.0f;
 	for (int i = 0; i < entityCount; i++) {
@@ -123,9 +142,23 @@ bool entityCheck(vec3 rayOrigin, const vec3 rayDirection, float minBlockDist) {
 	return false;
 }
 
+
+
+
+////////////////////////////
+// Random Value Functions //
+////////////////////////////
 highp float random(highp vec2 coords) {
    return fract(sin(dot(coords.xy, vec2(12.9898,78.233))) * 43758.5453);
 }
+
+
+
+
+/////////////////////////////
+// Reflection & Refraction //
+/////////////////////////////
+// TODO: Reflection
 
 vec3 refract(const vec3 I, const vec3 N, const float ior)
 {
@@ -151,14 +184,14 @@ vec3 refract(const vec3 I, const vec3 N, const float ior)
 	}
 }
 
+
+
+
+///////////////////
+// Main Function //
+///////////////////
 void main() {
 	ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
-
-	// Center Pixel
-	// if (pixel_coords*2 == iResolution) {
-	// 	imageStore(screen, pixel_coords, vec4(1.0f, 0.0f, 0.0f, 1.0f));
-	// 	return;
-	// }
 
 	vec2 uv = (pixel_coords - 0.5*iResolution) / iResolution.y;
 
@@ -185,7 +218,7 @@ void main() {
 	float fogAmount = 0.0f;
 	float glassAmount = 0.0f;
 	bool entityHit = false;
-	while ((currentBlock == 1 || currentBlock == 2 || currentBlock == 15) && blockSteps < 2048 && !entityHit) {
+	while ((currentBlock == 1 || currentBlock == 2 || currentBlock == 15) && blockSteps < 1048 && !entityHit) {
 		if (rayDirection.x == 0.0 && rayDirection.y == 0.0 && rayDirection.z == 0.0) {
 			imageStore(screen, pixel_coords, vec4(1.0f, 1.0f, 1.0f, 1.0f));
 			return;
@@ -232,59 +265,18 @@ void main() {
 			blockSteps += 1;
 
 			if (currentBlock == 15 && previousBlock != 15) { // Going into glass
-				// const vec3 normal = -vec3(distDir);
-				// const float angleOfIncidence = acos(dot(normal, -rayDirection));
-				// const float newAngleOfIncidence = asin(sin(angleOfIncidence) * airRefractionIndex / glassRefractionIndex);
-
-				// // Rodrigues Rotation Formula
-				// const vec3 v = -normal;
-				// const vec3 k = cross(-normal, rayDirection);
-				// const float theta = newAngleOfIncidence;
-				// rayDirection = normalize(v * cos(theta) + cross(k, v) * sin(theta) + k * dot(k, v) * (1.0 - cos(theta)));
-
-				// float n1 = airRefractionIndex;
-				// float n2 = glassRefractionIndex;
-				// float n = n1 / n2;
-				// vec3 I = rayDirection;
-				// vec3 N = -vec3(distDir);
-				// float c1 = dot(N, I);
-				// float c2 = sqrt(1.0 - (n * n) * (1.0 - c1 * c1));
-				// rayDirection = normalize(n * (I + c1 * N) - N * c2);
-
 				const vec3 normal = -vec3(distDir);
 				rayDirection = refract(rayDirection, normal, glassRefractionIndex);
 			} else if (previousBlock == 15 && currentBlock != 15) { // Coming out of glass
-				// const vec3 normal = -vec3(distDir);
-				// const float angleOfIncidence = acos(dot(normal, -rayDirection));
-				// const float newAngleOfIncidence = asin(sin(angleOfIncidence) * glassRefractionIndex / airRefractionIndex);
-
-				// // Rodrigues Rotation Formula
-				// const vec3 v = -normal;
-				// const vec3 k = cross(-normal, rayDirection);
-				// const float theta = newAngleOfIncidence;
-				// rayDirection = normalize(v * cos(theta) + cross(k, v) * sin(theta) + k * dot(k, v) * (1.0 - cos(theta)));
-
-				// float n1 = glassRefractionIndex;
-				// float n2 = airRefractionIndex;
-				// float n = n1 / n2;
-				// vec3 I = rayDirection;
-				// vec3 N = -vec3(distDir);
-				// float c1 = dot(N, I);
-				// float c2 = sqrt(1.0 - (n * n) * (1.0 - c1 * c1));
-
-				// rayDirection = normalize(n * (I + c1 * N) - N * c2);
-
-				// if (abs(dot(rayDirection, rayDirection)) <= 0.01f && abs(dot(rayDirection, rayDirection)) >= 0.0f) {
-				// 	imageStore(screen, pixel_coords, vec4(1.0f, 0.0f, 0.0f, 1.0f));
-				// 	return;
-				// }
-				
 				const vec3 normal = -vec3(distDir);
 				rayDirection = refract(rayDirection, normal, glassRefractionIndex);
 			}
 		}
 	}
 
+
+	// Block Colors
+	// TODO: Put this into a lookup
 	if (currentBlock == 0) {            // Void
 		col = vec3(0.0f, 0.0f, 0.0f);
 	}else if (currentBlock == 3) {      // Black
@@ -326,9 +318,10 @@ void main() {
 		col = vec3(1.0f, 0.0f, 1.0f);
 	}
 
+
+	// Selected Block Outline
 	// TODO: Get to work with glass (shader marches through glass,
 	// 		 outline is selected block, glass can't be selected)
-	// Selected Block Outline
 	if (selectedBlock.a == 1 && currentBlockPos == selectedBlock.xyz) {
 		const float vertexWidth = 0.05f;
 		const float outlineWidth = 0.02f;
