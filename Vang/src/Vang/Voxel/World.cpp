@@ -3,7 +3,7 @@
 namespace Vang::Voxel {
 
 	ChunkCoord World::convertWorldPosToChunkCoord(glm::ivec3 worldPos) {
-		return worldPos / static_cast<glm::ivec3>(chunkSize);
+		return worldPos / static_cast<glm::ivec3>(CHUNK_SIZE);
 	}
 
 	ChunkCoord World::convertWorldPosToChunkCoord(const int32_t x, const int32_t y,
@@ -43,7 +43,7 @@ namespace Vang::Voxel {
 
 		const auto chunk = loadChunk(chunkPos);
 
-		chunk->setBlock(worldPos - chunkPos * glm::ivec3{chunkSize}, block);
+		chunk->setBlock(worldPos - chunkPos * glm::ivec3{CHUNK_SIZE}, block);
 	}
 	Blocks World::getBlock(const int32_t x, const int32_t y, const int32_t z) {
 		// TODO: Remove world boundaries
@@ -55,8 +55,8 @@ namespace Vang::Voxel {
 
 		const auto chunk = loadChunk(chunkPos);
 
-		return chunk->getBlock(x - chunkPos.x * chunkSize.x, y - chunkPos.y * chunkSize.y,
-							   z - chunkPos.z * chunkSize.z);
+		return chunk->getBlock(x - chunkPos.x * CHUNK_SIZE.x, y - chunkPos.y * CHUNK_SIZE.y,
+							   z - chunkPos.z * CHUNK_SIZE.z);
 	}
 
 	Blocks World::getBlock(const glm::ivec3& pos) {
