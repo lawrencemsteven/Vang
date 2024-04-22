@@ -6,6 +6,7 @@ namespace Vang::Voxel {
 		m_blocks.resize(CHUNK_SIZE[0] * CHUNK_SIZE[1] * CHUNK_SIZE[2] * 2);
 		generateChunk();
 		resetCuboids();
+		greedyCuboidCompilation();
 	}
 
 	void Chunk::setBlock(const uint32_t x, const uint32_t y, const uint32_t z, const Blocks block) {
@@ -88,13 +89,13 @@ namespace Vang::Voxel {
 		m_blocks[convert3DTo1DCuboid(x, y, z)] |= val << static_cast<uint8_t>(dir);
 	}
 
-	// TODO: Requires all values in startPos <= endPos
+	// TODO: Require all values in startPos <= endPos
 	bool Chunk::checkCuboidEquality(const glm::uvec3& startPos, const glm::uvec3& endPos,
 									const Blocks block) {
 		for (uint32_t x = startPos.x; x <= endPos.x; x++) {
 			for (uint32_t y = startPos.y; y <= endPos.y; y++) {
 				for (uint32_t z = startPos.z; z <= endPos.z; z++) {
-					if (getBlock(x, y, z) != block) {
+					if (getBlock(x, y, z) != block || isCuboid(x, y, z)) {
 						return false;
 					}
 				}
@@ -116,11 +117,12 @@ namespace Vang::Voxel {
 		// TODO: Cleanup
 		while (incrementX || decrementY || incrementZ) {
 			if (incrementX) {
-				if (x + cuboidSize.x + 1 > CHUNK_SIZE.x) {
+				const uint32_t newX = x + cuboidSize.x + 1;
+				if (x + cuboidSize.x + 1 >= CHUNK_SIZE.x) {
 					incrementX = false;
 				}
-				if (checkCuboidEquality({x, y - cuboidSize.y, z},
-										{x + cuboidSize.x + 1, y, z + cuboidSize.z}, block)) {
+				else if (checkCuboidEquality({x, y - cuboidSize.y, z},
+											 {x + cuboidSize.x + 1, y, z + cuboidSize.z}, block)) {
 					cuboidSize.x += 1;
 				}
 				else {
@@ -128,8 +130,21 @@ namespace Vang::Voxel {
 				}
 			}
 
+			if (incrementZ) {
+				if (z + cuboidSize.z + 1 >= CHUNK_SIZE.z) {
+					incrementZ = false;
+				}
+				else if (checkCuboidEquality({x, y - cuboidSize.y, z},
+											 {x + cuboidSize.x, y, z + cuboidSize.z + 1}, block)) {
+					cuboidSize.z += 1;
+				}
+				else {
+					incrementZ = false;
+				}
+			}
+
 			if (decrementY) {
-				if (y - cuboidSize.y - 1 > CHUNK_SIZE.y) {
+				if (y - cuboidSize.y - 1 >= CHUNK_SIZE.y) {
 					decrementY = false;
 				}
 				else if (checkCuboidEquality({x, y - cuboidSize.y - 1, z},
@@ -140,34 +155,24 @@ namespace Vang::Voxel {
 					decrementY = false;
 				}
 			}
-
-			if (incrementZ) {
-				if (z + cuboidSize.z + 1 > CHUNK_SIZE.z) {
-					incrementZ = false;
-				}
-				if (checkCuboidEquality({x, y - cuboidSize.y, z},
-										{x + cuboidSize.x, y, z + cuboidSize.z + 1}, block)) {
-					cuboidSize.z += 1;
-				}
-				else {
-					incrementZ = false;
-				}
-			}
 		}
 
 		if (cuboidSize == glm::uvec3{0, 0, 0}) {
 			return;
 		}
 
-		for (uint32_t x = 0; x < cuboidSize.x + 1; x++) {
-			for (uint32_t y = 0; y < cuboidSize.y + 1; y++) {
-				for (uint32_t z = 0; z < cuboidSize.z + 1; z++) {
-					setCuboidDirection(x, y, z, CuboidDirection::PositiveX, cuboidSize.x - x);
-					setCuboidDirection(x, y, z, CuboidDirection::NegativeX, x);
-					setCuboidDirection(x, y, z, CuboidDirection::PositiveY, cuboidSize.y - y);
-					setCuboidDirection(x, y, z, CuboidDirection::NegativeY, y);
-					setCuboidDirection(x, y, z, CuboidDirection::PositiveZ, cuboidSize.z - z);
-					setCuboidDirection(x, y, z, CuboidDirection::NegativeZ, z);
+		for (uint32_t cuboidX = x; cuboidX <= x + cuboidSize.x; cuboidX++) {
+			for (uint32_t cuboidY = y - cuboidSize.y; cuboidY <= y; cuboidY++) {
+				for (uint32_t cuboidZ = z; cuboidZ <= z + cuboidSize.z; cuboidZ++) {
+					setCuboidDirection(cuboidX, cuboidY, cuboidZ, CuboidDirection::PositiveX,
+									   cuboidSize.x - x);
+					setCuboidDirection(cuboidX, cuboidY, cuboidZ, CuboidDirection::NegativeX, x);
+					setCuboidDirection(cuboidX, cuboidY, cuboidZ, CuboidDirection::PositiveY,
+									   cuboidSize.y - y);
+					setCuboidDirection(cuboidX, cuboidY, cuboidZ, CuboidDirection::NegativeY, y);
+					setCuboidDirection(cuboidX, cuboidY, cuboidZ, CuboidDirection::PositiveZ,
+									   cuboidSize.z - z);
+					setCuboidDirection(cuboidX, cuboidY, cuboidZ, CuboidDirection::NegativeZ, z);
 				}
 			}
 		}

@@ -20,6 +20,8 @@ namespace Vang::VMath {
 
 		// TODO: Cleanup
 
+		// TODO: Handle case where player is inside of a block (One that is not air?)
+
 		glm::ivec3 currentBlockPos = Vang::Voxel::World::convertWorldPosToBlockCoord(rayOrigin);
 		while (output.distance <= maxDistance) {
 			glm::vec3 signedDirection = glm::sign(rayDirection);
