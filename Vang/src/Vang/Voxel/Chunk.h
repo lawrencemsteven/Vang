@@ -6,8 +6,8 @@ namespace Vang::Voxel {
 
 	typedef glm::ivec3 ChunkCoord;
 
-	inline const glm::uvec3 CHUNK_SIZE{64, 64, 64};
-	const uint32_t BLOCK_COUNT = CHUNK_SIZE[0] * CHUNK_SIZE[1] * CHUNK_SIZE[2];
+	constexpr glm::uvec3 CHUNK_SIZE{64, 64, 64};
+	constexpr uint32_t BLOCK_COUNT = CHUNK_SIZE[0] * CHUNK_SIZE[1] * CHUNK_SIZE[2];
 
 	enum class Blocks : uint32_t {
 		None,
@@ -97,7 +97,7 @@ namespace Vang::Voxel {
 								const CuboidDirection dir, const uint32_t val);
 		bool checkCuboidEquality(const glm::uvec3& startPos, const glm::uvec3& endPos,
 								 const Blocks block);
-		void calcCuboid(const uint32_t x, const uint32_t y, const uint32_t z);
+		uint32_t calcCuboid(const uint32_t x, const uint32_t y, const uint32_t z);
 	};
 
 }

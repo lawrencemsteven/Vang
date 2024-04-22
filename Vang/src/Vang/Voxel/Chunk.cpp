@@ -3,7 +3,7 @@
 namespace Vang::Voxel {
 
 	Chunk::Chunk() {
-		m_blocks.resize(CHUNK_SIZE[0] * CHUNK_SIZE[1] * CHUNK_SIZE[2] * 2);
+		m_blocks.resize(BLOCK_COUNT * 2);
 		generateChunk();
 		resetCuboids();
 		greedyCuboidCompilation();
@@ -39,11 +39,15 @@ namespace Vang::Voxel {
 		resetCuboids();
 
 		// Iterate over each block
+		uint32_t blocksCuboided{0};
 		for (uint32_t x = 0; x < CHUNK_SIZE[0]; x++) {
 			for (uint32_t z = 0; z < CHUNK_SIZE[2]; z++) {
 				for (uint32_t y = CHUNK_SIZE[1] - 1; y < CHUNK_SIZE[1]; y--) {
 					if (!isCuboid(x, y, z)) {
-						calcCuboid(x, y, z);
+						blocksCuboided += calcCuboid(x, y, z);
+					}
+					if (blocksCuboided == BLOCK_COUNT) {
+						return;
 					}
 				}
 			}
@@ -59,12 +63,12 @@ namespace Vang::Voxel {
 	}
 
 	std::size_t Chunk::convert3DTo1D(const uint32_t x, const uint32_t y, const uint32_t z) const {
-		return x + (CHUNK_SIZE[2] * z) + (CHUNK_SIZE[1] * CHUNK_SIZE[1] * y);
+		return 2 * (x + (CHUNK_SIZE[2] * z) + (CHUNK_SIZE[1] * CHUNK_SIZE[1] * y));
 	}
 
 	std::size_t Chunk::convert3DTo1DCuboid(const uint32_t x, const uint32_t y,
 										   const uint32_t z) const {
-		return x + (CHUNK_SIZE[2] * z) + (CHUNK_SIZE[1] * CHUNK_SIZE[1] * y) + BLOCK_COUNT;
+		return convert3DTo1D(x, y, z) + 1;
 	}
 
 	uint32_t Chunk::getCuboid(const uint32_t x, const uint32_t y, const uint32_t z) {
@@ -72,12 +76,15 @@ namespace Vang::Voxel {
 	}
 
 	void Chunk::generateChunk() {
-		std::fill(m_blocks.begin(), m_blocks.begin() + BLOCK_COUNT,
-				  static_cast<uint32_t>(Blocks::Air));
+		for (std::size_t i = 0; i < BLOCK_COUNT; i++) {
+			m_blocks[i * 2] = static_cast<uint32_t>(Blocks::Air);
+		}
 	}
 
 	void Chunk::resetCuboids() {
-		std::fill(m_blocks.begin() + BLOCK_COUNT, m_blocks.end(), 0u);
+		for (std::size_t i = 0; i < BLOCK_COUNT; i++) {
+			m_blocks[i * 2 + 1] = 0;
+		}
 	}
 
 	bool Chunk::isCuboid(const uint32_t x, const uint32_t y, const uint32_t z) {
@@ -104,7 +111,7 @@ namespace Vang::Voxel {
 		return true;
 	}
 
-	void Chunk::calcCuboid(const uint32_t x, const uint32_t y, const uint32_t z) {
+	uint32_t Chunk::calcCuboid(const uint32_t x, const uint32_t y, const uint32_t z) {
 		bool incrementX = true;
 		bool decrementY = true;
 		bool incrementZ = true;
@@ -158,7 +165,7 @@ namespace Vang::Voxel {
 		}
 
 		if (cuboidSize == glm::uvec3{0, 0, 0}) {
-			return;
+			return 1;
 		}
 
 		for (uint32_t cuboidX = x; cuboidX <= x + cuboidSize.x; cuboidX++) {
@@ -176,5 +183,7 @@ namespace Vang::Voxel {
 				}
 			}
 		}
+
+		return cuboidSize.x * cuboidSize.y * cuboidSize.z;
 	}
 }

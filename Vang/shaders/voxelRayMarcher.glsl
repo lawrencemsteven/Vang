@@ -2,7 +2,7 @@
 precision highp float;
 layout(local_size_x = 16, local_size_y = 8, local_size_z = 1) in;
 layout(rgba32f, binding = 0) uniform writeonly image2D screen;
-layout(r32ui, binding = 1) uniform readonly uimage3D blocks;
+layout(rg32ui, binding = 1) uniform readonly uimage3D blocks;
 
 
 
