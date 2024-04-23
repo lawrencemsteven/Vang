@@ -1,5 +1,6 @@
 set(VANG_UNIT_TESTS_SOURCES
     "src/BlueprintContainerUnitTests.cpp"
+    "src/ChunkUnitTests.cpp"
 )
 
 add_executable(Vang_unit_tests ${VANG_UNIT_TESTS_SOURCES})

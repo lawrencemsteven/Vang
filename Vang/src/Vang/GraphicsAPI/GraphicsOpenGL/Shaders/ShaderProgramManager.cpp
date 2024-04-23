@@ -48,7 +48,7 @@ namespace Vang::gfx::OpenGL {
 		uint32_t viewDistance	= 2 * (renderDistance - 1) + 1;
 		glm::uvec3 chunkDistance{};
 		for (uint32_t i = 0; i < 3; i++) {
-			chunkDistance[i] = viewDistance * Vang::Voxel::chunkSize[i];
+			chunkDistance[i] = viewDistance * Vang::Voxel::CHUNK_SIZE[i];
 		}
 
 		m_computeShaderProgram.setUniform("iRenderDistance", renderDistance);

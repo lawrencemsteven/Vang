@@ -13,9 +13,9 @@ namespace Vang::gfx::OpenGL {
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexImage3D(GL_TEXTURE_3D, 0, GL_R32UI, 576, 576, 576, 0, GL_RED_INTEGER, GL_UNSIGNED_INT,
+		glTexImage3D(GL_TEXTURE_3D, 0, GL_RG32UI, 576, 576, 576, 0, GL_RG_INTEGER, GL_UNSIGNED_INT,
 					 NULL);
-		glBindImageTexture(1, m_texture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
+		glBindImageTexture(1, m_texture, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RG32UI);
 	}
 
 	void BlockBuffer::update() {
@@ -30,9 +30,10 @@ namespace Vang::gfx::OpenGL {
 				for (uint32_t z = 0; z < renderDiameter; z++) {
 					const auto& chunk = chunks[chunkCounter];
 					if (chunk->getDirty()) {
+						chunk->greedyCuboidCompilation();
 						chunk->setDirty(false);
 						glTexSubImage3D(GL_TEXTURE_3D, 0, x * 64, z * 64, y * 64, 64, 64, 64,
-										GL_RED_INTEGER, GL_UNSIGNED_INT,
+										GL_RG_INTEGER, GL_UNSIGNED_INT,
 										chunk->getAllBlocks().data());
 					}
 					chunkCounter += 1;
