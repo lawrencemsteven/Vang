@@ -39,6 +39,8 @@ namespace Vang::Voxel {
 
 		Blocks getBlock(uint32_t x, uint32_t y, uint32_t z) const;
 		Blocks getBlock(const glm::uvec3& coords) const;
+		uint32_t getCuboid(uint32_t x, uint32_t y, uint32_t z) const;
+		uint32_t getCuboid(const glm::uvec3& coords) const;
 		bool getDirty() const;
 
 		void setBlock(const uint32_t x, const uint32_t y, const uint32_t z, const Blocks block);
@@ -89,12 +91,11 @@ namespace Vang::Voxel {
 			NegativeZ = 0,
 		};
 
-		uint32_t getCuboid(const uint32_t x, const uint32_t y, const uint32_t z);
 		void generateChunk();
 		void resetCuboids();
 		bool isCuboid(const uint32_t x, const uint32_t y, const uint32_t z);
-		void setCuboidDirection(const uint32_t x, const uint32_t y, const uint32_t z,
-								const CuboidDirection dir, const uint32_t val);
+		void setCuboidDirection(const glm::uvec3& pos, const CuboidDirection dir,
+								const uint32_t val);
 		bool checkCuboidEquality(const glm::uvec3& startPos, const glm::uvec3& endPos,
 								 const Blocks block);
 		uint32_t calcCuboid(const uint32_t x, const uint32_t y, const uint32_t z);

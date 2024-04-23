@@ -82,20 +82,20 @@ vec3 getBlockCoordsFloat(vec3 pos) {
 	return vec3(round(pos.x), round(pos.y), round(pos.z));
 }
 
-uint getBlock(ivec3 coord) {
+uvec2 getBlockInfo(ivec3 coord) {
 	// TODO: Add more chunks
 	if (coord.x > 575 || coord.x < 0 || coord.y > 575 || coord.y < 0 || coord.z > 575 || coord.z < 0) {
-		return 0;
+		return uvec2(0, 0x2108421);
 	}
 
 	// TODO: This should not be here
 	coord.yz = coord.zy;
 
-	return imageLoad(blocks, coord).r;
+	return imageLoad(blocks, coord).rg;
 }
 
-uint getBlock(vec3 pos) {
-	return getBlock(getBlockCoords(pos));
+uvec2 getBlockInfo(vec3 pos) {
+	return getBlockInfo(getBlockCoords(pos));
 }
 
 
@@ -187,6 +187,51 @@ vec3 refract(const vec3 I, const vec3 N, const float ior)
 
 
 
+/////////////
+// Cuboids //
+/////////////
+//
+// 00 00000 00000 00000 00000 00000 00000
+//  1   2     3     4     5     6     7
+//
+// Todo: First bit should be transparency
+//
+// 1 = Block Information
+//
+// 2 = +X
+// 3 = -X
+//
+// 4 = +Y
+// 5 = -Y
+//
+// 6 = +Z
+// 7 = -Z
+//
+uint cuboidBitShift(uint cuboidInfo, uint shiftAmount) {
+	return cuboidInfo >> shiftAmount & 0x1F;
+}
+uint getCuboidPositiveX(uint cuboidInfo) {
+	return cuboidBitShift(cuboidInfo, 25);
+}
+uint getCuboidNegativeX(uint cuboidInfo) {
+	return cuboidBitShift(cuboidInfo, 20);
+}
+uint getCuboidPositiveY(uint cuboidInfo) {
+	return cuboidBitShift(cuboidInfo, 15);
+}
+uint getCuboidNegativeY(uint cuboidInfo) {
+	return cuboidBitShift(cuboidInfo, 10);
+}
+uint getCuboidPositiveZ(uint cuboidInfo) {
+	return cuboidBitShift(cuboidInfo, 5);
+}
+uint getCuboidNegativeZ(uint cuboidInfo) {
+	return cuboidBitShift(cuboidInfo, 0);
+}
+
+
+
+
 ///////////////////
 // Main Function //
 ///////////////////
@@ -212,62 +257,61 @@ void main() {
 	// Plane-Assisted Ray Marching
 	float totalDistance = 0.0f;
 	ivec3 currentBlockPos = getBlockCoords(rayOrigin);
-	uint previousBlock = getBlock(currentBlockPos);
-	uint currentBlock = previousBlock;
+	uvec2 previousBlock = getBlockInfo(currentBlockPos);
+	uvec2 currentBlock = previousBlock;
 	int blockSteps = 0;
 	float fogAmount = 0.0f;
 	float glassAmount = 0.0f;
 	bool entityHit = false;
-	while ((currentBlock == 1 || currentBlock == 2 || currentBlock == 15) && blockSteps < 1048 && !entityHit) {
-		if (rayDirection.x == 0.0 && rayDirection.y == 0.0 && rayDirection.z == 0.0) {
-			imageStore(screen, pixel_coords, vec4(1.0f, 1.0f, 1.0f, 1.0f));
-			return;
-		}
-		
+	while ((currentBlock.r == 1 || currentBlock.r == 2 || currentBlock.r == 15) && blockSteps < 1048 && !entityHit) {		
 		vec3 signedDirection = sign(rayDirection);
 
-		if (signedDirection.x == 0 && signedDirection.y == 0 && signedDirection.z == 0) {
-			imageStore(screen, pixel_coords, vec4(0.0f, 0.0f, 1.0f, 1.0f));
-			return;
-		}
-
 		ivec3 distDir = ivec3(round(signedDirection.x), 0, 0);
-		float minDist = planeIntersectionDistance(rayOrigin, rayDirection, vec3(currentBlockPos.x + 0.5f * signedDirection.x, currentBlockPos.yz), vec3(-sign(rayDirection.x), 0.0f, 0.0f));
+		float cuboidModifier = signedDirection.x > 0 ? getCuboidPositiveX(currentBlock.g) : -1 * float(getCuboidNegativeX(currentBlock.g));
+		vec3 planeOrigin = vec3(float(currentBlockPos.x) + 0.5f * signedDirection.x + cuboidModifier, currentBlockPos.yz);
+		vec3 planeNormal = vec3(-sign(rayDirection.x), 0.0f, 0.0f);
+		float minDist = planeIntersectionDistance(rayOrigin, rayDirection, planeOrigin, planeNormal);
 
-		float newDist = planeIntersectionDistance(rayOrigin, rayDirection, vec3(currentBlockPos.x, currentBlockPos.y + 0.5f * signedDirection.y, currentBlockPos.z), vec3(0.0f, -sign(rayDirection.y), 0.0f));
+		cuboidModifier = signedDirection.y > 0 ? getCuboidPositiveY(currentBlock.g) : -1 * float(getCuboidNegativeY(currentBlock.g));
+		planeOrigin = vec3(currentBlockPos.x, float(currentBlockPos.y) + 0.5f * signedDirection.y + cuboidModifier, currentBlockPos.z);
+		planeNormal = vec3(0.0f, -sign(rayDirection.y), 0.0f);
+		float newDist = planeIntersectionDistance(rayOrigin, rayDirection, planeOrigin, planeNormal);
 		if (newDist < minDist) {
 			distDir = ivec3(0, round(signedDirection.y), 0);
 			minDist = newDist;
 		}
-		newDist = planeIntersectionDistance(rayOrigin, rayDirection, vec3(currentBlockPos.xy, currentBlockPos.z + 0.5f * signedDirection.z), vec3(0.0f, 0.0f, -sign(rayDirection.z)));
+		cuboidModifier = signedDirection.z > 0 ? getCuboidPositiveZ(currentBlock.g) : -1 * float(getCuboidNegativeZ(currentBlock.g));
+		planeOrigin = vec3(currentBlockPos.xy, float(currentBlockPos.z) + 0.5f * signedDirection.z + cuboidModifier);
+		planeNormal = vec3(0.0f, 0.0f, -sign(rayDirection.z));
+		newDist = planeIntersectionDistance(rayOrigin, rayDirection, planeOrigin, planeNormal);
 		if (newDist < minDist) {
 			distDir = ivec3(0, 0, round(signedDirection.z));
 			minDist = newDist;
 		}
 
 		// Fog
-		if (currentBlock == 2) {
+		if (currentBlock.r == 2) {
 			fogAmount += minDist;
 		}
 
 		// Glass
-		if (currentBlock == 15) {
+		if (currentBlock.r == 15) {
 			glassAmount += minDist;
 		}
 
 		entityHit = entityCheck(rayOrigin, rayDirection, minDist);
 		if (!entityHit) {
-			currentBlockPos += distDir;
-			previousBlock = currentBlock;
-			currentBlock = getBlock(currentBlockPos);
 			rayOrigin += rayDirection * minDist;
+			currentBlockPos = getBlockCoords(rayOrigin + 0.5 * distDir);
+			previousBlock = currentBlock;
+			currentBlock = getBlockInfo(currentBlockPos);
 			totalDistance += minDist;
 			blockSteps += 1;
 
-			if (currentBlock == 15 && previousBlock != 15) { // Going into glass
+			if (currentBlock.r == 15 && previousBlock.r != 15) { // Going into glass
 				const vec3 normal = -vec3(distDir);
 				rayDirection = refract(rayDirection, normal, glassRefractionIndex);
-			} else if (previousBlock == 15 && currentBlock != 15) { // Coming out of glass
+			} else if (previousBlock.r == 15 && currentBlock.r != 15) { // Coming out of glass
 				const vec3 normal = -vec3(distDir);
 				rayDirection = refract(rayDirection, normal, glassRefractionIndex);
 			}
@@ -277,31 +321,31 @@ void main() {
 
 	// Block Colors
 	// TODO: Put this into a lookup
-	if (currentBlock == 0) {            // Void
+	if (currentBlock.r == 0) {            // Void
 		col = vec3(0.0f, 0.0f, 0.0f);
-	}else if (currentBlock == 3) {      // Black
+	}else if (currentBlock.r == 3) {      // Black
 		col = vec3(0.1f, 0.1f, 0.1f);
-	} else if (currentBlock == 4) {		// Gray
+	} else if (currentBlock.r == 4) {		// Gray
 		col = vec3(0.35f, 0.35f, 0.35f);
-	} else if (currentBlock == 5) {		// LightGray
+	} else if (currentBlock.r == 5) {		// LightGray
 		col = vec3(0.7f, 0.7f, 0.7f);
-	} else if (currentBlock == 6) {		// White
+	} else if (currentBlock.r == 6) {		// White
 		col = vec3(0.95f, 0.95f, 0.95f);
-	} else if (currentBlock == 7) {		// Red
+	} else if (currentBlock.r == 7) {		// Red
 		col = vec3(0.8f, 0.1f, 0.1f);
-	} else if (currentBlock == 8) {		// Orange
+	} else if (currentBlock.r == 8) {		// Orange
 		col = vec3(0.8f, 0.4f, 0.1f);
-	} else if (currentBlock == 9) {		// Yellow
+	} else if (currentBlock.r == 9) {		// Yellow
 		col = vec3(0.8f, 0.8f, 0.1f);
-	} else if (currentBlock == 10) {	// Green
+	} else if (currentBlock.r == 10) {	// Green
 		col = vec3(0.1f, 0.7f, 0.1f);
-	} else if (currentBlock == 11) {	// Blue
+	} else if (currentBlock.r == 11) {	// Blue
 		col = vec3(0.1f, 0.1f, 0.8f);
-	} else if (currentBlock == 12) {	// Purple
+	} else if (currentBlock.r == 12) {	// Purple
 		col = vec3(0.5f, 0.1f, 0.8f);
-	} else if (currentBlock == 13) {	// Pink
+	} else if (currentBlock.r == 13) {	// Pink
 		col = vec3(0.9f, 0.5f, 0.6f);
-	} else if (currentBlock == 14) {	// Rainbow
+	} else if (currentBlock.r == 14) {	// Rainbow
 		const float totalRainbowTime = 10.0f;
 		const float segmentTime = totalRainbowTime / 3.0f;
 		const int animationState = int(3.0f * (mod(iTime, totalRainbowTime) / totalRainbowTime));

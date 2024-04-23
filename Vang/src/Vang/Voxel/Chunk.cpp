@@ -34,6 +34,16 @@ namespace Vang::Voxel {
 		return getBlock(coords[0], coords[1], coords[2]);
 	}
 
+	uint32_t Chunk::getCuboid(uint32_t x, uint32_t y, uint32_t z) const {
+		const auto loc = convert3DTo1DCuboid(x, y, z);
+
+		return m_blocks[loc];
+	}
+
+	uint32_t Chunk::getCuboid(const glm::uvec3& coords) const {
+		return getCuboid(coords[0], coords[1], coords[2]);
+	}
+
 	void Chunk::greedyCuboidCompilation() {
 		// TODO: Multi-thread this
 		resetCuboids();
@@ -71,10 +81,6 @@ namespace Vang::Voxel {
 		return convert3DTo1D(x, y, z) + 1;
 	}
 
-	uint32_t Chunk::getCuboid(const uint32_t x, const uint32_t y, const uint32_t z) {
-		return m_blocks[convert3DTo1DCuboid(x, y, z)];
-	}
-
 	void Chunk::generateChunk() {
 		for (std::size_t i = 0; i < BLOCK_COUNT; i++) {
 			m_blocks[i * 2] = static_cast<uint32_t>(Blocks::Air);
@@ -91,9 +97,9 @@ namespace Vang::Voxel {
 		return getCuboid(x, y, z) << 2 > 0;
 	}
 
-	void Chunk::setCuboidDirection(const uint32_t x, const uint32_t y, const uint32_t z,
-								   const CuboidDirection dir, const uint32_t val) {
-		m_blocks[convert3DTo1DCuboid(x, y, z)] |= val << static_cast<uint8_t>(dir);
+	void Chunk::setCuboidDirection(const glm::uvec3& pos, const CuboidDirection dir,
+								   const uint32_t val) {
+		m_blocks[convert3DTo1DCuboid(pos.x, pos.y, pos.z)] |= (val << static_cast<uint8_t>(dir));
 	}
 
 	// TODO: Require all values in startPos <= endPos
@@ -125,11 +131,11 @@ namespace Vang::Voxel {
 		while (incrementX || decrementY || incrementZ) {
 			if (incrementX) {
 				const uint32_t newX = x + cuboidSize.x + 1;
-				if (x + cuboidSize.x + 1 >= CHUNK_SIZE.x) {
+				if (newX >= CHUNK_SIZE.z || cuboidSize.x >= 31u) {
 					incrementX = false;
 				}
-				else if (checkCuboidEquality({x, y - cuboidSize.y, z},
-											 {x + cuboidSize.x + 1, y, z + cuboidSize.z}, block)) {
+				else if (checkCuboidEquality({x, y - cuboidSize.y, z}, {newX, y, z + cuboidSize.z},
+											 block)) {
 					cuboidSize.x += 1;
 				}
 				else {
@@ -138,11 +144,12 @@ namespace Vang::Voxel {
 			}
 
 			if (incrementZ) {
-				if (z + cuboidSize.z + 1 >= CHUNK_SIZE.z) {
+				const uint32_t newZ = z + cuboidSize.z + 1;
+				if (newZ >= CHUNK_SIZE.z || cuboidSize.z >= 31u) {
 					incrementZ = false;
 				}
-				else if (checkCuboidEquality({x, y - cuboidSize.y, z},
-											 {x + cuboidSize.x, y, z + cuboidSize.z + 1}, block)) {
+				else if (checkCuboidEquality({x, y - cuboidSize.y, z}, {x + cuboidSize.x, y, newZ},
+											 block)) {
 					cuboidSize.z += 1;
 				}
 				else {
@@ -151,11 +158,12 @@ namespace Vang::Voxel {
 			}
 
 			if (decrementY) {
-				if (y - cuboidSize.y - 1 >= CHUNK_SIZE.y) {
+				const uint32_t newY = y - cuboidSize.y - 1;
+				if (newY >= CHUNK_SIZE.y || cuboidSize.y >= 31u) {
 					decrementY = false;
 				}
-				else if (checkCuboidEquality({x, y - cuboidSize.y - 1, z},
-											 {x + cuboidSize.x, y, z + cuboidSize.z}, block)) {
+				else if (checkCuboidEquality({x, newY, z}, {x + cuboidSize.x, y, z + cuboidSize.z},
+											 block)) {
 					cuboidSize.y += 1;
 				}
 				else {
@@ -168,18 +176,16 @@ namespace Vang::Voxel {
 			return 1;
 		}
 
-		for (uint32_t cuboidX = x; cuboidX <= x + cuboidSize.x; cuboidX++) {
-			for (uint32_t cuboidY = y - cuboidSize.y; cuboidY <= y; cuboidY++) {
-				for (uint32_t cuboidZ = z; cuboidZ <= z + cuboidSize.z; cuboidZ++) {
-					setCuboidDirection(cuboidX, cuboidY, cuboidZ, CuboidDirection::PositiveX,
-									   cuboidSize.x - x);
-					setCuboidDirection(cuboidX, cuboidY, cuboidZ, CuboidDirection::NegativeX, x);
-					setCuboidDirection(cuboidX, cuboidY, cuboidZ, CuboidDirection::PositiveY,
-									   cuboidSize.y - y);
-					setCuboidDirection(cuboidX, cuboidY, cuboidZ, CuboidDirection::NegativeY, y);
-					setCuboidDirection(cuboidX, cuboidY, cuboidZ, CuboidDirection::PositiveZ,
-									   cuboidSize.z - z);
-					setCuboidDirection(cuboidX, cuboidY, cuboidZ, CuboidDirection::NegativeZ, z);
+		for (uint32_t cuboidX = 0; cuboidX <= cuboidSize.x; cuboidX++) {
+			for (uint32_t cuboidY = 0; cuboidY <= cuboidSize.y; cuboidY++) {
+				for (uint32_t cuboidZ = 0; cuboidZ <= cuboidSize.z; cuboidZ++) {
+					const glm::uvec3 pos{cuboidX + x, y - cuboidY, z + cuboidZ};
+					setCuboidDirection(pos, CuboidDirection::PositiveX, cuboidSize.x - cuboidX);
+					setCuboidDirection(pos, CuboidDirection::NegativeX, cuboidX);
+					setCuboidDirection(pos, CuboidDirection::PositiveY, cuboidY);
+					setCuboidDirection(pos, CuboidDirection::NegativeY, cuboidSize.y - cuboidY);
+					setCuboidDirection(pos, CuboidDirection::PositiveZ, cuboidSize.z - cuboidZ);
+					setCuboidDirection(pos, CuboidDirection::NegativeZ, cuboidZ);
 				}
 			}
 		}
