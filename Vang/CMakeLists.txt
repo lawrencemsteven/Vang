@@ -2,6 +2,14 @@ include(CMakeFiles.cmake)
 
 add_library(Vang STATIC ${Vang_FILES})
 
+if (COMPILE_SHADERS)
+    add_custom_command(
+		TARGET Vang
+		PRE_BUILD
+		COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/CmakeScripts/bakeShaders.py" "${CMAKE_CURRENT_SOURCE_DIR}/shaders" "${CMAKE_CURRENT_BINARY_DIR}/shaders"
+	)
+endif (COMPILE_SHADERS)
+
 # WINDOW API'S:
 #   VANG_WINDOW_GLFW
 

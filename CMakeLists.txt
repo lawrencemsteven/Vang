@@ -6,11 +6,11 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-option(CREATE_PACKAGE "Create a package for target" OFF)
+option(COMPILE_SHADERS "Create a package for target" ON)
 
-if (CREATE_PACKAGE)
-    message("Test")
-endif (CREATE_PACKAGE)
+if (COMPILE_SHADERS)
+    find_package(PythonInterp REQUIRED)
+endif (COMPILE_SHADERS)
 
 FetchContent_Declare(
     Catch2
