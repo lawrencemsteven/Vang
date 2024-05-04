@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef VANG_DEBUG
+#ifdef _DEBUG
 #	define VANG_FATAL(message) Vang::Utility::Log::Fatal(message);
 #	define VANG_ERROR(message) Vang::Utility::Log::Error(message);
 #	define VANG_WARN(message) Vang::Utility::Log::Warn(message);
