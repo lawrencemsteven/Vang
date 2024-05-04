@@ -2,13 +2,19 @@ include(CMakeFiles.cmake)
 
 add_library(Vang STATIC ${Vang_FILES})
 
-if (COMPILE_SHADERS)
+if (BAKE_SHADERS)
     add_custom_command(
 		TARGET Vang
 		PRE_BUILD
 		COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/CmakeScripts/bakeShaders.py" "${CMAKE_CURRENT_SOURCE_DIR}/shaders" "${CMAKE_CURRENT_BINARY_DIR}/shaders"
 	)
-endif (COMPILE_SHADERS)
+	file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/shaders/bakedShaders.h" CONTENT "")
+	target_sources(Vang PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/shaders/bakedShaders.h")
+	target_compile_definitions(Vang PRIVATE VANG_BAKED_SHADERS)
+	target_compile_definitions(Vang PRIVATE VANG_SHADERS="${CMAKE_CURRENT_BINARY_DIR}/shaders/bakedShaders.h" )
+else(BAKE_SHADERS)
+	target_compile_definitions(Vang PRIVATE VANG_SHADERS_FOLDER="${CMAKE_CURRENT_SOURCE_DIR}/shaders" )
+endif (BAKE_SHADERS)
 
 # WINDOW API'S:
 #   VANG_WINDOW_GLFW
@@ -19,13 +25,11 @@ endif (COMPILE_SHADERS)
 #   VANG_GRAPHICSAPI_OPENGL
 
 # OTHER:
-#   VANG_DEBUG - Log warning, info, and debug
 #	VANG_BLOCK_LOGGING_COUT - Block logging cout messages (unit_tests)
 target_compile_definitions(Vang
 	PRIVATE
 		VANG_WINDOW_GLFW
 		VANG_GRAPHICSAPI_OPENGL
-		VANG_DEBUG
 )
 
 target_link_libraries(Vang
@@ -41,10 +45,6 @@ target_include_directories(Vang
 )
 
 target_compile_features(Vang PUBLIC cxx_std_20)
-
-target_compile_definitions(Vang PRIVATE VANG_SHADERS_FOLDER="${CMAKE_CURRENT_SOURCE_DIR}/shaders" )
-
-target_compile_definitions(Vang PRIVATE VANG_XML_FOLDER="${CMAKE_CURRENT_SOURCE_DIR}/xml" )
 
 target_precompile_headers(Vang
 	PUBLIC

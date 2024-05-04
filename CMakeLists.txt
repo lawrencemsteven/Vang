@@ -6,11 +6,11 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-option(COMPILE_SHADERS "Create a package for target" ON)
+option(BAKE_SHADERS "Bake shaders into target" ON)
 
-if (COMPILE_SHADERS)
+if (BAKE_SHADERS)
     find_package(PythonInterp REQUIRED)
-endif (COMPILE_SHADERS)
+endif (BAKE_SHADERS)
 
 FetchContent_Declare(
     Catch2

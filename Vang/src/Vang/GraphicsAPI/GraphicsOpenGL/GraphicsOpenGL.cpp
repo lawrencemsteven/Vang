@@ -8,12 +8,9 @@
 #	include "GLFW/glfw3.h"
 #endif
 
-#define DEFAULT_VERTEX_SHADER                                                                      \
-	static_cast<std::string>(VANG_SHADERS_FOLDER).append("/main.vert.glsl")
-#define DEFAULT_FRAGMENT_SHADER                                                                    \
-	static_cast<std::string>(VANG_SHADERS_FOLDER).append("/main.frag.glsl")
-#define DEFAULT_COMPUTE_SHADER                                                                     \
-	static_cast<std::string>(VANG_SHADERS_FOLDER).append("/voxelRayMarcher.glsl")
+#ifdef VANG_BAKED_SHADERS
+#	include VANG_SHADERS
+#endif
 
 namespace Vang::gfx::OpenGL {
 
@@ -46,9 +43,17 @@ namespace Vang::gfx::OpenGL {
 	void GraphicsOpenGL::initialize() {
 		initializeOpenGL();
 		Vang::Windowing::Window& window = Vang::getWindow();
-		m_shaderProgramManager.initialize(DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER,
-										  DEFAULT_COMPUTE_SHADER, window.getWidth(),
-										  window.getHeight());
+#ifdef VANG_BAKED_SHADERS
+		m_shaderProgramManager.initialize(
+			Vang::gfx::Shaders::SHADER_MAIN_VERT, Vang::gfx::Shaders::SHADER_MAIN_FRAG,
+			Vang::gfx::Shaders::SHADER_VOXELRAYMARCHER, window.getWidth(), window.getHeight());
+#else
+		m_shaderProgramManager.initialize(
+			static_cast<std::string>(VANG_SHADERS_FOLDER).append("/main.vert.glsl"),
+			static_cast<std::string>(VANG_SHADERS_FOLDER).append("/main.frag.glsl"),
+			static_cast<std::string>(VANG_SHADERS_FOLDER).append("/voxelRayMarcher.glsl"),
+			window.getWidth(), window.getHeight());
+#endif
 	}
 
 	void GraphicsOpenGL::initializeOpenGL() {

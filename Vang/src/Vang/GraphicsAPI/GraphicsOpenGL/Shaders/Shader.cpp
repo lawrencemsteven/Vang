@@ -10,13 +10,25 @@ namespace Vang::gfx::OpenGL {
 		loadAndCompile();
 	}
 
-	Shader::~Shader() {
-		if (m_shader.has_value()) { glDeleteShader(m_shader.value()); }
+	Shader::Shader(const char* src, ShaderType type)
+		: m_path{""},
+		  m_type{type} {
+		loadAndCompile(src);
 	}
 
-	bool Shader::reload() { return loadAndCompile(); }
+	Shader::~Shader() {
+		if (m_shader.has_value()) {
+			glDeleteShader(m_shader.value());
+		}
+	}
 
-	std::optional<GLuint> Shader::getID() { return m_shader; }
+	bool Shader::reload() {
+		return loadAndCompile();
+	}
+
+	std::optional<GLuint> Shader::getID() {
+		return m_shader;
+	}
 
 	bool Shader::loadAndCompile() {
 		// Read From File
@@ -29,6 +41,10 @@ namespace Vang::gfx::OpenGL {
 			return false;
 		}
 
+		return loadAndCompile(shader_source.c_str());
+	}
+
+	bool Shader::loadAndCompile(const char* src) {
 		// Create Shader
 		switch (m_type) {
 			case ShaderType::Vertex:
@@ -43,8 +59,7 @@ namespace Vang::gfx::OpenGL {
 		}
 
 		// Compile Shader
-		const char* shader_source_char = shader_source.c_str();
-		glShaderSource(m_shader.value(), 1, &shader_source_char, NULL);
+		glShaderSource(m_shader.value(), 1, &src, NULL);
 		glCompileShader(m_shader.value());
 
 		// Check For Compilation Errors

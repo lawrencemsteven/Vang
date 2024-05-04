@@ -28,11 +28,24 @@ for i in range(len(shaders)):
 	shaderNames[i] = shaderNames[i].replace(os.sep, "_")
 	shaderNames[i] = re.sub('[^a-zA-Z0-9]', '_', shaderNames[i])
 
-f = open(os.path.join(toLocation, "test.h"), "w")
-f.write(fromLocation + "\n\n" + toLocation + "\n")
+bakedShadersFile = open(os.path.join(toLocation, "bakedShaders.h"), "w")
+# bakedShadersFile.write(fromLocation + "\n\n" + toLocation + "\n")
+# for i in range(len(shaders)):
+# 	bakedShadersFile.write(shaders[i] + " :: " + shaderNames[i] + "\n")
+# bakedShadersFile.close()
+
+bakedShadersFile.write("namespace Vang::gfx::Shaders {\n")
 for i in range(len(shaders)):
-	f.write(shaders[i] + " :: " + shaderNames[i] + "\n")
-f.close()
+	bakedShadersFile.write("const char* SHADER_" + shaderNames[i] + " = R\"(\n")
+	
+	shaderFile = open(os.path.join(fromLocation, shaders[i] + ".glsl"), "r")
+	for line in shaderFile:
+		bakedShadersFile.write(line)
+	shaderFile.close()
+
+	bakedShadersFile.write("\n)\";\n\n")
+bakedShadersFile.write("}")
+bakedShadersFile.close()
 
 # std::string shader_src = R"(
 # //shader cods
