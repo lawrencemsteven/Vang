@@ -34,7 +34,7 @@ namespace Vang::Objects {
 		void updateRaycastReturn();
 
 		// TODO: Make this editable, maybe somewhere to set player size or height?
-		const float cameraHeight = 1.8f;
+		const float cameraHeight = 0.0f;
 		float m_reachDistance{10.0f};
 		Vang::VMath::raycastReturn m_raycastResult{};
 		Camera m_camera;

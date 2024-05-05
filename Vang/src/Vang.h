@@ -34,6 +34,7 @@
 #include "Vang/Utility/Events/Event.h"
 #include "Vang/Utility/Events/EventHandler.h"
 #include "Vang/Utility/Events/MouseEvent.h"
+#include "Vang/Utility/FileIO/FileIO.h"
 #include "Vang/Utility/Layers/LayerStack.h"
 #include "Vang/Utility/Player/Player.h"
 #include "Vang/Utility/Structures/Structure.h"
