@@ -33,6 +33,83 @@ namespace Vang::gfx::OpenGL {
 		m_computeShaderProgram.setUniform("iResolution", static_cast<int>(width),
 										  static_cast<int>(height));
 
+		initialize_impl();
+	}
+
+	void ShaderProgramManager::initialize(const char* vertexShaderFile,
+										  const char* fragmentShaderFile,
+										  const char* computeShaderFile, unsigned int width,
+										  unsigned int height) {
+		m_screenWidth  = width;
+		m_screenHeight = height;
+		m_screenTexture.initialize(width, height);
+		m_vertexData.initialize();
+
+		m_rasterShaderProgram.initialize();
+		m_computeShaderProgram.initialize();
+
+		Shader vertexShader{vertexShaderFile, ShaderType::Vertex};
+		Shader fragmentShader{fragmentShaderFile, ShaderType::Fragment};
+		m_rasterShaderProgram.attachShader(std::move(vertexShader));
+		m_rasterShaderProgram.attachShader(std::move(fragmentShader));
+		m_rasterShaderProgram.linkProgram();
+
+		Shader computeShader{computeShaderFile, ShaderType::Compute};
+		m_computeShaderProgram.attachShader(std::move(computeShader));
+		m_computeShaderProgram.linkProgram();
+
+		m_computeShaderProgram.setUniform("iResolution", static_cast<int>(width),
+										  static_cast<int>(height));
+
+		initialize_impl();
+	}
+
+	void ShaderProgramManager::update() {
+		m_computeShaderProgram.setUniform("iTime", Vang::Utility::Time::timeSinceStart());
+
+		// TODO: Move this somewhere else
+		const auto& raycastReturn = Vang::getPlayer().getRaycastResult();
+		const glm::ivec4 selectedBlock =
+			glm::ivec4{raycastReturn.blockHitPosition, raycastReturn.hit};
+		m_computeShaderProgram.setUniform("selectedBlock", selectedBlock);
+
+		m_computeShaderProgram.use();
+		glDispatchCompute(static_cast<GLuint>(floor(m_screenWidth / 16.0f)),
+						  static_cast<GLuint>(floor(m_screenHeight / 8.0f)), 1);
+		glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
+		m_blockBuffer.update();
+		m_entityBuffer.update(m_computeShaderProgram);
+
+		m_rasterShaderProgram.use();
+		m_vertexData.update();
+	}
+
+	void ShaderProgramManager::displayCamera(const Vang::Objects::Camera& camera) {
+		// Camera Position
+		const glm::vec3 camera_position = camera.getPosition();
+		m_computeShaderProgram.setUniform("camera.position", camera_position.x, camera_position.y,
+										  camera_position.z);
+
+		// Camera Orientation
+		const glm::mat4 view = camera.getView();
+		m_computeShaderProgram.setUniform("camera.forward", view[0][2], view[1][2], view[2][2]);
+		m_computeShaderProgram.setUniform("camera.up", view[0][1], view[1][1], view[2][1]);
+		m_computeShaderProgram.setUniform("camera.right", view[0][0], view[1][0], view[2][0]);
+
+		// Camera FOV
+		m_computeShaderProgram.setUniform("camera.fov", camera.getFOV());
+	}
+
+	ShaderProgram& ShaderProgramManager::getRasterShaderProgram() {
+		return m_rasterShaderProgram;
+	}
+
+	ShaderProgram& ShaderProgramManager::getComputeShaderProgram() {
+		return m_computeShaderProgram;
+	}
+
+	void ShaderProgramManager::initialize_impl() {
 		// OpenGL Query
 		// GLint max_layers;
 		// glGetIntegerv(GL_MAX_3D_TEXTURE_SIZE, &max_layers);
@@ -102,50 +179,4 @@ namespace Vang::gfx::OpenGL {
 
 		m_entityBuffer = EntityBuffer{m_computeShaderProgram};
 	}
-
-	void ShaderProgramManager::update() {
-		m_computeShaderProgram.setUniform("iTime", Vang::Utility::Time::timeSinceStart());
-
-		// TODO: Move this somewhere else
-		const auto& raycastReturn = Vang::getPlayer().getRaycastResult();
-		const glm::ivec4 selectedBlock =
-			glm::ivec4{raycastReturn.blockHitPosition, raycastReturn.hit};
-		m_computeShaderProgram.setUniform("selectedBlock", selectedBlock);
-
-		m_computeShaderProgram.use();
-		glDispatchCompute(static_cast<GLuint>(floor(m_screenWidth / 16.0f)),
-						  static_cast<GLuint>(floor(m_screenHeight / 8.0f)), 1);
-		glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
-
-		m_blockBuffer.update();
-		m_entityBuffer.update(m_computeShaderProgram);
-
-		m_rasterShaderProgram.use();
-		m_vertexData.update();
-	}
-
-	void ShaderProgramManager::displayCamera(const Vang::Objects::Camera& camera) {
-		// Camera Position
-		const glm::vec3 camera_position = camera.getPosition();
-		m_computeShaderProgram.setUniform("camera.position", camera_position.x, camera_position.y,
-										  camera_position.z);
-
-		// Camera Orientation
-		const glm::mat4 view = camera.getView();
-		m_computeShaderProgram.setUniform("camera.forward", view[0][2], view[1][2], view[2][2]);
-		m_computeShaderProgram.setUniform("camera.up", view[0][1], view[1][1], view[2][1]);
-		m_computeShaderProgram.setUniform("camera.right", view[0][0], view[1][0], view[2][0]);
-
-		// Camera FOV
-		m_computeShaderProgram.setUniform("camera.fov", camera.getFOV());
-	}
-
-	ShaderProgram& ShaderProgramManager::getRasterShaderProgram() {
-		return m_rasterShaderProgram;
-	}
-
-	ShaderProgram& ShaderProgramManager::getComputeShaderProgram() {
-		return m_computeShaderProgram;
-	}
-
 }
