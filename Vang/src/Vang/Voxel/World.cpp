@@ -31,14 +31,10 @@ namespace Vang::Voxel {
 	}
 
 	void World::setBlock(const int32_t x, const int32_t y, const int32_t z, const Blocks block) {
-		const auto chunkPos = convertWorldPosToChunkCoord(x, y, z);
-
-		const auto chunk = loadChunk(chunkPos);
-
-		chunk->setBlock(x - chunkPos.x, y - chunkPos.y, z - chunkPos.z, block);
+		setBlock(glm::ivec3{x, y, z}, block);
 	}
 
-	void World::setBlock(glm::ivec3 worldPos, Blocks block) {
+	void World::setBlock(const glm::ivec3& worldPos, Blocks block) {
 		const auto chunkPos = convertWorldPosToChunkCoord(worldPos);
 
 		const auto chunk = loadChunk(chunkPos);

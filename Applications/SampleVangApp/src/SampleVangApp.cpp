@@ -135,6 +135,8 @@ int main() {
 	Vang::Utility::Structure::generateStructure(28, 28, 456, 456, 6, Vang::Voxel::Blocks::Gray,
 												Vang::Voxel::Blocks::Air);
 
+	Vang::getPlayer().setPosition({5.0f, 5.0f, 5.0f});
+
 	while (Vang::getRunning()) {
 		Vang::update();
 		// std::cout << "FPS: " << (1.0f / Vang::Utility::Time::deltaTime()) << std::endl;

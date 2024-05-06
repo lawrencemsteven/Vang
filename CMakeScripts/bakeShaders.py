@@ -13,6 +13,7 @@ shaderNames = []
 shader_dirs = []
 roots = []
 
+
 # Get All Files
 def getFiles(startLoc, relLoc = ""):
 	for file in os.listdir(os.path.join(startLoc, relLoc)):
@@ -23,21 +24,41 @@ def getFiles(startLoc, relLoc = ""):
 			getFiles(startLoc, os.path.join(relLoc, file))
 getFiles(fromLocation)
 
+
+# Get shader varible names
 for i in range(len(shaders)):
 	shaderNames.append(shaders[i].upper())
 	shaderNames[i] = shaderNames[i].replace(os.sep, "_")
 	shaderNames[i] = re.sub('[^a-zA-Z0-9]', '_', shaderNames[i])
 
-bakedShadersFile = open(os.path.join(toLocation, "bakedShaders.h"), "w")
-# bakedShadersFile.write(fromLocation + "\n\n" + toLocation + "\n")
-# for i in range(len(shaders)):
-# 	bakedShadersFile.write(shaders[i] + " :: " + shaderNames[i] + "\n")
-# bakedShadersFile.close()
 
-bakedShadersFile.write("namespace Vang::gfx::Shaders {\n")
+# Output file
+bakedShadersFile = open(os.path.join(toLocation, "bakedShaders.h"), "w")
+
+
+# Pragma
+bakedShadersFile.write("#pragma once\n\n")
+
+
+# Namespace Definition
+bakedShadersFile.write("namespace Vang::gfx::Shaders {\n\n")
+
+
+# Write preprocessor definitions
+bakedShadersFile.write("#ifdef VANG_RENDERING_PLANEASSISTED\n")
+bakedShadersFile.write("\tconst char* SHADER_PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_PLANEASSISTED\";\n")
+bakedShadersFile.write("#elif VANG_RENDERING_CUBOID\n")
+bakedShadersFile.write("\tconst char* SHADER_PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_CUBOID\";\n")
+bakedShadersFile.write("#elif VANG_RENDERING_OCTREE\n")
+bakedShadersFile.write("\tconst char* SHADER_PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_OCTREE\";\n")
+bakedShadersFile.write("#endif\n\n")
+
+
+# Write shaders to output file
 for i in range(len(shaders)):
-	bakedShadersFile.write("const char* SHADER_" + shaderNames[i] + " = R\"(\n")
-	
+	bakedShadersFile.write("\tconst char* SHADER_" + shaderNames[i] + " = *SHADER_PREPROCESSOR_DEFINITIONS + R\"(\n")
+
+	# Shader Data
 	shaderFile = open(os.path.join(fromLocation, shaders[i] + ".glsl"), "r")
 	for line in shaderFile:
 		bakedShadersFile.write(line)
@@ -46,10 +67,3 @@ for i in range(len(shaders)):
 	bakedShadersFile.write("\n)\";\n\n")
 bakedShadersFile.write("}")
 bakedShadersFile.close()
-
-# std::string shader_src = R"(
-# //shader cods
-# //more shader
-# //even more code
-# //you don't  need to add \n every line with the R prefix 
-# )";
