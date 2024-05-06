@@ -32,7 +32,16 @@ for i in range(len(shaders)):
 	shaderNames[i] = re.sub('[^a-zA-Z0-9]', '_', shaderNames[i])
 
 
-# Output file
+# Create Output files
+bakedShadersFile = open(os.path.join(toLocation, "bakedShaders.h"), "w")
+
+
+
+
+#################
+## HEADER FILE ##
+#################
+# Get Header File
 bakedShadersFile = open(os.path.join(toLocation, "bakedShaders.h"), "w")
 
 
@@ -44,19 +53,69 @@ bakedShadersFile.write("#pragma once\n\n")
 bakedShadersFile.write("namespace Vang::gfx::Shaders {\n\n")
 
 
-# Write preprocessor definitions
+# Class Definition
+bakedShadersFile.write("\tclass BakedShaders {\n")
+bakedShadersFile.write("\tpublic:\n")
+bakedShadersFile.write("\t\tBakedShaders() = delete;\n")
+bakedShadersFile.write("\t\t~BakedShaders() = delete;\n\n")
+
+
+# Method Definitions
+for shaderName in shaderNames:
+	bakedShadersFile.write("\t\tstatic const char* GET_" + shaderName + "();\n")
+bakedShadersFile.write("\n")
+
+
+# Private Shader Variables
+bakedShadersFile.write("\tprivate:\n")
+bakedShadersFile.write("\t\tstatic std::string PREPROCESSOR_DEFINITIONS;\n")
+for shaderName in shaderNames:
+	bakedShadersFile.write("\t\tstatic std::string " + shaderName + ";\n")
+
+
+# Close Class, Namespace, and File
+bakedShadersFile.write("\t};\n\n")
+bakedShadersFile.write("}")
+bakedShadersFile.close()
+
+
+
+
+#################
+## SOURCE FILE ##
+#################
+# Get Source File
+bakedShadersFile = open(os.path.join(toLocation, "bakedShaders.cpp"), "w")
+
+
+# Include Header
+bakedShadersFile.write("#include \"bakedShaders.h\"\n\n")
+
+
+# Namespace Definition
+bakedShadersFile.write("namespace Vang::gfx::Shaders {\n\n")
+
+
+# Method Definitions
+for shaderName in shaderNames:
+	bakedShadersFile.write("\tconst char* BakedShaders::GET_" + shaderName + "() {\n")
+	bakedShadersFile.write("\t\treturn (PREPROCESSOR_DEFINITIONS + " + shaderName + ").c_str();\n")
+	bakedShadersFile.write("\t}\n\n")
+
+
+# Preprocessor Definitions
 bakedShadersFile.write("#ifdef VANG_RENDERING_PLANEASSISTED\n")
-bakedShadersFile.write("\tconst char* SHADER_PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_PLANEASSISTED\\n\";\n")
+bakedShadersFile.write("\tstd::string BakedShaders::PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_PLANEASSISTED\\n\";\n")
 bakedShadersFile.write("#elif VANG_RENDERING_CUBOID\n")
-bakedShadersFile.write("\tconst char* SHADER_PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_CUBOID\\n\";\n")
+bakedShadersFile.write("\tstd::string BakedShaders::PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_CUBOID\\n\";\n")
 bakedShadersFile.write("#elif VANG_RENDERING_OCTREE\n")
-bakedShadersFile.write("\tconst char* SHADER_PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_OCTREE\\n\";\n")
+bakedShadersFile.write("\tstd::string BakedShaders::PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_OCTREE\";\n")
 bakedShadersFile.write("#endif\n\n")
 
 
-# Write shaders to output file
+# Shader Definitions
 for i in range(len(shaders)):
-	bakedShadersFile.write("\tconst char* SHADER_" + shaderNames[i] + " = *SHADER_PREPROCESSOR_DEFINITIONS + R\"(\n")
+	bakedShadersFile.write("\tstd::string BakedShaders::" + shaderNames[i] + " = R\"(\n")
 
 	# Shader Data
 	shaderFile = open(os.path.join(fromLocation, shaders[i] + ".glsl"), "r")
@@ -65,5 +124,7 @@ for i in range(len(shaders)):
 	shaderFile.close()
 
 	bakedShadersFile.write("\n)\";\n\n")
+
+# Close Namespace and File
 bakedShadersFile.write("}")
 bakedShadersFile.close()

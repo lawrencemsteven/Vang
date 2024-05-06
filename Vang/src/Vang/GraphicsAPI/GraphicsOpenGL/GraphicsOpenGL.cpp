@@ -44,9 +44,10 @@ namespace Vang::gfx::OpenGL {
 		initializeOpenGL();
 		Vang::Windowing::Window& window = Vang::getWindow();
 #ifdef VANG_BAKED_SHADERS
-		m_shaderProgramManager.initialize(
-			Vang::gfx::Shaders::SHADER_MAIN_VERT, Vang::gfx::Shaders::SHADER_MAIN_FRAG,
-			Vang::gfx::Shaders::SHADER_VOXELRAYMARCHER, window.getWidth(), window.getHeight());
+		m_shaderProgramManager.initialize(Vang::gfx::Shaders::BakedShaders::GET_MAIN_VERT(),
+										  Vang::gfx::Shaders::BakedShaders::GET_MAIN_FRAG(),
+										  Vang::gfx::Shaders::BakedShaders::GET_VOXELRAYMARCHER(),
+										  window.getWidth(), window.getHeight());
 #else
 		m_shaderProgramManager.initialize(
 			static_cast<std::string>(VANG_SHADERS_FOLDER).append("/main.vert.glsl"),
