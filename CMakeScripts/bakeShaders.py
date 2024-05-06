@@ -46,11 +46,11 @@ bakedShadersFile.write("namespace Vang::gfx::Shaders {\n\n")
 
 # Write preprocessor definitions
 bakedShadersFile.write("#ifdef VANG_RENDERING_PLANEASSISTED\n")
-bakedShadersFile.write("\tconst char* SHADER_PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_PLANEASSISTED\";\n")
+bakedShadersFile.write("\tconst char* SHADER_PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_PLANEASSISTED\\n\";\n")
 bakedShadersFile.write("#elif VANG_RENDERING_CUBOID\n")
-bakedShadersFile.write("\tconst char* SHADER_PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_CUBOID\";\n")
+bakedShadersFile.write("\tconst char* SHADER_PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_CUBOID\\n\";\n")
 bakedShadersFile.write("#elif VANG_RENDERING_OCTREE\n")
-bakedShadersFile.write("\tconst char* SHADER_PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_OCTREE\";\n")
+bakedShadersFile.write("\tconst char* SHADER_PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_OCTREE\\n\";\n")
 bakedShadersFile.write("#endif\n\n")
 
 
