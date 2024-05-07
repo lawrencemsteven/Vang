@@ -40,6 +40,11 @@ namespace Vang::gfx::OpenGL {
 										  const char* fragmentShaderFile,
 										  const char* computeShaderFile, unsigned int width,
 										  unsigned int height) {
+		// const GLubyte* vendor	= glGetString(GL_VENDOR);	// Returns the vendor
+		// const GLubyte* renderer = glGetString(GL_RENDERER); // Returns a hint to the model
+		// std::cout << "GPU Vendor:   " << vendor << std::endl;
+		// std::cout << "GPU Renderer: " << renderer << std::endl;
+
 		m_screenWidth  = width;
 		m_screenHeight = height;
 		m_screenTexture.initialize(width, height);
@@ -115,8 +120,6 @@ namespace Vang::gfx::OpenGL {
 		// glGetIntegerv(GL_MAX_3D_TEXTURE_SIZE, &max_layers);
 		// std::cout << "Max 3D Texture Size: " << max_layers << std::endl;
 		// std::cout << "GL_DITHER: " << (glIsEnabled(GL_DITHER) == GL_TRUE) << std::endl;
-
-
 
 		std::vector<uint32_t> testData2{};
 
