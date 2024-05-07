@@ -8,7 +8,11 @@ if (BAKE_SHADERS)
 		PRE_BUILD
 		COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/CmakeScripts/bakeShaders.py" "${CMAKE_CURRENT_SOURCE_DIR}/shaders" "${CMAKE_CURRENT_BINARY_DIR}/shaders"
 	)
+
+	# Generate Files For CMake Generate Step
 	file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/shaders/bakedShaders.h" CONTENT "")
+	file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/shaders/bakedShaders.cpp" CONTENT "")
+	
 	target_sources(Vang PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/shaders/bakedShaders.h")
 	target_sources(Vang PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/shaders/bakedShaders.cpp")
 	target_compile_definitions(Vang PRIVATE VANG_BAKED_SHADERS)

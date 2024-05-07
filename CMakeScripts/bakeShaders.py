@@ -68,9 +68,9 @@ bakedShadersFile.write("\n")
 
 # Private Shader Variables
 bakedShadersFile.write("\tprivate:\n")
-bakedShadersFile.write("\t\tstatic std::string PREPROCESSOR_DEFINITIONS;\n")
+bakedShadersFile.write("\t\tstatic const char* PREPROCESSOR_DEFINITIONS;\n")
 for shaderName in shaderNames:
-	bakedShadersFile.write("\t\tstatic std::string " + shaderName + ";\n")
+	bakedShadersFile.write("\t\tstatic const char* " + shaderName + ";\n")
 
 
 # Close Class, Namespace, and File
@@ -99,23 +99,25 @@ bakedShadersFile.write("namespace Vang::gfx::Shaders {\n\n")
 # Method Definitions
 for shaderName in shaderNames:
 	bakedShadersFile.write("\tconst char* BakedShaders::GET_" + shaderName + "() {\n")
-	bakedShadersFile.write("\t\treturn (PREPROCESSOR_DEFINITIONS + " + shaderName + ").c_str();\n")
+	bakedShadersFile.write("\t\tstd::string output{PREPROCESSOR_DEFINITIONS};\n")
+	bakedShadersFile.write("\t\toutput += " + shaderName + ";\n")
+	bakedShadersFile.write("\t\treturn output.c_str();\n")
 	bakedShadersFile.write("\t}\n\n")
 
 
 # Preprocessor Definitions
 bakedShadersFile.write("#ifdef VANG_RENDERING_PLANEASSISTED\n")
-bakedShadersFile.write("\tstd::string BakedShaders::PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_PLANEASSISTED\\n\";\n")
+bakedShadersFile.write("\tconst char* BakedShaders::PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_PLANEASSISTED\\n\";\n")
 bakedShadersFile.write("#elif VANG_RENDERING_CUBOID\n")
-bakedShadersFile.write("\tstd::string BakedShaders::PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_CUBOID\\n\";\n")
+bakedShadersFile.write("\tconst char* BakedShaders::PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_CUBOID\\n\";\n")
 bakedShadersFile.write("#elif VANG_RENDERING_OCTREE\n")
-bakedShadersFile.write("\tstd::string BakedShaders::PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_OCTREE\";\n")
+bakedShadersFile.write("\tconst char* BakedShaders::PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_OCTREE\";\n")
 bakedShadersFile.write("#endif\n\n")
 
 
 # Shader Definitions
 for i in range(len(shaders)):
-	bakedShadersFile.write("\tstd::string BakedShaders::" + shaderNames[i] + " = R\"(\n")
+	bakedShadersFile.write("\tconst char* BakedShaders::" + shaderNames[i] + " = R\"(\n")
 
 	# Shader Data
 	shaderFile = open(os.path.join(fromLocation, shaders[i] + ".glsl"), "r")
