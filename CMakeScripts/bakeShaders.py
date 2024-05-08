@@ -13,7 +13,6 @@ shaderNames = []
 shader_dirs = []
 roots = []
 
-
 # Get All Files
 def getFiles(startLoc, relLoc = ""):
 	for file in os.listdir(os.path.join(startLoc, relLoc)):
@@ -62,12 +61,13 @@ bakedShadersFile.write("\t\t~BakedShaders() = delete;\n\n")
 
 # Method Definitions
 for shaderName in shaderNames:
-	bakedShadersFile.write("\t\tstatic const char* GET_" + shaderName + "();\n")
+	bakedShadersFile.write("\t\tstatic std::string GET_" + shaderName + "();\n")
 bakedShadersFile.write("\n")
 
 
 # Private Shader Variables
 bakedShadersFile.write("\tprivate:\n")
+bakedShadersFile.write("\t\tstatic const char* SHADER_VERSION;\n")
 bakedShadersFile.write("\t\tstatic const char* PREPROCESSOR_DEFINITIONS;\n")
 for shaderName in shaderNames:
 	bakedShadersFile.write("\t\tstatic const char* " + shaderName + ";\n")
@@ -98,11 +98,15 @@ bakedShadersFile.write("namespace Vang::gfx::Shaders {\n\n")
 
 # Method Definitions
 for shaderName in shaderNames:
-	bakedShadersFile.write("\tconst char* BakedShaders::GET_" + shaderName + "() {\n")
-	bakedShadersFile.write("\t\tstd::string output{PREPROCESSOR_DEFINITIONS};\n")
+	bakedShadersFile.write("\tstd::string BakedShaders::GET_" + shaderName + "() {\n")
+	bakedShadersFile.write("\t\tstd::string output{SHADER_VERSION};\n")
+	bakedShadersFile.write("\t\toutput += PREPROCESSOR_DEFINITIONS;\n")
 	bakedShadersFile.write("\t\toutput += " + shaderName + ";\n")
-	bakedShadersFile.write("\t\treturn output.c_str();\n")
+	bakedShadersFile.write("\t\treturn output;\n")
 	bakedShadersFile.write("\t}\n\n")
+
+# GLSL Version
+bakedShadersFile.write("const char* BakedShaders::SHADER_VERSION = \"#version 460 core\\n\";\n\n")
 
 
 # Preprocessor Definitions
@@ -111,7 +115,7 @@ bakedShadersFile.write("\tconst char* BakedShaders::PREPROCESSOR_DEFINITIONS = \
 bakedShadersFile.write("#elif VANG_RENDERING_CUBOID\n")
 bakedShadersFile.write("\tconst char* BakedShaders::PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_CUBOID\\n\";\n")
 bakedShadersFile.write("#elif VANG_RENDERING_OCTREE\n")
-bakedShadersFile.write("\tconst char* BakedShaders::PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_OCTREE\";\n")
+bakedShadersFile.write("\tconst char* BakedShaders::PREPROCESSOR_DEFINITIONS = \"#define VANG_RENDERING_OCTREE\\n\";\n")
 bakedShadersFile.write("#endif\n\n")
 
 
