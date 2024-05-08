@@ -129,6 +129,7 @@ int main() {
 	uint32_t prevScene{0};
 
 	Vang::Utility::FileIO::FileWriter outFile{"./VangBenchmarks.csv"};
+	outFile.write("0,");
 
 	while (Vang::getRunning()) {
 		Vang::update();
