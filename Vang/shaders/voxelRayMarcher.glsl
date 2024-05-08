@@ -241,11 +241,12 @@ void main() {
 
 	vec3 col = vec3(0);
 
-	const float crosshairSize = 0.005f;
-	if (length(uv) < crosshairSize) {
-		imageStore(screen, pixel_coords, vec4(0.0f, 0.0f, 0.0f, 1.0f));
-		return;
-	}
+	// TODO: Add Back Crosshair
+	// const float crosshairSize = 0.005f;
+	// if (length(uv) < crosshairSize) {
+	// 	imageStore(screen, pixel_coords, vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	// 	return;
+	// }
 
 	vec3 rayOrigin = camera.position;
 	vec3 rayDirection = normalize(uv.x*camera.right + uv.y*camera.up + (90/camera.fov)*camera.forward);
