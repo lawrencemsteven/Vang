@@ -38,6 +38,8 @@ bool loadTunnelScene() {
 		}
 	}
 
+	Vang::getPlayer().getCamera().rotateRight(90.0f);
+
 	return true;
 }
 
@@ -79,6 +81,9 @@ bool loadStaircaseScene() {
 		}
 	}
 
+	// Vang::getPlayer().getCamera().rotateRight(90.0f);
+	Vang::getPlayer().getCamera().rotateUp(45.0f);
+
 	return true;
 }
 
@@ -115,6 +120,9 @@ bool loadEmptyScene() {
 			world.setBlock({x, 0, z}, Vang::Voxel::Blocks::Gray);
 		}
 	}
+
+	Vang::getPlayer().getCamera().rotateRight(45.0f);
+	Vang::getPlayer().getCamera().rotateUp(-135.0f);
 
 	return true;
 }
