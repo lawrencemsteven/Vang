@@ -1,5 +1,15 @@
 #include <Vang.h>
 
+bool sceneFrameSkip(const uint32_t amount) {
+	static uint32_t skippedFrames{0};
+	skippedFrames++;
+	if (skippedFrames >= amount) {
+		skippedFrames = 0;
+		return true;
+	}
+	return false;
+}
+
 bool initializeScene() {
 	static float sceneTime{1.0f};
 	sceneTime -= Vang::Utility::Time::deltaTime();
@@ -128,21 +138,27 @@ int main() {
 	uint32_t currentScene{0};
 	uint32_t prevScene{0};
 
+	const uint32_t framesToSkip{10};
+
 	Vang::Utility::FileIO::FileWriter outFile{"./VangBenchmarks.csv"};
 	outFile.write("0,");
 
 	while (Vang::getRunning()) {
-		Vang::update();
-
 		switch (currentScene) {
 			case 0: currentScene += static_cast<uint32_t>(initializeScene()); break;
-			case 1: currentScene += static_cast<uint32_t>(loadTunnelScene()); break;
-			case 2: currentScene += static_cast<uint32_t>(runTunnelScene()); break;
-			case 3: currentScene += static_cast<uint32_t>(loadStaircaseScene()); break;
-			case 4: currentScene += static_cast<uint32_t>(runStaircaseScene()); break;
-			case 5: currentScene += static_cast<uint32_t>(loadEmptyScene()); break;
-			case 6: currentScene += static_cast<uint32_t>(runEmptyScene()); break;
-			case 7: Vang::close();
+			case 1: currentScene += static_cast<uint32_t>(sceneFrameSkip(framesToSkip)); break;
+			case 2: currentScene += static_cast<uint32_t>(loadTunnelScene()); break;
+			case 3: currentScene += static_cast<uint32_t>(sceneFrameSkip(framesToSkip)); break;
+			case 4: currentScene += static_cast<uint32_t>(runTunnelScene()); break;
+			case 5: currentScene += static_cast<uint32_t>(sceneFrameSkip(framesToSkip)); break;
+			case 6: currentScene += static_cast<uint32_t>(loadStaircaseScene()); break;
+			case 7: currentScene += static_cast<uint32_t>(sceneFrameSkip(framesToSkip)); break;
+			case 8: currentScene += static_cast<uint32_t>(runStaircaseScene()); break;
+			case 9: currentScene += static_cast<uint32_t>(sceneFrameSkip(framesToSkip)); break;
+			case 10: currentScene += static_cast<uint32_t>(loadEmptyScene()); break;
+			case 11: currentScene += static_cast<uint32_t>(sceneFrameSkip(framesToSkip)); break;
+			case 12: currentScene += static_cast<uint32_t>(runEmptyScene()); break;
+			case 13: Vang::close();
 		}
 
 		outFile.write(std::to_string(Vang::Utility::Time::deltaTime()) + ",");
@@ -153,5 +169,7 @@ int main() {
 			outFile.writeLine("");
 			outFile.write(std::to_string(currentScene) + ",");
 		}
+
+		Vang::update();
 	}
 }
