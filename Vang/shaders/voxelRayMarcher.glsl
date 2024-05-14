@@ -410,6 +410,13 @@ void main() {
 	col += mix(-NOISE_GRANULARITY, NOISE_GRANULARITY, random(uv));
 
 
+	#if VANG_RENDERING_CUBOID
+	col *= vec3{0.5f, 1.0f, 0.5f};
+	#elif VANG_RENDERING_PLANEASSISTED
+	col *= vec3{0.5f, 0.5f, 1.0f};
+	#endif
+
+
 	// Return value
 	imageStore(screen, pixel_coords, vec4(col, 1.0f));
 }
