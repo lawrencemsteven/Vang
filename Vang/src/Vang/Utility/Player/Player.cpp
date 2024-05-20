@@ -4,7 +4,7 @@
 
 namespace Vang::Objects {
 
-	Player::Player() {
+	void Player::initialize() {
 		updateCameraPosition();
 	}
 

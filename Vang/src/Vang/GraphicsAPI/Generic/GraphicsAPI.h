@@ -6,13 +6,14 @@ namespace Vang::gfx {
 
 	class GraphicsAPI {
 	public:
-		GraphicsAPI();
-		GraphicsAPI(std::string_view application_name);
+		GraphicsAPI()							   = default;
 		GraphicsAPI(const GraphicsAPI&)			   = delete;
 		GraphicsAPI(GraphicsAPI&&)				   = delete;
 		GraphicsAPI& operator=(const GraphicsAPI&) = delete;
 		GraphicsAPI& operator=(GraphicsAPI&&)	   = delete;
 
+		virtual void initialize();
+		virtual void initialize(std::string_view applicationName);
 		virtual void update() = 0;
 
 		std::string_view getApplicationName();

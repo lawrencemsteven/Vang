@@ -43,6 +43,7 @@
 #include "Vang/Window/Window.h"
 
 namespace Vang {
+	void initialize();
 	bool getRunning();
 	void update();
 	void close();

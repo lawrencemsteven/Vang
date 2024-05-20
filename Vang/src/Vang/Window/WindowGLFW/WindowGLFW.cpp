@@ -9,14 +9,14 @@
 
 namespace Vang::Windowing {
 
-	WindowGLFW::WindowGLFW(const std::string& title, uint32_t width, uint32_t height,
-						   bool fullscreen)
-		: Window(title, width, height, fullscreen) {
-		initializeWindow();
-	}
-
 	WindowGLFW::~WindowGLFW() {
 		close();
+	}
+
+	void WindowGLFW::initialize(const std::string& title, uint32_t width, uint32_t height,
+								bool fullscreen) {
+		Window::initialize(title, width, height, fullscreen);
+		initializeWindow();
 	}
 
 	void WindowGLFW::update() {
