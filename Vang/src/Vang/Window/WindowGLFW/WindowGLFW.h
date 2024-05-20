@@ -9,13 +9,15 @@ namespace Vang::Windowing {
 
 	class WindowGLFW : public Window {
 	public:
-		WindowGLFW(const std::string& title, uint32_t width, uint32_t height, bool fullscreen);
+		WindowGLFW() = default;
 		~WindowGLFW();
 		WindowGLFW(const WindowGLFW&)			 = delete;
 		WindowGLFW(WindowGLFW&&)				 = delete;
 		WindowGLFW& operator=(const WindowGLFW&) = delete;
 		WindowGLFW& operator=(WindowGLFW&&)		 = delete;
 
+		void initialize(const std::string& title, uint32_t width, uint32_t height,
+						bool fullscreen) override;
 		void update() override;
 		void close() override;
 

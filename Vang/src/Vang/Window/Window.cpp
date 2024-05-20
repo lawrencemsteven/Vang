@@ -9,7 +9,8 @@ namespace Vang::Windowing {
 		Vang::getEventHandler().onEvent(e);
 	}
 
-	Window::Window(const std::string& title, uint32_t width, uint32_t height, bool fullscreen) {
+	void Window::initialize(const std::string& title, uint32_t width, uint32_t height,
+							bool fullscreen) {
 		m_data.title		 = title;
 		m_data.width		 = width;
 		m_data.height		 = height;

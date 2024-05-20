@@ -9,10 +9,11 @@ namespace Vang::gfx::OpenGL {
 
 	class GraphicsOpenGL : public GraphicsAPI {
 	public:
-		GraphicsOpenGL();
-		GraphicsOpenGL(std::string_view applicationName);
+		GraphicsOpenGL() = default;
 		~GraphicsOpenGL();
 
+		void initialize() override;
+		void initialize(std::string_view applicationName);
 		void update() override;
 
 		void windowResize(uint32_t width, uint32_t height) override;
@@ -20,10 +21,10 @@ namespace Vang::gfx::OpenGL {
 		void displayCamera(const Vang::Objects::Camera& camera) override;
 
 	private:
-		void initialize();
+		void initializeOpenGL();
 		void cleanup();
 
-		void initializeOpenGL();
+		void initializeShaders();
 
 		ShaderProgramManager m_shaderProgramManager;
 	};

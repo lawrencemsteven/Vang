@@ -7,12 +7,14 @@ namespace Vang::Objects {
 
 	class Player {
 	public:
-		Player();
+		Player()						 = default;
 		~Player()						 = default;
 		Player(const Player&)			 = delete;
 		Player(Player&&)				 = delete;
 		Player& operator=(const Player&) = delete;
 		Player& operator=(Player&&)		 = delete;
+
+		void initialize();
 
 		void moveForward(float amount);
 		void moveRight(float amount);

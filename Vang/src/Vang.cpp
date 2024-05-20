@@ -4,9 +4,8 @@ namespace Vang {
 
 	static bool s_running{true};
 	static std::string s_applicationName{};
-	static VANG_CURRENT_WINDOW s_window{s_applicationName, DEFAULT_WIDTH, DEFAULT_HEIGHT,
-										DEFAULT_FULLSCREEN};
-	static VANG_CURRENT_GRAPHICSAPI s_graphicsAPI{s_applicationName};
+	static VANG_CURRENT_WINDOW s_window{};
+	static VANG_CURRENT_GRAPHICSAPI s_graphicsAPI{};
 	static Vang::Voxel::World s_currentWorld{};
 	static Vang::Objects::Player s_player{};
 	static Vang::Blueprints::BlueprintContainer<Vang::Blueprints::BlockBlueprint> s_blockManager{};
@@ -19,6 +18,13 @@ namespace Vang {
 
 	void cleanup() {
 		s_window.close();
+	}
+
+	void initialize() {
+		s_running;
+		s_window.initialize(s_applicationName, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_FULLSCREEN);
+		s_graphicsAPI.initialize(s_applicationName);
+		s_player.initialize();
 	}
 
 	bool getRunning() {

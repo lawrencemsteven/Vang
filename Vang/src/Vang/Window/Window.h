@@ -8,8 +8,8 @@ namespace Vang::Windowing {
 	public:
 		using EventCallbackFn = std::function<void(Vang::Utility::Events::Event&)>;
 
-		Window(const std::string& title, uint32_t width, uint32_t height, bool fullscreen);
-
+		virtual void initialize(const std::string& title, uint32_t width, uint32_t height,
+								bool fullscreen);
 		virtual void update() = 0;
 		virtual void close()  = 0;
 

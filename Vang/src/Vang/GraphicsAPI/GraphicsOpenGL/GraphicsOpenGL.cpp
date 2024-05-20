@@ -6,6 +6,7 @@
 
 #ifdef VANG_WINDOW_GLFW
 #	include "GLFW/glfw3.h"
+#	include "GraphicsOpenGL.h"
 #endif
 
 #ifdef VANG_BAKED_SHADERS
@@ -14,17 +15,18 @@
 
 namespace Vang::gfx::OpenGL {
 
-	GraphicsOpenGL::GraphicsOpenGL() {
-		initialize();
-	}
-
-	GraphicsOpenGL::GraphicsOpenGL(std::string_view applicationName)
-		: GraphicsAPI{applicationName} {
-		initialize();
-	}
-
 	GraphicsOpenGL::~GraphicsOpenGL() {
 		cleanup();
+	}
+
+	void GraphicsOpenGL::initialize() {
+		GraphicsAPI::initialize();
+		initializeOpenGL();
+	}
+
+	void GraphicsOpenGL::initialize(std::string_view applicationName) {
+		GraphicsAPI::initialize(applicationName);
+		initializeOpenGL();
 	}
 
 	void GraphicsOpenGL::update() {
@@ -40,8 +42,7 @@ namespace Vang::gfx::OpenGL {
 		m_shaderProgramManager.displayCamera(camera);
 	}
 
-	void GraphicsOpenGL::initialize() {
-		initializeOpenGL();
+	void GraphicsOpenGL::initializeShaders() {
 		Vang::Windowing::Window& window = Vang::getWindow();
 #ifdef VANG_BAKED_SHADERS
 		m_shaderProgramManager.initialize(
@@ -69,6 +70,8 @@ namespace Vang::gfx::OpenGL {
 
 		Vang::Windowing::Window& window = Vang::getWindow();
 		windowResize(window.getWidth(), window.getHeight());
+
+		initializeShaders();
 	}
 
 	void GraphicsOpenGL::cleanup() {

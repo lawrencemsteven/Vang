@@ -109,6 +109,8 @@ private:
 
 
 int main() {
+	Vang::initialize();
+
 	Vang::getLayerStack().pushLayer(new PlayerMovementLayer());
 
 	auto& world = Vang::getCurrentWorld();
