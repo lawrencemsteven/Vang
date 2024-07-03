@@ -36,9 +36,9 @@ namespace Vang::gfx::OpenGL {
 		initialize_impl();
 	}
 
-	void ShaderProgramManager::initialize(const char* vertexShaderFile,
-										  const char* fragmentShaderFile,
-										  const char* computeShaderFile, unsigned int width,
+	void ShaderProgramManager::initialize(const std::string& vertexShaderFile,
+										  const std::string& fragmentShaderFile,
+										  const std::string& computeShaderFile, unsigned int width,
 										  unsigned int height) {
 		m_screenWidth  = width;
 		m_screenHeight = height;

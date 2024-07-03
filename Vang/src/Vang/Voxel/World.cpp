@@ -38,7 +38,7 @@ namespace Vang::Voxel {
 		chunk->setBlock(x - chunkPos.x, y - chunkPos.y, z - chunkPos.z, block);
 	}
 
-	void World::setBlock(glm::ivec3 worldPos, Blocks block) {
+	void World::setBlock(const glm::ivec3& worldPos, Blocks block) {
 		const auto chunkPos = convertWorldPosToChunkCoord(worldPos);
 
 		const auto chunk = loadChunk(chunkPos);

@@ -11,8 +11,8 @@
 #	define VANG_CURRENT_GRAPHICSAPI Vang::gfx::OpenGL::GraphicsOpenGL
 #endif
 
-#define DEFAULT_WIDTH 1920
-#define DEFAULT_HEIGHT 1080
+#define DEFAULT_WIDTH 1280
+#define DEFAULT_HEIGHT 720
 #define DEFAULT_FULLSCREEN false
 
 #ifdef VANG_WINDOW_GLFW
@@ -34,6 +34,7 @@
 #include "Vang/Utility/Events/Event.h"
 #include "Vang/Utility/Events/EventHandler.h"
 #include "Vang/Utility/Events/MouseEvent.h"
+#include "Vang/Utility/FileIO/FileIO.h"
 #include "Vang/Utility/Layers/LayerStack.h"
 #include "Vang/Utility/Player/Player.h"
 #include "Vang/Utility/Structures/Structure.h"

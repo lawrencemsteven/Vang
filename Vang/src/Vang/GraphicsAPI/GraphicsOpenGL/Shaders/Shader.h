@@ -10,7 +10,7 @@ namespace Vang::gfx::OpenGL {
 	class Shader {
 	public:
 		Shader(std::filesystem::path path, ShaderType type);
-		Shader(const char* src, ShaderType type);
+		Shader(const std::string& src, ShaderType type);
 		~Shader();
 		Shader(const Shader&)			 = delete;
 		Shader(Shader&&)				 = default;
@@ -24,7 +24,7 @@ namespace Vang::gfx::OpenGL {
 	private:
 		// TODO: Remove duplicated code
 		bool loadAndCompile();
-		bool loadAndCompile(const char* src);
+		bool loadAndCompile(const std::string& src);
 
 		std::optional<GLuint> m_shader{};
 
