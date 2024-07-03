@@ -28,7 +28,7 @@ namespace Vang::Voxel {
 		static glm::ivec3 convertWorldPosToBlockCoord(const float x, const float y, const float z);
 
 		void setBlock(const int32_t x, const int32_t y, const int32_t z, const Blocks block);
-		void setBlock(glm::ivec3 worldPos, const Blocks block);
+		void setBlock(const glm::ivec3& worldPos, const Blocks block);
 
 		Blocks getBlock(const int32_t x, const int32_t y, const int32_t z);
 		Blocks getBlock(const glm::ivec3& pos);

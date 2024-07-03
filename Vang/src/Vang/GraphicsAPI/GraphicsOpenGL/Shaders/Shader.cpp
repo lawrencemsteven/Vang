@@ -10,7 +10,7 @@ namespace Vang::gfx::OpenGL {
 		loadAndCompile();
 	}
 
-	Shader::Shader(const char* src, ShaderType type)
+	Shader::Shader(const std::string& src, ShaderType type)
 		: m_path{""},
 		  m_type{type} {
 		loadAndCompile(src);
@@ -44,7 +44,7 @@ namespace Vang::gfx::OpenGL {
 		return loadAndCompile(shader_source.c_str());
 	}
 
-	bool Shader::loadAndCompile(const char* src) {
+	bool Shader::loadAndCompile(const std::string& src) {
 		// Create Shader
 		switch (m_type) {
 			case ShaderType::Vertex:
@@ -59,7 +59,8 @@ namespace Vang::gfx::OpenGL {
 		}
 
 		// Compile Shader
-		glShaderSource(m_shader.value(), 1, &src, NULL);
+		const char* shaderSource = src.c_str();
+		glShaderSource(m_shader.value(), 1, &shaderSource, NULL);
 		glCompileShader(m_shader.value());
 
 		// Check For Compilation Errors

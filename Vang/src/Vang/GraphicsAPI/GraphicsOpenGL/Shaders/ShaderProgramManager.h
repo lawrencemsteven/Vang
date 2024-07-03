@@ -18,8 +18,9 @@ namespace Vang::gfx::OpenGL {
 						std::filesystem::path fragmentShaderFile,
 						std::filesystem::path computeShaderFile, unsigned int width,
 						unsigned int height);
-		void initialize(const char* vertexShaderFile, const char* fragmentShaderFile,
-						const char* computeShaderFile, unsigned int width, unsigned int height);
+		void initialize(const std::string& vertexShaderFile, const std::string& fragmentShaderFile,
+						const std::string& computeShaderFile, unsigned int width,
+						unsigned int height);
 
 		void update();
 		void displayCamera(const Vang::Objects::Camera& camera);
