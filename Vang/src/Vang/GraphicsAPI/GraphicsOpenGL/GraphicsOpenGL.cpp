@@ -51,9 +51,9 @@ namespace Vang::gfx::OpenGL {
 										  window.getWidth(), window.getHeight());
 #else
 		m_shaderProgramManager.initialize(
-			static_cast<std::string>(VANG_SHADERS_FOLDER).append("/main.vert.glsl"),
-			static_cast<std::string>(VANG_SHADERS_FOLDER).append("/main.frag.glsl"),
-			static_cast<std::string>(VANG_SHADERS_FOLDER).append("/voxelRayMarcher.glsl"),
+			static_cast<std::filesystem::path>(VANG_SHADERS_FOLDER).append("main.vert.glsl"),
+			static_cast<std::filesystem::path>(VANG_SHADERS_FOLDER).append("main.frag.glsl"),
+			static_cast<std::filesystem::path>(VANG_SHADERS_FOLDER).append("voxelRayMarcher.glsl"),
 			window.getWidth(), window.getHeight());
 #endif
 	}
