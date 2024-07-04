@@ -72,7 +72,8 @@ namespace Vang::gfx::OpenGL {
 			VANG_ERROR("ERROR::SHADER::COMILATION_FAILED");
 			VANG_ERROR(info_log);
 		}
-		return true;
+
+		return success;
 	}
 
 }
