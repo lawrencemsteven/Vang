@@ -36,6 +36,7 @@
 #include "Vang/Utility/Events/MouseEvent.h"
 #include "Vang/Utility/FileIO/FileIO.h"
 #include "Vang/Utility/Layers/LayerStack.h"
+#include "Vang/Utility/Lights/LightManager.h"
 #include "Vang/Utility/Player/Player.h"
 #include "Vang/Utility/Structures/Structure.h"
 #include "Vang/Utility/Time/Time.h"
@@ -61,4 +62,5 @@ namespace Vang {
 	Vang::Input::InputCache& getInputCache();
 	Vang::Voxel::World& getCurrentWorld();
 	Vang::Utility::EntityManager& getEntityManager();
+	Vang::Utility::LightManager& getLightManager();
 };

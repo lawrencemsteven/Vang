@@ -30,6 +30,11 @@ set(Vang_FILES
 	"./src/Vang/Utility/Layers/LayerStack.h"
 	"./src/Vang/Utility/Layers/LayerStack.cpp"
 
+	"./src/Vang/Utility/Lights/Light.h"
+	"./src/Vang/Utility/Lights/Light.cpp"
+	"./src/Vang/Utility/Lights/LightManager.h"
+	"./src/Vang/Utility/Lights/LightManager.cpp"
+
 	"./src/Vang/Utility/Logging/Log.h"
 	"./src/Vang/Utility/Logging/Log.cpp"
 
@@ -89,6 +94,8 @@ set(Vang_FILES
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Buffers/BlockBuffer.cpp"
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Buffers/EntityBuffer.h"
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Buffers/EntityBuffer.cpp"
+	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Buffers/LightBuffer.h"
+	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Buffers/LightBuffer.cpp"
 
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/Shader.h"
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/Shader.cpp"

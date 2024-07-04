@@ -29,9 +29,8 @@ struct Camera {
 };
 
 struct Light {
-	vec4 position;
-	float range;
-	float intensity;
+	vec4 positionAndRadius;
+	vec4 colorAndIntensity;
 };
 
 struct Entity {
@@ -67,6 +66,7 @@ uniform Camera camera;
 
 uniform ivec4 selectedBlock;
 uniform uint entityCount;
+uniform uint lightCount;
 
 
 
