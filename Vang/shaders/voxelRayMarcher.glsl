@@ -201,49 +201,45 @@ struct RaymarchReturn {
 	float dist;
 };
 
-bool blockIsTransparent(uint block) {
-	return block == 1 || block == 2 || block == 15;
+bool blockIsTransparent(uvec2 block) {
+	return block.r == 1 || block.r == 2 || block.r == 15;
 }
 
-bool blockIsSolid(uint block) {
+bool blockIsSolid(uvec2 block) {
 	return !blockIsTransparent(block);
 }
 
 // marchStep()
 // Meant to represent one iteration of a raymarch
 //
-// inout vec3 origin - The origin point of the raymarch
-// inout vec3 direction - The NORMALIZED direction to march in
+// inout vec3 rayOrigin - The origin point of the raymarch
+// inout vec3 rayDirection - The NORMALIZED direction to march in
 // inout float currMarchDistance - The distance of the overall march (will be accumulated)
-// inout uvec3 currBlock - The current block that the origin is inside of
-// inout ivec3 currBlockPos - The current block position that the origin is inside of
+// inout uvec3 currBlock - The current block that the rayOrigin is inside of
+// inout ivec3 currBlockPos - The current block position that the rayOrigin is inside of
 // inout vec3 glassAbsorbtion - The multiplier for the color absorbed by the glass
 // inout vec3 fogAccumulation - Basically the opposite of glassAbsorbtion and will add to the color based on the fog.
-//
-// TODO: currBlock can be solved for with origin???
-// TODO: fogAccumulation is not correct (should fog be lit if in complete darkness?)
-//		 Proper Volumetric Fog should be considered here
-void marchStep(inout vec3 origin, inout vec3 direction, inout float currMarchDistance, inout uvec2 currBlock, inout ivec3 currBlockPos, inout vec3 glassAbsorbtion, inout vec3 fogAccumulation) {
-	vec3 signedDirection = sign(direction);
+void marchStep(inout vec3 rayOrigin, inout vec3 rayDirection, inout float currMarchDistance, inout uvec2 currBlock, inout ivec3 currBlockPos, inout vec3 glassAbsorbtion, inout vec3 fogAccumulation) {
+	vec3 signedDirection = sign(rayDirection);
 
 	ivec3 distDir = ivec3(round(signedDirection.x), 0, 0);
 	float cuboidModifier = signedDirection.x > 0 ? getCuboidPositiveX(currBlock.g) : -1 * float(getCuboidNegativeX(currBlock.g));
 	vec3 planeOrigin = vec3(float(currBlockPos.x) + 0.5f * signedDirection.x + cuboidModifier, currBlockPos.yz);
-	vec3 planeNormal = vec3(-sign(direction.x), 0.0f, 0.0f);
-	float minDist = planeIntersectionDistance(origin, direction, planeOrigin, planeNormal);
+	vec3 planeNormal = vec3(-sign(rayDirection.x), 0.0f, 0.0f);
+	float minDist = planeIntersectionDistance(rayOrigin, rayDirection, planeOrigin, planeNormal);
 
 	cuboidModifier = signedDirection.y > 0 ? getCuboidPositiveY(currBlock.g) : -1 * float(getCuboidNegativeY(currBlock.g));
 	planeOrigin = vec3(currBlockPos.x, float(currBlockPos.y) + 0.5f * signedDirection.y + cuboidModifier, currBlockPos.z);
-	planeNormal = vec3(0.0f, -sign(direction.y), 0.0f);
-	float newDist = planeIntersectionDistance(origin, direction, planeOrigin, planeNormal);
+	planeNormal = vec3(0.0f, -sign(rayDirection.y), 0.0f);
+	float newDist = planeIntersectionDistance(rayOrigin, rayDirection, planeOrigin, planeNormal);
 	if (newDist < minDist) {
 		distDir = ivec3(0, round(signedDirection.y), 0);
 		minDist = newDist;
 	}
 	cuboidModifier = signedDirection.z > 0 ? getCuboidPositiveZ(currBlock.g) : -1 * float(getCuboidNegativeZ(currBlock.g));
 	planeOrigin = vec3(currBlockPos.xy, float(currBlockPos.z) + 0.5f * signedDirection.z + cuboidModifier);
-	planeNormal = vec3(0.0f, 0.0f, -sign(direction.z));
-	newDist = planeIntersectionDistance(origin, direction, planeOrigin, planeNormal);
+	planeNormal = vec3(0.0f, 0.0f, -sign(rayDirection.z));
+	newDist = planeIntersectionDistance(rayOrigin, rayDirection, planeOrigin, planeNormal);
 	if (newDist < minDist) {
 		distDir = ivec3(0, 0, round(signedDirection.z));
 		minDist = newDist;
@@ -257,26 +253,26 @@ void marchStep(inout vec3 origin, inout vec3 direction, inout float currMarchDis
 	// Glass
 	if (currBlock.r == 15) {
 		// TODO: Look over glass values
-		glassAbsorbtion += minDist * vec3(1.0, 0.0, 0.0);
+		glassAbsorbtion += minDist * vec3(1.0, 0.1, 0.1);
 	}
 
-	origin += direction * minDist;
-	currBlockPos = getBlockCoords(origin + 0.5 * distDir);
+	rayOrigin += rayDirection * minDist;
+	currBlockPos = getBlockCoords(rayOrigin + 0.5 * distDir);
 	uvec2 previousBlock = currBlock;
 	currBlock = getBlockInfo(currBlockPos);
 	currMarchDistance += minDist;
 
 	if (currBlock.r == 15 && previousBlock.r != 15) { // Going into glass
 		const vec3 normal = -vec3(distDir);
-		direction = lightRefract(direction, normal, glassRefractionIndex);
+		rayDirection = lightRefract(rayDirection, normal, glassRefractionIndex);
 	} else if (previousBlock.r == 15 && currBlock.r != 15) { // Coming out of glass
 		const vec3 normal = -vec3(distDir);
-		direction = lightRefract(direction, normal, glassRefractionIndex);
+		rayDirection = lightRefract(rayDirection, normal, glassRefractionIndex);
 	}
 }
 
-RaymarchReturn marchToPoint(vec3 origin, vec3 pos) {
-	float maxMarchDistance = length(pos - origin);
+RaymarchReturn marchToPoint(vec3 rayOrigin, vec3 pos) {
+	float maxMarchDistance = length(pos - rayOrigin);
 	float currMarchDistance = 0.0;
 
 	while (currMarchDistance < maxMarchDistance) {
@@ -286,7 +282,7 @@ RaymarchReturn marchToPoint(vec3 origin, vec3 pos) {
 	return RaymarchReturn(true, 1, ivec3(0,0,0), 1.0);
 }
 
-RaymarchReturn marchUntilHit(vec3 origin, vec3 direction) {
+RaymarchReturn marchUntilHit(vec3 rayOrigin, vec3 rayDirection) {
 	return RaymarchReturn(true, 1, ivec3(0,0,0), 1.0);
 }
 
@@ -353,47 +349,45 @@ void main() {
 	// Positive Z forward
 	// Plane-Assisted Ray Marching
 	float totalDistance = 0.0f;
-	ivec3 currentBlockPos = getBlockCoords(rayOrigin);
-	uvec2 previousBlock = getBlockInfo(currentBlockPos);
-	uvec2 currentBlock = previousBlock;
+	ivec3 currBlockPos = getBlockCoords(rayOrigin);
+	uvec2 prevBlock = getBlockInfo(currBlockPos);
+	uvec2 currBlock = prevBlock;
 	int raymarchIterations = 0;
-	float fogAmount = 0.0f;
-	float glassAmount = 0.0f;
 	vec3 glassAbsorbtion = vec3(0.0);
 	vec3 fogAccumulation = vec3(0.0);
-	while ((currentBlock.r == 1 || currentBlock.r == 2 || currentBlock.r == 15) && raymarchIterations < 256) {		
-		marchStep(rayOrigin, rayDirection, totalDistance, currentBlock, currentBlockPos, glassAbsorbtion, fogAccumulation);
+	while (blockIsTransparent(currBlock) && raymarchIterations < 256) {		
+		marchStep(rayOrigin, rayDirection, totalDistance, currBlock, currBlockPos, glassAbsorbtion, fogAccumulation);
 		raymarchIterations += 1;
 	}
 
 
 	// Block Colors
 	// TODO: Put this into a lookup
-	if (currentBlock.r == 0) {            // Void
+	if (currBlock.r == 0) {            // Void
 		col = vec3(0.0f, 0.0f, 0.0f);
-	}else if (currentBlock.r == 3) {      // Black
+	}else if (currBlock.r == 3) {      // Black
 		col = vec3(0.1f, 0.1f, 0.1f);
-	} else if (currentBlock.r == 4) {		// Gray
+	} else if (currBlock.r == 4) {		// Gray
 		col = vec3(0.35f, 0.35f, 0.35f);
-	} else if (currentBlock.r == 5) {		// LightGray
+	} else if (currBlock.r == 5) {		// LightGray
 		col = vec3(0.7f, 0.7f, 0.7f);
-	} else if (currentBlock.r == 6) {		// White
+	} else if (currBlock.r == 6) {		// White
 		col = vec3(0.95f, 0.95f, 0.95f);
-	} else if (currentBlock.r == 7) {		// Red
+	} else if (currBlock.r == 7) {		// Red
 		col = vec3(0.8f, 0.1f, 0.1f);
-	} else if (currentBlock.r == 8) {		// Orange
+	} else if (currBlock.r == 8) {		// Orange
 		col = vec3(0.8f, 0.4f, 0.1f);
-	} else if (currentBlock.r == 9) {		// Yellow
+	} else if (currBlock.r == 9) {		// Yellow
 		col = vec3(0.8f, 0.8f, 0.1f);
-	} else if (currentBlock.r == 10) {	// Green
+	} else if (currBlock.r == 10) {	// Green
 		col = vec3(0.1f, 0.7f, 0.1f);
-	} else if (currentBlock.r == 11) {	// Blue
+	} else if (currBlock.r == 11) {	// Blue
 		col = vec3(0.1f, 0.1f, 0.8f);
-	} else if (currentBlock.r == 12) {	// Purple
+	} else if (currBlock.r == 12) {	// Purple
 		col = vec3(0.5f, 0.1f, 0.8f);
-	} else if (currentBlock.r == 13) {	// Pink
+	} else if (currBlock.r == 13) {	// Pink
 		col = vec3(0.9f, 0.5f, 0.6f);
-	} else if (currentBlock.r == 14) {	// Rainbow
+	} else if (currBlock.r == 14) {	// Rainbow
 		const float totalRainbowTime = 10.0f;
 		const float segmentTime = totalRainbowTime / 3.0f;
 		const int animationState = int(3.0f * (mod(iTime, totalRainbowTime) / totalRainbowTime));
@@ -411,7 +405,7 @@ void main() {
 	// Selected Block Outline
 	// TODO: Get to work with glass (shader marches through glass,
 	// 		 outline is selected block, glass can't be selected)
-	if (selectedBlock.a == 1 && currentBlockPos == selectedBlock.xyz) {
+	if (selectedBlock.a == 1 && currBlockPos == selectedBlock.xyz) {
 		const float vertexWidth = 0.05f;
 		const float outlineWidth = 0.02f;
 
