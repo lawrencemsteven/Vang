@@ -101,92 +101,6 @@ uvec2 getBlockInfo(vec3 pos) {
 
 
 
-//////////////////
-// Ray Marching //
-//////////////////
-float planeIntersectionDistance(vec3 rayOrigin, vec3 rayDirection, vec3 planeOrigin, vec3 planeNormal) {
-	float denom = dot(planeNormal, rayDirection);
-	if (abs(denom) > 0.0f) {
-		vec3 pointDist = planeOrigin - rayOrigin;
-		float dist = dot(pointDist, planeNormal) / denom;
-		return dist;
-	}
-	// Large enough for a miss
-	// Might never be reached???
-	return 100.0f;
-}
-
-
-
-
-//////////////
-// Entities //
-//////////////
-float distanceToNearestEntity(const vec3 rayOrigin) {
-	float minDist = 1024.0f;
-	for (int i = 0; i < entityCount; i++) {
-		minDist = min(minDist, length(entities[i].position.xyz - rayOrigin) - entities[i].radius);
-	}
-	return minDist;
-}
-
-bool entityCheck(vec3 rayOrigin, const vec3 rayDirection, float minBlockDist) {
-	while (minBlockDist > 0.0f) {
-		float dist = distanceToNearestEntity(rayOrigin);
-		minBlockDist -= dist;
-		rayOrigin += rayDirection * dist;
-		if (dist < 0.01f) {
-			return true;
-		}
-	}
-	return false;
-}
-
-
-
-
-////////////////////////////
-// Random Value Functions //
-////////////////////////////
-highp float random(highp vec2 coords) {
-   return fract(sin(dot(coords.xy, vec2(12.9898,78.233))) * 43758.5453);
-}
-
-
-
-
-/////////////////////////////
-// Reflection & Refraction //
-/////////////////////////////
-// TODO: Reflection
-
-vec3 refract(const vec3 I, const vec3 N, const float ior)
-{
-    float cosi = clamp(-1, 1, dot(I, N));
-    float etai = 1;
-	float etat = ior;
-    vec3 n = N;
-    if (cosi < 0) { 
-		cosi = -cosi; 
-	} else {
-		float temp = etai;
-		etai = etat;
-		etat = temp;
-		n = -N;
-	}
-    float eta = etai / etat;
-    float k = 1 - eta * eta * (1 - cosi * cosi);
-
-	if (k < 0) {
-		return vec3(0);
-	} else {
-		return eta * I + (eta * cosi - sqrt(k)) * n;
-	}
-}
-
-
-
-
 /////////////
 // Cuboids //
 /////////////
@@ -232,6 +146,189 @@ uint getCuboidNegativeZ(uint cuboidInfo) {
 
 
 
+/////////////////////////////
+// Reflection & Refraction //
+/////////////////////////////
+// TODO: Reflection
+
+vec3 lightRefract(const vec3 I, const vec3 N, const float ior)
+{
+    float cosi = clamp(-1, 1, dot(I, N));
+    float etai = 1;
+	float etat = ior;
+    vec3 n = N;
+    if (cosi < 0) { 
+		cosi = -cosi; 
+	} else {
+		float temp = etai;
+		etai = etat;
+		etat = temp;
+		n = -N;
+	}
+    float eta = etai / etat;
+    float k = 1 - eta * eta * (1 - cosi * cosi);
+
+	if (k < 0) {
+		return vec3(0);
+	} else {
+		return eta * I + (eta * cosi - sqrt(k)) * n;
+	}
+}
+
+
+
+
+//////////////////
+// Ray Marching //
+//////////////////
+float planeIntersectionDistance(vec3 rayOrigin, vec3 rayDirection, vec3 planeOrigin, vec3 planeNormal) {
+	float denom = dot(planeNormal, rayDirection);
+	if (abs(denom) > 0.0f) {
+		vec3 pointDist = planeOrigin - rayOrigin;
+		float dist = dot(pointDist, planeNormal) / denom;
+		return dist;
+	}
+	// Large enough for a miss
+	// Might never be reached???
+	// TODO: Think this over
+	return 100.0f;
+}
+
+struct RaymarchReturn {
+	bool hit;
+	uint blockHit;
+	ivec3 blockHitPosition;
+	float dist;
+};
+
+bool blockIsTransparent(uint block) {
+	return block == 1 || block == 2 || block == 15;
+}
+
+bool blockIsSolid(uint block) {
+	return !blockIsTransparent(block);
+}
+
+// marchStep()
+// Meant to represent one iteration of a raymarch
+//
+// inout vec3 origin - The origin point of the raymarch
+// inout vec3 direction - The NORMALIZED direction to march in
+// inout float currMarchDistance - The distance of the overall march (will be accumulated)
+// inout uvec3 currBlock - The current block that the origin is inside of
+// inout ivec3 currBlockPos - The current block position that the origin is inside of
+// inout vec3 glassAbsorbtion - The multiplier for the color absorbed by the glass
+// inout vec3 fogAccumulation - Basically the opposite of glassAbsorbtion and will add to the color based on the fog.
+//
+// TODO: currBlock can be solved for with origin???
+// TODO: fogAccumulation is not correct (should fog be lit if in complete darkness?)
+//		 Proper Volumetric Fog should be considered here
+void marchStep(inout vec3 origin, inout vec3 direction, inout float currMarchDistance, inout uvec2 currBlock, inout ivec3 currBlockPos, inout vec3 glassAbsorbtion, inout vec3 fogAccumulation) {
+	vec3 signedDirection = sign(direction);
+
+	ivec3 distDir = ivec3(round(signedDirection.x), 0, 0);
+	float cuboidModifier = signedDirection.x > 0 ? getCuboidPositiveX(currBlock.g) : -1 * float(getCuboidNegativeX(currBlock.g));
+	vec3 planeOrigin = vec3(float(currBlockPos.x) + 0.5f * signedDirection.x + cuboidModifier, currBlockPos.yz);
+	vec3 planeNormal = vec3(-sign(direction.x), 0.0f, 0.0f);
+	float minDist = planeIntersectionDistance(origin, direction, planeOrigin, planeNormal);
+
+	cuboidModifier = signedDirection.y > 0 ? getCuboidPositiveY(currBlock.g) : -1 * float(getCuboidNegativeY(currBlock.g));
+	planeOrigin = vec3(currBlockPos.x, float(currBlockPos.y) + 0.5f * signedDirection.y + cuboidModifier, currBlockPos.z);
+	planeNormal = vec3(0.0f, -sign(direction.y), 0.0f);
+	float newDist = planeIntersectionDistance(origin, direction, planeOrigin, planeNormal);
+	if (newDist < minDist) {
+		distDir = ivec3(0, round(signedDirection.y), 0);
+		minDist = newDist;
+	}
+	cuboidModifier = signedDirection.z > 0 ? getCuboidPositiveZ(currBlock.g) : -1 * float(getCuboidNegativeZ(currBlock.g));
+	planeOrigin = vec3(currBlockPos.xy, float(currBlockPos.z) + 0.5f * signedDirection.z + cuboidModifier);
+	planeNormal = vec3(0.0f, 0.0f, -sign(direction.z));
+	newDist = planeIntersectionDistance(origin, direction, planeOrigin, planeNormal);
+	if (newDist < minDist) {
+		distDir = ivec3(0, 0, round(signedDirection.z));
+		minDist = newDist;
+	}
+
+	// Fog
+	if (currBlock.r == 2) {
+		fogAccumulation += minDist * vec3(0.0625, 0.0625, 0.0625);
+	}
+
+	// Glass
+	if (currBlock.r == 15) {
+		// TODO: Look over glass values
+		glassAbsorbtion += minDist * vec3(1.0, 0.0, 0.0);
+	}
+
+	origin += direction * minDist;
+	currBlockPos = getBlockCoords(origin + 0.5 * distDir);
+	uvec2 previousBlock = currBlock;
+	currBlock = getBlockInfo(currBlockPos);
+	currMarchDistance += minDist;
+
+	if (currBlock.r == 15 && previousBlock.r != 15) { // Going into glass
+		const vec3 normal = -vec3(distDir);
+		direction = lightRefract(direction, normal, glassRefractionIndex);
+	} else if (previousBlock.r == 15 && currBlock.r != 15) { // Coming out of glass
+		const vec3 normal = -vec3(distDir);
+		direction = lightRefract(direction, normal, glassRefractionIndex);
+	}
+}
+
+RaymarchReturn marchToPoint(vec3 origin, vec3 pos) {
+	float maxMarchDistance = length(pos - origin);
+	float currMarchDistance = 0.0;
+
+	while (currMarchDistance < maxMarchDistance) {
+
+	}
+
+	return RaymarchReturn(true, 1, ivec3(0,0,0), 1.0);
+}
+
+RaymarchReturn marchUntilHit(vec3 origin, vec3 direction) {
+	return RaymarchReturn(true, 1, ivec3(0,0,0), 1.0);
+}
+
+
+
+
+//////////////
+// Entities //
+//////////////
+float distanceToNearestEntity(const vec3 rayOrigin) {
+	float minDist = 1024.0f;
+	for (int i = 0; i < entityCount; i++) {
+		minDist = min(minDist, length(entities[i].position.xyz - rayOrigin) - entities[i].radius);
+	}
+	return minDist;
+}
+
+bool entityCheck(vec3 rayOrigin, const vec3 rayDirection, float minBlockDist) {
+	while (minBlockDist > 0.0f) {
+		float dist = distanceToNearestEntity(rayOrigin);
+		minBlockDist -= dist;
+		rayOrigin += rayDirection * dist;
+		if (dist < 0.01f) {
+			return true;
+		}
+	}
+	return false;
+}
+
+
+
+
+////////////////////////////
+// Random Value Functions //
+////////////////////////////
+highp float random(highp vec2 coords) {
+   return fract(sin(dot(coords.xy, vec2(12.9898,78.233))) * 43758.5453);
+}
+
+
+
+
 ///////////////////
 // Main Function //
 ///////////////////
@@ -259,63 +356,14 @@ void main() {
 	ivec3 currentBlockPos = getBlockCoords(rayOrigin);
 	uvec2 previousBlock = getBlockInfo(currentBlockPos);
 	uvec2 currentBlock = previousBlock;
-	int blockSteps = 0;
+	int raymarchIterations = 0;
 	float fogAmount = 0.0f;
 	float glassAmount = 0.0f;
-	bool entityHit = false;
-	while ((currentBlock.r == 1 || currentBlock.r == 2 || currentBlock.r == 15) && blockSteps < 1048 && !entityHit) {		
-		vec3 signedDirection = sign(rayDirection);
-
-		ivec3 distDir = ivec3(round(signedDirection.x), 0, 0);
-		float cuboidModifier = signedDirection.x > 0 ? getCuboidPositiveX(currentBlock.g) : -1 * float(getCuboidNegativeX(currentBlock.g));
-		vec3 planeOrigin = vec3(float(currentBlockPos.x) + 0.5f * signedDirection.x + cuboidModifier, currentBlockPos.yz);
-		vec3 planeNormal = vec3(-sign(rayDirection.x), 0.0f, 0.0f);
-		float minDist = planeIntersectionDistance(rayOrigin, rayDirection, planeOrigin, planeNormal);
-
-		cuboidModifier = signedDirection.y > 0 ? getCuboidPositiveY(currentBlock.g) : -1 * float(getCuboidNegativeY(currentBlock.g));
-		planeOrigin = vec3(currentBlockPos.x, float(currentBlockPos.y) + 0.5f * signedDirection.y + cuboidModifier, currentBlockPos.z);
-		planeNormal = vec3(0.0f, -sign(rayDirection.y), 0.0f);
-		float newDist = planeIntersectionDistance(rayOrigin, rayDirection, planeOrigin, planeNormal);
-		if (newDist < minDist) {
-			distDir = ivec3(0, round(signedDirection.y), 0);
-			minDist = newDist;
-		}
-		cuboidModifier = signedDirection.z > 0 ? getCuboidPositiveZ(currentBlock.g) : -1 * float(getCuboidNegativeZ(currentBlock.g));
-		planeOrigin = vec3(currentBlockPos.xy, float(currentBlockPos.z) + 0.5f * signedDirection.z + cuboidModifier);
-		planeNormal = vec3(0.0f, 0.0f, -sign(rayDirection.z));
-		newDist = planeIntersectionDistance(rayOrigin, rayDirection, planeOrigin, planeNormal);
-		if (newDist < minDist) {
-			distDir = ivec3(0, 0, round(signedDirection.z));
-			minDist = newDist;
-		}
-
-		// Fog
-		if (currentBlock.r == 2) {
-			fogAmount += minDist;
-		}
-
-		// Glass
-		if (currentBlock.r == 15) {
-			glassAmount += minDist;
-		}
-
-		entityHit = entityCheck(rayOrigin, rayDirection, minDist);
-		if (!entityHit) {
-			rayOrigin += rayDirection * minDist;
-			currentBlockPos = getBlockCoords(rayOrigin + 0.5 * distDir);
-			previousBlock = currentBlock;
-			currentBlock = getBlockInfo(currentBlockPos);
-			totalDistance += minDist;
-			blockSteps += 1;
-
-			if (currentBlock.r == 15 && previousBlock.r != 15) { // Going into glass
-				const vec3 normal = -vec3(distDir);
-				rayDirection = refract(rayDirection, normal, glassRefractionIndex);
-			} else if (previousBlock.r == 15 && currentBlock.r != 15) { // Coming out of glass
-				const vec3 normal = -vec3(distDir);
-				rayDirection = refract(rayDirection, normal, glassRefractionIndex);
-			}
-		}
+	vec3 glassAbsorbtion = vec3(0.0);
+	vec3 fogAccumulation = vec3(0.0);
+	while ((currentBlock.r == 1 || currentBlock.r == 2 || currentBlock.r == 15) && raymarchIterations < 256) {		
+		marchStep(rayOrigin, rayDirection, totalDistance, currentBlock, currentBlockPos, glassAbsorbtion, fogAccumulation);
+		raymarchIterations += 1;
 	}
 
 
@@ -358,10 +406,7 @@ void main() {
 		} else if (animationState == 2) {
 			col = vec3(animationAmount, 0.0f, 1.0f - animationAmount);
 		}
-	} else if (entityHit) {				// Entity
-		col = vec3(1.0f, 0.0f, 1.0f);
 	}
-
 
 	// Selected Block Outline
 	// TODO: Get to work with glass (shader marches through glass,
@@ -391,15 +436,11 @@ void main() {
 
 
 	// Calculate Fog Amount
-	col = mix(col, vec3(0.8, 0.8, 0.8), clamp(fogAmount / 8.0f, 0.0f, 1.0f));
-	//col = mix(col, vec3(0.8, 0.0, 0.0), fogAmount / 16.0f);
+	col = clamp(col + fogAccumulation, 0.0, 1.0);
 
 
 	// Calculate Glass Amount
-	if (glassAmount > 0.0f) {
-		glassAmount += 5.0f;
-	}
-	col = mix(col, vec3(0.9, 0.0, 0.0), clamp(glassAmount / 20.0f, 0.0f, 1.0f));
+	col *= exp(-glassAbsorbtion);
 	
 
 	// Headlight
