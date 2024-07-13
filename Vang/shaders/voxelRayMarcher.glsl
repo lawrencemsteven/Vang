@@ -379,15 +379,15 @@ void main() {
 		col = vec3(0.8f, 0.4f, 0.1f);
 	} else if (currBlock.r == 9) {		// Yellow
 		col = vec3(0.8f, 0.8f, 0.1f);
-	} else if (currBlock.r == 10) {	// Green
+	} else if (currBlock.r == 10) {		// Green
 		col = vec3(0.1f, 0.7f, 0.1f);
-	} else if (currBlock.r == 11) {	// Blue
+	} else if (currBlock.r == 11) {		// Blue
 		col = vec3(0.1f, 0.1f, 0.8f);
-	} else if (currBlock.r == 12) {	// Purple
+	} else if (currBlock.r == 12) {		// Purple
 		col = vec3(0.5f, 0.1f, 0.8f);
-	} else if (currBlock.r == 13) {	// Pink
+	} else if (currBlock.r == 13) {		// Pink
 		col = vec3(0.9f, 0.5f, 0.6f);
-	} else if (currBlock.r == 14) {	// Rainbow
+	} else if (currBlock.r == 14) {		// Rainbow
 		const float totalRainbowTime = 10.0f;
 		const float segmentTime = totalRainbowTime / 3.0f;
 		const int animationState = int(3.0f * (mod(iTime, totalRainbowTime) / totalRainbowTime));
