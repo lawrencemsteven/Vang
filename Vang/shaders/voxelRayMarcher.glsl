@@ -28,14 +28,14 @@ struct Camera {
 	float fov;
 };
 
-struct Light {
-	vec4 positionAndRadius;
-	vec4 colorAndIntensity;
-};
-
 struct Entity {
 	vec4 position;
 	float radius;
+};
+
+struct Light {
+	vec4 positionAndRadius;
+	vec4 colorAndIntensity;
 };
 
 
@@ -44,12 +44,12 @@ struct Entity {
 ///////////
 // SSBOs //
 ///////////
-layout(std430) readonly buffer Lights {
-	Light lights[];
+layout(std430, binding = 0) readonly buffer Entities {
+	Entity entities[];
 };
 
-layout(std430) readonly buffer Entities {
-	Entity entities[];
+layout(std430, binding = 1) readonly buffer SSBO_LIGHTS {
+	Light lights[2];
 };
 
 
@@ -66,7 +66,7 @@ uniform Camera camera;
 
 uniform ivec4 selectedBlock;
 uniform uint entityCount;
-uniform uint lightCount;
+uniform uint LIGHT_COUNT;
 
 
 
@@ -271,6 +271,15 @@ void marchStep(inout vec3 rayOrigin, inout vec3 rayDirection, inout float currMa
 	}
 }
 
+vec3 marchLights(vec3 rayOrigin) {
+	for (int i = 0; i < LIGHT_COUNT; i++) {
+		if (distance(rayOrigin, lights[i].positionAndRadius.xyz) <= lights[i].positionAndRadius.w) {
+			return mix(lights[i].colorAndIntensity.xyz, vec3(0.1), distance(rayOrigin, lights[i].positionAndRadius.xyz) / lights[i].positionAndRadius.w);
+		}
+	}
+	return vec3(0.1);
+}
+
 RaymarchReturn marchToPoint(vec3 rayOrigin, vec3 pos) {
 	float maxMarchDistance = length(pos - rayOrigin);
 	float currMarchDistance = 0.0;
@@ -355,10 +364,16 @@ void main() {
 	int raymarchIterations = 0;
 	vec3 glassAbsorbtion = vec3(0.0);
 	vec3 fogAccumulation = vec3(0.0);
+	vec3 lightModifier = vec3(0.1);
+
+
+
 	while (blockIsTransparent(currBlock) && raymarchIterations < 256) {		
 		marchStep(rayOrigin, rayDirection, totalDistance, currBlock, currBlockPos, glassAbsorbtion, fogAccumulation);
 		raymarchIterations += 1;
 	}
+	lightModifier = marchLights(rayOrigin);
+
 
 
 	// Block Colors
@@ -438,12 +453,13 @@ void main() {
 	
 
 	// Headlight
-	col = mix(col, col* 0.4, clamp(totalDistance / 20.0f, 0.0f, 1.0f));
+	// col = mix(col, col* 0.4, clamp(totalDistance / 20.0f, 0.0f, 1.0f));
 
 
 	// Fix Color Banding
 	col += mix(-NOISE_GRANULARITY, NOISE_GRANULARITY, random(uv));
 
+	col *= lightModifier;
 
 	// Return value
 	imageStore(screen, pixel_coords, vec4(col, 1.0f));

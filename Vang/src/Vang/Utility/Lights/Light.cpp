@@ -28,18 +28,22 @@ namespace Vang::Utility {
 	}
 
 	void Light::setPosition(glm::vec3 position) {
+		setDirty(true);
 		m_position = std::move(position);
 	}
 
 	void Light::setColor(glm::vec3 color) {
+		setDirty(true);
 		m_color = std::move(color);
 	}
 
 	void Light::setRadius(const float radius) {
+		setDirty(true);
 		m_radius = radius;
 	}
 
 	void Light::setIntensity(const float intensity) {
+		setDirty(true);
 		m_intensity = std::move(intensity);
 	}
 

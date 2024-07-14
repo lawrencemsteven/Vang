@@ -45,22 +45,23 @@
 #include "Vang/Window/Window.h"
 
 namespace Vang {
-	void initialize();
-	bool getRunning();
-	void update();
-	void close();
+	extern void initialize();
+	extern bool getRunning();
+	extern void update();
+	extern void close();
 
-	const std::string& getApplicationName();
-	Vang::Windowing::Window& getWindow();
-	Vang::gfx::GraphicsAPI& getGraphicsAPI();
-	Vang::Objects::Player& getPlayer();
-	Vang::Blueprints::BlueprintContainer<Vang::Blueprints::BlockBlueprint>& getBlockManager();
-	Vang::Blueprints::BlueprintContainer<Vang::Blueprints::ItemBlueprint>& getItemManager();
-	Vang::Modding::ModManager& getModManager();
-	Vang::Utility::Layers::LayerStack& getLayerStack();
-	Vang::Utility::Events::EventHandler& getEventHandler();
-	Vang::Input::InputCache& getInputCache();
-	Vang::Voxel::World& getCurrentWorld();
-	Vang::Utility::EntityManager& getEntityManager();
-	Vang::Utility::LightManager& getLightManager();
+	extern const std::string& getApplicationName();
+	extern Vang::Windowing::Window& getWindow();
+	extern Vang::gfx::GraphicsAPI& getGraphicsAPI();
+	extern Vang::Objects::Player& getPlayer();
+	extern Vang::Blueprints::BlueprintContainer<Vang::Blueprints::BlockBlueprint>&
+	getBlockManager();
+	extern Vang::Blueprints::BlueprintContainer<Vang::Blueprints::ItemBlueprint>& getItemManager();
+	extern Vang::Modding::ModManager& getModManager();
+	extern Vang::Utility::Layers::LayerStack& getLayerStack();
+	extern Vang::Utility::Events::EventHandler& getEventHandler();
+	extern Vang::Input::InputCache& getInputCache();
+	extern Vang::Voxel::World& getCurrentWorld();
+	extern Vang::Utility::EntityManager& getEntityManager();
+	extern Vang::Utility::LightManager& getLightManager();
 };

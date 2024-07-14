@@ -20,10 +20,11 @@ namespace Vang::gfx::OpenGL {
 	LightBuffer::LightBuffer(ShaderProgram& shaderProgram) {
 		// TODO: Currently, only 1 Light will work at a time. The data is not being correctly sent
 		// to the GPU.
-		shaderProgram.setUniform("LightCount", 0u);
+		shaderProgram.setUniform("LIGHT_COUNT", 0u);
 
-		m_bufferLocation =
-			glGetProgramResourceIndex(shaderProgram.getID(), GL_SHADER_STORAGE_BLOCK, "Lights");
+		m_bufferLocation = glGetProgramResourceIndex(shaderProgram.getID(), GL_SHADER_STORAGE_BLOCK,
+													 "SSBO_LIGHTS");
+		std::cout << "Buffer Location: " << m_bufferLocation << std::endl;
 		glGenBuffers(1, &m_buffer);
 		glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_buffer);
 		glBufferData(GL_SHADER_STORAGE_BUFFER, MAX_LIGHTS * sizeof(GPULight), NULL,
@@ -34,28 +35,25 @@ namespace Vang::gfx::OpenGL {
 	LightBuffer::~LightBuffer() {}
 
 	void LightBuffer::update(ShaderProgram& shaderProgram) {
-		auto LightManager = Vang::getLightManager();
-		auto Lights		  = LightManager.getLights();
+		auto& lightManager = Vang::getLightManager();
+		const auto lights  = lightManager.getLights();
 
-		// TODO: Optimize setting all Lights at once
-		// If LightManager is dirty then set all Lights
-		if (LightManager.getDirty()) {
-			shaderProgram.setUniform("LightCount", static_cast<uint32_t>(Lights.size()));
-			for (uint32_t i = 0; i < Lights.size(); i++) {
-				updateLight(Lights[i], i, m_buffer);
-				Lights[i].setDirty(false);
+		// TODO: Grouping of lights will allow for better dirty testing (Also maybe better storage)
+		// TODO: Light manager should be a linked list? Somehow a missing light needs to be filled
+		// in or skipped.
+
+		// If LightManager is dirty then search for all dirty lights and set
+		if (lightManager.getDirty()) {
+			std::cout << "Light Count: " << lights.size() << std::endl;
+			shaderProgram.setUniform("LIGHT_COUNT", static_cast<uint32_t>(lights.size()));
+
+			for (uint32_t i = 0; i < lights.size(); i++) {
+				updateLight(lights[i], i, m_buffer);
+				lightManager.cleanLight(i);
 			}
+
+			lightManager.setDirty(false);
 			return;
-		}
-
-		// Sets dirty Lights on the GPU
-		for (uint32_t i = 0; i < Lights.size(); i++) {
-			if (Lights[i].getDirty()) {
-				if (Lights[i].getDirty()) {
-					updateLight(Lights[i], i, m_buffer);
-					Lights[i].setDirty(false);
-				}
-			}
 		}
 	}
 }

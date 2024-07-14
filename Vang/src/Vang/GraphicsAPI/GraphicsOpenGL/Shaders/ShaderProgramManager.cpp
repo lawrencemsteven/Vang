@@ -80,6 +80,7 @@ namespace Vang::gfx::OpenGL {
 
 		m_blockBuffer.update();
 		m_entityBuffer.update(m_computeShaderProgram);
+		m_lightBuffer.update(m_computeShaderProgram);
 
 		m_rasterShaderProgram.use();
 		m_vertexData.update();
@@ -157,26 +158,27 @@ namespace Vang::gfx::OpenGL {
 
 
 
-		// Lights
-		struct Light {
-			glm::vec4 position;
-			float range;
-			float intensity;
-		};
+		// OLD Lights
+		// struct Light {
+		// 	glm::vec4 position;
+		// 	float range;
+		// 	float intensity;
+		// };
 
-		std::vector<Light> lights{};
-		lights.push_back(Light{glm::vec4{5.0f, 6.0f, 7.0f, 1.0f}, 15.0f, 1.0f});
+		// std::vector<Light> lights{};
+		// lights.push_back(Light{glm::vec4{5.0f, 6.0f, 7.0f, 1.0f}, 15.0f, 1.0f});
 
-		GLint lightsLocation;
-		GLuint lightsBuffer;
-		lightsLocation = glGetProgramResourceIndex(m_computeShaderProgram.getID(),
-												   GL_SHADER_STORAGE_BLOCK, "Lights");
-		glGenBuffers(1, &lightsBuffer);
-		glBindBuffer(GL_SHADER_STORAGE_BUFFER, lightsBuffer);
-		glBufferData(GL_SHADER_STORAGE_BUFFER, lights.size() * sizeof(Light), lights.data(),
-					 GL_DYNAMIC_DRAW);
-		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, lightsLocation, lightsBuffer);
+		// GLint lightsLocation;
+		// GLuint lightsBuffer;
+		// lightsLocation = glGetProgramResourceIndex(m_computeShaderProgram.getID(),
+		// 										   GL_SHADER_STORAGE_BLOCK, "Lights");
+		// glGenBuffers(1, &lightsBuffer);
+		// glBindBuffer(GL_SHADER_STORAGE_BUFFER, lightsBuffer);
+		// glBufferData(GL_SHADER_STORAGE_BUFFER, lights.size() * sizeof(Light), lights.data(),
+		// 			 GL_DYNAMIC_DRAW);
+		// glBindBufferBase(GL_SHADER_STORAGE_BUFFER, lightsLocation, lightsBuffer);
 
 		m_entityBuffer = EntityBuffer{m_computeShaderProgram};
+		m_lightBuffer  = LightBuffer{m_computeShaderProgram};
 	}
 }

@@ -26,7 +26,7 @@ namespace Vang::Utility {
 		glm::vec3 m_color{};
 		float m_radius{};
 		float m_intensity{};
-		bool m_dirty{false};
+		bool m_dirty{true};
 	};
 
 }

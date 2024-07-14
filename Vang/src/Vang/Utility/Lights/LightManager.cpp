@@ -2,11 +2,6 @@
 
 namespace Vang::Utility {
 
-	std::vector<Light>& Vang::Utility::LightManager::getLights() {
-		m_dirty = true;
-		return m_lights;
-	}
-
 	const std::vector<Light>& Vang::Utility::LightManager::getLights() const {
 		return m_lights;
 	}
@@ -38,5 +33,9 @@ namespace Vang::Utility {
 
 	void LightManager::setDirty(bool dirty) {
 		m_dirty = dirty;
+	}
+
+	void LightManager::cleanLight(const std::size_t lightIdx) {
+		m_lights[lightIdx].setDirty(false);
 	}
 }
