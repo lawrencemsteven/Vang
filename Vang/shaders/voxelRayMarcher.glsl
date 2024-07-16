@@ -297,10 +297,6 @@ vec3 marchLights(vec3 surfaceColor, vec3 rayOrigin, vec3 rayDirection, vec3 surf
 		vec3 diffuse = lights[i].colorAndIntensity.xyz * diff * surfaceColor;
 
 		// Specular
-		// Phong
-			//vec3 reflectDir = reflect(-lightDir, surfaceNormal);
-			//float spec = pow(max(dot(-rayDirection, reflectDir), 0.0), /*MATERIAL_SHININESS*/ 128);
-		// Blinn-Phong
 		vec3 halfwayDir = normalize(lightDir + -rayDirection);
 		float spec = pow(max(dot(surfaceNormal, halfwayDir), 0.0), /*MATERIAL_SHININESS*/ 128);
 		
