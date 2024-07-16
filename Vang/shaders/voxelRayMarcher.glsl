@@ -219,7 +219,7 @@ bool blockIsSolid(uvec2 block) {
 // inout ivec3 currBlockPos - The current block position that the rayOrigin is inside of
 // inout vec3 glassAbsorbtion - The multiplier for the color absorbed by the glass
 // inout vec3 fogAccumulation - Basically the opposite of glassAbsorbtion and will add to the color based on the fog.
-void marchStep(inout vec3 rayOrigin, inout vec3 rayDirection, inout float currMarchDistance, inout uvec2 currBlock, inout ivec3 currBlockPos, inout vec3 glassAbsorbtion, inout vec3 fogAccumulation) {
+void marchStep(inout vec3 rayOrigin, inout vec3 rayDirection, inout float currMarchDistance, inout uvec2 currBlock, inout ivec3 currBlockPos, inout vec3 glassAbsorbtion, inout vec3 fogAccumulation, inout vec3 surfaceNormal) {
 	vec3 signedDirection = sign(rayDirection);
 
 	ivec3 distDir = ivec3(round(signedDirection.x), 0, 0);
@@ -262,22 +262,12 @@ void marchStep(inout vec3 rayOrigin, inout vec3 rayDirection, inout float currMa
 	currBlock = getBlockInfo(currBlockPos);
 	currMarchDistance += minDist;
 
+	surfaceNormal = -vec3(distDir);
 	if (currBlock.r == 15 && previousBlock.r != 15) { // Going into glass
-		const vec3 normal = -vec3(distDir);
-		rayDirection = lightRefract(rayDirection, normal, glassRefractionIndex);
+		rayDirection = lightRefract(rayDirection, surfaceNormal, glassRefractionIndex);
 	} else if (previousBlock.r == 15 && currBlock.r != 15) { // Coming out of glass
-		const vec3 normal = -vec3(distDir);
-		rayDirection = lightRefract(rayDirection, normal, glassRefractionIndex);
+		rayDirection = lightRefract(rayDirection, surfaceNormal, glassRefractionIndex);
 	}
-}
-
-vec3 marchLights(vec3 rayOrigin) {
-	for (int i = 0; i < LIGHT_COUNT; i++) {
-		if (distance(rayOrigin, lights[i].positionAndRadius.xyz) <= lights[i].positionAndRadius.w) {
-			return mix(lights[i].colorAndIntensity.xyz, vec3(0.1), distance(rayOrigin, lights[i].positionAndRadius.xyz) / lights[i].positionAndRadius.w);
-		}
-	}
-	return vec3(0.1);
 }
 
 RaymarchReturn marchToPoint(vec3 rayOrigin, vec3 pos) {
@@ -293,6 +283,39 @@ RaymarchReturn marchToPoint(vec3 rayOrigin, vec3 pos) {
 
 RaymarchReturn marchUntilHit(vec3 rayOrigin, vec3 rayDirection) {
 	return RaymarchReturn(true, 1, ivec3(0,0,0), 1.0);
+}
+
+vec3 marchLights(vec3 surfaceColor, vec3 rayOrigin, vec3 rayDirection, vec3 surfaceNormal) {
+	// Ambient
+	vec3 ambient = 0.05 * surfaceColor;
+	vec3 outColor = vec3(0.0);
+
+	for (int i = 0; i < LIGHT_COUNT; i++) {
+		// Diffuse
+		vec3 lightDir = normalize(lights[i].positionAndRadius.xyz - rayOrigin);
+		float diff = max(dot(surfaceNormal, lightDir), 0.0);
+		vec3 diffuse = lights[i].colorAndIntensity.xyz * diff * surfaceColor;
+
+		// Specular
+		// Phong
+			//vec3 reflectDir = reflect(-lightDir, surfaceNormal);
+			//float spec = pow(max(dot(-rayDirection, reflectDir), 0.0), /*MATERIAL_SHININESS*/ 128);
+		// Blinn-Phong
+		vec3 halfwayDir = normalize(lightDir + -rayDirection);
+		float spec = pow(max(dot(surfaceNormal, halfwayDir), 0.0), /*MATERIAL_SHININESS*/ 128);
+		
+		// TODO: Should specular include surface color???
+		vec3 specular = lights[i].colorAndIntensity.xyz * spec * surfaceColor;
+
+		// Attenuation
+		float dist = length(lights[i].positionAndRadius.xyz - rayOrigin);
+		float attenuation = clamp(1.0 - dist / lights[i].positionAndRadius.w, 0.0, 1.0);
+
+		// Apply Attenuation
+		outColor += (ambient + diffuse + specular) * attenuation;
+	}
+
+	return outColor;
 }
 
 
@@ -365,14 +388,14 @@ void main() {
 	vec3 glassAbsorbtion = vec3(0.0);
 	vec3 fogAccumulation = vec3(0.0);
 	vec3 lightModifier = vec3(0.1);
+	vec3 surfaceNormal = vec3(0.0);
 
 
 
 	while (blockIsTransparent(currBlock) && raymarchIterations < 256) {		
-		marchStep(rayOrigin, rayDirection, totalDistance, currBlock, currBlockPos, glassAbsorbtion, fogAccumulation);
+		marchStep(rayOrigin, rayDirection, totalDistance, currBlock, currBlockPos, glassAbsorbtion, fogAccumulation, surfaceNormal);
 		raymarchIterations += 1;
 	}
-	lightModifier = marchLights(rayOrigin);
 
 
 
@@ -420,6 +443,7 @@ void main() {
 	// Selected Block Outline
 	// TODO: Get to work with glass (shader marches through glass,
 	// 		 outline is selected block, glass can't be selected)
+	// TODO: If pixel is black, just return
 	if (selectedBlock.a == 1 && currBlockPos == selectedBlock.xyz) {
 		const float vertexWidth = 0.05f;
 		const float outlineWidth = 0.02f;
@@ -450,16 +474,14 @@ void main() {
 
 	// Calculate Glass Amount
 	col *= exp(-glassAbsorbtion);
-	
 
-	// Headlight
-	// col = mix(col, col* 0.4, clamp(totalDistance / 20.0f, 0.0f, 1.0f));
+	
+	// Lights
+	col = marchLights(col, rayOrigin, rayDirection, surfaceNormal);
 
 
 	// Fix Color Banding
 	col += mix(-NOISE_GRANULARITY, NOISE_GRANULARITY, random(uv));
-
-	col *= lightModifier;
 
 	// Return value
 	imageStore(screen, pixel_coords, vec4(col, 1.0f));
