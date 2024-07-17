@@ -11,6 +11,7 @@ layout(rg32ui, binding = 1) uniform readonly uimage3D blocks;
 // Constants //
 ///////////////
 const highp float NOISE_GRANULARITY = 0.5/255.0;
+const float MAX_RAYMARCH_STEPS = 256;
 const float airRefractionIndex = 1.0;
 const float glassRefractionIndex = 1.52;
 
@@ -196,9 +197,13 @@ float planeIntersectionDistance(vec3 rayOrigin, vec3 rayDirection, vec3 planeOri
 
 struct RaymarchReturn {
 	bool hit;
-	uint blockHit;
+	vec3 hitPosition;
+	uvec2 blockHit;
 	ivec3 blockHitPosition;
 	float dist;
+	vec3 glassAbsorbtion;
+	vec3 fogAccumulation;
+	vec3 surfaceNormal;
 };
 
 bool blockIsTransparent(uvec2 block) {
@@ -219,7 +224,7 @@ bool blockIsSolid(uvec2 block) {
 // inout ivec3 currBlockPos - The current block position that the rayOrigin is inside of
 // inout vec3 glassAbsorbtion - The multiplier for the color absorbed by the glass
 // inout vec3 fogAccumulation - Basically the opposite of glassAbsorbtion and will add to the color based on the fog.
-void marchStep(inout vec3 rayOrigin, inout vec3 rayDirection, inout float currMarchDistance, inout uvec2 currBlock, inout ivec3 currBlockPos, inout vec3 glassAbsorbtion, inout vec3 fogAccumulation, inout vec3 surfaceNormal) {
+void marchStep(inout vec3 rayOrigin, inout vec3 rayDirection, inout float currMarchDistance, inout uvec2 currBlock, inout ivec3 currBlockPos, inout vec3 glassAbsorbtion, inout vec3 fogAccumulation, inout vec3 surfaceNormal, bool refractions) {
 	vec3 signedDirection = sign(rayDirection);
 
 	ivec3 distDir = ivec3(round(signedDirection.x), 0, 0);
@@ -253,7 +258,7 @@ void marchStep(inout vec3 rayOrigin, inout vec3 rayDirection, inout float currMa
 	// Glass
 	if (currBlock.r == 15) {
 		// TODO: Look over glass values
-		glassAbsorbtion += minDist * vec3(1.0, 0.1, 0.1);
+		glassAbsorbtion += minDist * vec3(1.0, 1.0, 0.1);
 	}
 
 	rayOrigin += rayDirection * minDist;
@@ -263,26 +268,50 @@ void marchStep(inout vec3 rayOrigin, inout vec3 rayDirection, inout float currMa
 	currMarchDistance += minDist;
 
 	surfaceNormal = -vec3(distDir);
-	if (currBlock.r == 15 && previousBlock.r != 15) { // Going into glass
-		rayDirection = lightRefract(rayDirection, surfaceNormal, glassRefractionIndex);
-	} else if (previousBlock.r == 15 && currBlock.r != 15) { // Coming out of glass
-		rayDirection = lightRefract(rayDirection, surfaceNormal, glassRefractionIndex);
+	if (refractions) {
+		if (currBlock.r == 15 && previousBlock.r != 15) { // Going into glass
+			rayDirection = lightRefract(rayDirection, surfaceNormal, glassRefractionIndex);
+		} else if (previousBlock.r == 15 && currBlock.r != 15) { // Coming out of glass
+			rayDirection = lightRefract(rayDirection, surfaceNormal, glassRefractionIndex);
+		}
 	}
 }
 
 RaymarchReturn marchToPoint(vec3 rayOrigin, vec3 pos) {
 	float maxMarchDistance = length(pos - rayOrigin);
-	float currMarchDistance = 0.0;
 
-	while (currMarchDistance < maxMarchDistance) {
+	vec3 rayDirection = normalize(pos - rayOrigin);
+	float totalDistance = 0.0;
+	ivec3 currBlockPos = getBlockCoords(rayOrigin);
+	uvec2 currBlock = getBlockInfo(currBlockPos);
+	vec3 glassAbsorbtion = vec3(0.0);
+	vec3 fogAccumulation = vec3(0.0);
+	vec3 surfaceNormal = vec3(0.0);
 
+	int raymarchIterations = 0;
+	while (totalDistance < maxMarchDistance && blockIsTransparent(currBlock) && raymarchIterations < MAX_RAYMARCH_STEPS) {
+		marchStep(rayOrigin, rayDirection, totalDistance, currBlock, currBlockPos, glassAbsorbtion, fogAccumulation, surfaceNormal, false);
+		raymarchIterations += 1;
 	}
 
-	return RaymarchReturn(true, 1, ivec3(0,0,0), 1.0);
+	return RaymarchReturn(totalDistance < maxMarchDistance && blockIsSolid(currBlock), rayOrigin, currBlock, currBlockPos, totalDistance, glassAbsorbtion, fogAccumulation, surfaceNormal);
 }
 
 RaymarchReturn marchUntilHit(vec3 rayOrigin, vec3 rayDirection) {
-	return RaymarchReturn(true, 1, ivec3(0,0,0), 1.0);
+	float totalDistance = 0.0;
+	ivec3 currBlockPos = getBlockCoords(rayOrigin);
+	uvec2 currBlock = getBlockInfo(currBlockPos);
+	vec3 glassAbsorbtion = vec3(0.0);
+	vec3 fogAccumulation = vec3(0.0);
+	vec3 surfaceNormal = vec3(0.0);
+
+	int raymarchIterations = 0;
+	while (blockIsTransparent(currBlock) && raymarchIterations < MAX_RAYMARCH_STEPS) {		
+		marchStep(rayOrigin, rayDirection, totalDistance, currBlock, currBlockPos, glassAbsorbtion, fogAccumulation, surfaceNormal, true);
+		raymarchIterations += 1;
+	}
+
+	return RaymarchReturn(blockIsSolid(currBlock), rayOrigin, currBlock, currBlockPos, totalDistance, glassAbsorbtion, fogAccumulation, surfaceNormal);
 }
 
 vec3 marchLights(vec3 surfaceColor, vec3 rayOrigin, vec3 rayDirection, vec3 surfaceNormal) {
@@ -291,6 +320,12 @@ vec3 marchLights(vec3 surfaceColor, vec3 rayOrigin, vec3 rayDirection, vec3 surf
 	vec3 outColor = vec3(0.0);
 
 	for (int i = 0; i < LIGHT_COUNT; i++) {
+		// Shadow
+		RaymarchReturn rayInfo = marchToPoint(rayOrigin + (surfaceNormal * 0.0001), lights[i].positionAndRadius.xyz);
+		if (rayInfo.hit) {
+			continue;
+		}
+
 		// Diffuse
 		vec3 lightDir = normalize(lights[i].positionAndRadius.xyz - rayOrigin);
 		float diff = max(dot(surfaceNormal, lightDir), 0.0);
@@ -299,7 +334,6 @@ vec3 marchLights(vec3 surfaceColor, vec3 rayOrigin, vec3 rayDirection, vec3 surf
 		// Specular
 		vec3 halfwayDir = normalize(lightDir + -rayDirection);
 		float spec = pow(max(dot(surfaceNormal, halfwayDir), 0.0), /*MATERIAL_SHININESS*/ 128);
-		
 		// TODO: Should specular include surface color???
 		vec3 specular = lights[i].colorAndIntensity.xyz * spec * surfaceColor;
 
@@ -308,10 +342,99 @@ vec3 marchLights(vec3 surfaceColor, vec3 rayOrigin, vec3 rayDirection, vec3 surf
 		float attenuation = clamp(1.0 - dist / lights[i].positionAndRadius.w, 0.0, 1.0);
 
 		// Apply Attenuation
-		outColor += (ambient + diffuse + specular) * attenuation;
+		outColor += (ambient + diffuse + specular) * attenuation * exp(-rayInfo.glassAbsorbtion);
 	}
 
 	return outColor;
+}
+
+
+
+
+//////////////////////
+// Block Coloration //
+//////////////////////
+vec3 getBlockColor(uvec2 block) {
+	vec3 outputColor = vec3(0.0);
+
+	// TODO: Put this into a lookup
+	if (block.r == 0) {            // Void
+		outputColor = vec3(0.0f, 0.0f, 0.0f);
+	} else if (block.r == 3) {      // Black
+		outputColor = vec3(0.1f, 0.1f, 0.1f);
+	} else if (block.r == 4) {		// Gray
+		outputColor = vec3(0.35f, 0.35f, 0.35f);
+	} else if (block.r == 5) {		// LightGray
+		outputColor = vec3(0.7f, 0.7f, 0.7f);
+	} else if (block.r == 6) {		// White
+		outputColor = vec3(0.95f, 0.95f, 0.95f);
+	} else if (block.r == 7) {		// Red
+		outputColor = vec3(0.8f, 0.1f, 0.1f);
+	} else if (block.r == 8) {		// Orange
+		outputColor = vec3(0.8f, 0.4f, 0.1f);
+	} else if (block.r == 9) {		// Yellow
+		outputColor = vec3(0.8f, 0.8f, 0.1f);
+	} else if (block.r == 10) {		// Green
+		outputColor = vec3(0.1f, 0.7f, 0.1f);
+	} else if (block.r == 11) {		// Blue
+		outputColor = vec3(0.1f, 0.1f, 0.8f);
+	} else if (block.r == 12) {		// Purple
+		outputColor = vec3(0.5f, 0.1f, 0.8f);
+	} else if (block.r == 13) {		// Pink
+		outputColor = vec3(0.9f, 0.5f, 0.6f);
+	} else if (block.r == 14) {		// Rainbow
+		const float totalRainbowTime = 10.0f;
+		const float segmentTime = totalRainbowTime / 3.0f;
+		const int animationState = int(3.0f * (mod(iTime, totalRainbowTime) / totalRainbowTime));
+		const float animationAmount = mod(iTime, segmentTime) / segmentTime;
+
+		if (animationState == 0) {
+			outputColor = vec3(1.0f - animationAmount, animationAmount, 0.0f);
+		} else if (animationState == 1) {
+			outputColor = vec3(0.0f, 1.0f - animationAmount, animationAmount);
+		} else if (animationState == 2) {
+			outputColor = vec3(animationAmount, 0.0f, 1.0f - animationAmount);
+		}
+	}
+
+	return outputColor;
+}
+
+bool drawOutline(vec3 rayOrigin, ivec3 blockPos) {
+	// Selected Block Outline
+	// TODO: Get to work with glass (shader marches through glass,
+	// 		 outline is selected block, glass can't be selected)
+	// TODO: If pixel is black, just return
+	if (selectedBlock.w == 1 && blockPos == selectedBlock.xyz) {
+		const float vertexWidth = 0.05f;
+		const float outlineWidth = 0.02f;
+
+		// Vertices
+		bool xBound = fract(rayOrigin.x) > 0.5f - vertexWidth && fract(rayOrigin.x) < 0.5f + vertexWidth;
+		bool yBound = fract(rayOrigin.y) > 0.5f - vertexWidth && fract(rayOrigin.y) < 0.5f + vertexWidth;
+		bool zBound = fract(rayOrigin.z) > 0.5f - vertexWidth && fract(rayOrigin.z) < 0.5f + vertexWidth;
+
+		if (xBound && yBound && zBound) {
+			return true;
+		}
+
+		// Edges
+		xBound = fract(rayOrigin.x) > 0.5f - outlineWidth && fract(rayOrigin.x) < 0.5f + outlineWidth;
+		yBound = fract(rayOrigin.y) > 0.5f - outlineWidth && fract(rayOrigin.y) < 0.5f + outlineWidth;
+		zBound = fract(rayOrigin.z) > 0.5f - outlineWidth && fract(rayOrigin.z) < 0.5f + outlineWidth;
+
+		return xBound && yBound || yBound && zBound || zBound && xBound;
+	}
+
+	return false;
+}
+
+vec3 getPixelColor(vec3 rayOrigin, uvec2 block, ivec3 blockPos) {
+	if (drawOutline(rayOrigin, blockPos)) {
+		return vec3(0.0);
+	}
+
+	return getBlockColor(block);
 }
 
 
@@ -372,96 +495,21 @@ void main() {
 	vec3 rayOrigin = camera.position;
 	vec3 rayDirection = normalize(uv.x*camera.right + uv.y*camera.up + (90/camera.fov)*camera.forward);
 
-	// Positive X to the right
-	// Positive Y up
-	// Positive Z forward
-	// Plane-Assisted Ray Marching
-	float totalDistance = 0.0f;
-	ivec3 currBlockPos = getBlockCoords(rayOrigin);
-	uvec2 prevBlock = getBlockInfo(currBlockPos);
-	uvec2 currBlock = prevBlock;
-	int raymarchIterations = 0;
-	vec3 glassAbsorbtion = vec3(0.0);
-	vec3 fogAccumulation = vec3(0.0);
-	vec3 lightModifier = vec3(0.1);
-	vec3 surfaceNormal = vec3(0.0);
+
+	// Ray March From Camera
+	RaymarchReturn rayInfo = marchUntilHit(rayOrigin, rayDirection);
+
+	rayOrigin = rayInfo.hitPosition;
+	uvec2 currBlock = rayInfo.blockHit;
+	ivec3 currBlockPos = rayInfo.blockHitPosition;
+	float totalDistance = rayInfo.dist;
+	vec3 glassAbsorbtion = rayInfo.glassAbsorbtion;
+	vec3 fogAccumulation = rayInfo.fogAccumulation;
+	vec3 surfaceNormal = rayInfo.surfaceNormal;
 
 
-
-	while (blockIsTransparent(currBlock) && raymarchIterations < 256) {		
-		marchStep(rayOrigin, rayDirection, totalDistance, currBlock, currBlockPos, glassAbsorbtion, fogAccumulation, surfaceNormal);
-		raymarchIterations += 1;
-	}
-
-
-
-	// Block Colors
-	// TODO: Put this into a lookup
-	if (currBlock.r == 0) {            // Void
-		col = vec3(0.0f, 0.0f, 0.0f);
-	}else if (currBlock.r == 3) {      // Black
-		col = vec3(0.1f, 0.1f, 0.1f);
-	} else if (currBlock.r == 4) {		// Gray
-		col = vec3(0.35f, 0.35f, 0.35f);
-	} else if (currBlock.r == 5) {		// LightGray
-		col = vec3(0.7f, 0.7f, 0.7f);
-	} else if (currBlock.r == 6) {		// White
-		col = vec3(0.95f, 0.95f, 0.95f);
-	} else if (currBlock.r == 7) {		// Red
-		col = vec3(0.8f, 0.1f, 0.1f);
-	} else if (currBlock.r == 8) {		// Orange
-		col = vec3(0.8f, 0.4f, 0.1f);
-	} else if (currBlock.r == 9) {		// Yellow
-		col = vec3(0.8f, 0.8f, 0.1f);
-	} else if (currBlock.r == 10) {		// Green
-		col = vec3(0.1f, 0.7f, 0.1f);
-	} else if (currBlock.r == 11) {		// Blue
-		col = vec3(0.1f, 0.1f, 0.8f);
-	} else if (currBlock.r == 12) {		// Purple
-		col = vec3(0.5f, 0.1f, 0.8f);
-	} else if (currBlock.r == 13) {		// Pink
-		col = vec3(0.9f, 0.5f, 0.6f);
-	} else if (currBlock.r == 14) {		// Rainbow
-		const float totalRainbowTime = 10.0f;
-		const float segmentTime = totalRainbowTime / 3.0f;
-		const int animationState = int(3.0f * (mod(iTime, totalRainbowTime) / totalRainbowTime));
-		const float animationAmount = mod(iTime, segmentTime) / segmentTime;
-
-		if (animationState == 0) {
-			col = vec3(1.0f - animationAmount, animationAmount, 0.0f);
-		} else if (animationState == 1) {
-			col = vec3(0.0f, 1.0f - animationAmount, animationAmount);
-		} else if (animationState == 2) {
-			col = vec3(animationAmount, 0.0f, 1.0f - animationAmount);
-		}
-	}
-
-	// Selected Block Outline
-	// TODO: Get to work with glass (shader marches through glass,
-	// 		 outline is selected block, glass can't be selected)
-	// TODO: If pixel is black, just return
-	if (selectedBlock.a == 1 && currBlockPos == selectedBlock.xyz) {
-		const float vertexWidth = 0.05f;
-		const float outlineWidth = 0.02f;
-
-		// Vertices
-		bool xBound = fract(rayOrigin.x) > 0.5f - vertexWidth && fract(rayOrigin.x) < 0.5f + vertexWidth;
-		bool yBound = fract(rayOrigin.y) > 0.5f - vertexWidth && fract(rayOrigin.y) < 0.5f + vertexWidth;
-		bool zBound = fract(rayOrigin.z) > 0.5f - vertexWidth && fract(rayOrigin.z) < 0.5f + vertexWidth;
-
-		if (xBound && yBound && zBound) {
-			col = vec3(0.0f, 0.0f, 0.0f);
-		}
-
-		// Edges
-		xBound = fract(rayOrigin.x) > 0.5f - outlineWidth && fract(rayOrigin.x) < 0.5f + outlineWidth;
-		yBound = fract(rayOrigin.y) > 0.5f - outlineWidth && fract(rayOrigin.y) < 0.5f + outlineWidth;
-		zBound = fract(rayOrigin.z) > 0.5f - outlineWidth && fract(rayOrigin.z) < 0.5f + outlineWidth;
-
-		if (xBound && yBound || yBound && zBound || zBound && xBound) {
-			col = vec3(0.0f, 0.0f, 0.0f);
-		}
-	}
+	// Get Base Pixel Color
+	col = getPixelColor(rayOrigin, currBlock, currBlockPos);
 
 
 	// Calculate Fog Amount

@@ -118,7 +118,7 @@ int main() {
 	// Set bottom level of blocks
 	for (uint32_t x = 0; x < 576; x++) {
 		for (uint32_t z = 0; z < 576; z++) {
-			world.setBlock({x, 0, z}, Vang::Voxel::Blocks::Green);
+			world.setBlock({x, 0, z}, Vang::Voxel::Blocks::White);
 		}
 	}
 
@@ -139,7 +139,7 @@ int main() {
 
 	auto& lightManager = Vang::getLightManager();
 	lightManager.createLight(glm::vec3(5.0, 5.0, 5.0), glm::vec3(1.0, 1.0, 1.0), 10, 1);
-	lightManager.createLight(glm::vec3(15.0, 5.0, 5.0), glm::vec3(1.0, 1.0, 1.0), 10, 1);
+	lightManager.createLight(glm::vec3(15.0, 5.0, 5.0), glm::vec3(0.0, 1.0, 1.0), 10, 1);
 
 	while (Vang::getRunning()) {
 		Vang::update();
