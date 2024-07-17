@@ -17,7 +17,6 @@ namespace Vang::Utility {
 
 		const std::vector<Light>& getLights() const;
 		Light& getLight(const LightID LightID);
-		const Light& getLight(const LightID LightID) const;
 		bool getDirty();
 
 		LightID createLight();

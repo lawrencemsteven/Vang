@@ -12,6 +12,7 @@ layout(rg32ui, binding = 1) uniform readonly uimage3D blocks;
 ///////////////
 const highp float NOISE_GRANULARITY = 0.5/255.0;
 const float MAX_RAYMARCH_STEPS = 256;
+const float BRIGHTNESS = 0.01;
 const float airRefractionIndex = 1.0;
 const float glassRefractionIndex = 1.52;
 
@@ -316,7 +317,7 @@ RaymarchReturn marchUntilHit(vec3 rayOrigin, vec3 rayDirection) {
 
 vec3 marchLights(vec3 surfaceColor, vec3 rayOrigin, vec3 rayDirection, vec3 surfaceNormal) {
 	// Ambient
-	vec3 ambient = 0.05 * surfaceColor;
+	vec3 ambient = BRIGHTNESS * surfaceColor;
 	vec3 outColor = vec3(0.0);
 
 	for (int i = 0; i < LIGHT_COUNT; i++) {
@@ -345,7 +346,7 @@ vec3 marchLights(vec3 surfaceColor, vec3 rayOrigin, vec3 rayDirection, vec3 surf
 		outColor += (ambient + diffuse + specular) * attenuation * exp(-rayInfo.glassAbsorbtion);
 	}
 
-	return outColor;
+	return max(outColor, BRIGHTNESS * surfaceColor);
 }
 
 

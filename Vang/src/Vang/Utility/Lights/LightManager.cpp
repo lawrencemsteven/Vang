@@ -10,10 +10,6 @@ namespace Vang::Utility {
 		return m_lights[LightID];
 	}
 
-	const Light& LightManager::getLight(const LightID LightID) const {
-		return m_lights[LightID];
-	}
-
 	bool LightManager::getDirty() {
 		return m_dirty;
 	}

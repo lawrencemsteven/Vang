@@ -138,11 +138,29 @@ int main() {
 												Vang::Voxel::Blocks::Air);
 
 	auto& lightManager = Vang::getLightManager();
-	lightManager.createLight(glm::vec3(5.0, 5.0, 5.0), glm::vec3(1.0, 1.0, 1.0), 10, 1);
-	lightManager.createLight(glm::vec3(15.0, 5.0, 5.0), glm::vec3(0.0, 1.0, 1.0), 10, 1);
+	auto light1ID =
+		lightManager.createLight(glm::vec3(5.0, 5.0, 5.0), glm::vec3(1.0, 1.0, 1.0), 20, 1);
+	auto light2ID =
+		lightManager.createLight(glm::vec3(15.0, 5.0, 5.0), glm::vec3(0.0, 2.0, 2.0), 20, 1);
+
+	const float lightRadius = 5.0f;
+	const float spinTime	= 10.0f;
+
+	Vang::getPlayer().setPosition(glm::vec3(50.0, 15.0, 50.0));
 
 	while (Vang::getRunning()) {
 		Vang::update();
-		// std::cout << "FPS: " << (1.0f / Vang::Utility::Time::deltaTime()) << std::endl;
+
+		lightManager.getLight(light1ID).setPosition(glm::vec3(
+			50.0,
+			15.0 + lightRadius *
+					   cos(std::fmod(Vang::Utility::Time::timeSinceStart(), spinTime * 2.0 * M_PI)),
+			50.0));
+		lightManager.getLight(light2ID).setPosition(glm::vec3(
+			50.0 + lightRadius *
+					   cos(std::fmod(Vang::Utility::Time::timeSinceStart(), spinTime * 2.0 * M_PI)),
+			15.0,
+			50.0 + lightRadius * sin(std::fmod(Vang::Utility::Time::timeSinceStart(),
+											   spinTime * 2.0 * M_PI))));
 	}
 }

@@ -18,8 +18,6 @@ namespace Vang::gfx::OpenGL {
 	}
 
 	LightBuffer::LightBuffer(ShaderProgram& shaderProgram) {
-		// TODO: Currently, only 1 Light will work at a time. The data is not being correctly sent
-		// to the GPU.
 		shaderProgram.setUniform("LIGHT_COUNT", 0u);
 
 		m_bufferLocation = glGetProgramResourceIndex(shaderProgram.getID(), GL_SHADER_STORAGE_BLOCK,
@@ -36,13 +34,13 @@ namespace Vang::gfx::OpenGL {
 
 	void LightBuffer::update(ShaderProgram& shaderProgram) {
 		auto& lightManager = Vang::getLightManager();
-		const auto lights  = lightManager.getLights();
+		const auto& lights = lightManager.getLights();
 
 		// TODO: Grouping of lights will allow for better dirty testing (Also maybe better storage)
 		// TODO: Light manager should be a linked list? Somehow a missing light needs to be filled
 		// in or skipped.
 
-		// If LightManager is dirty then search for all dirty lights and set
+		// If LightManager is dirty then update all lights
 		if (lightManager.getDirty()) {
 			std::cout << "Light Count: " << lights.size() << std::endl;
 			shaderProgram.setUniform("LIGHT_COUNT", static_cast<uint32_t>(lights.size()));
@@ -54,6 +52,14 @@ namespace Vang::gfx::OpenGL {
 
 			lightManager.setDirty(false);
 			return;
+		}
+
+		// Check through each light to see if it is dirty
+		for (uint32_t i = 0; i < lights.size(); i++) {
+			if (lights[i].getDirty()) {
+				updateLight(lights[i], i, m_buffer);
+				lightManager.cleanLight(i);
+			}
 		}
 	}
 }
