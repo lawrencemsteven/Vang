@@ -1,17 +1,17 @@
 #pragma once
 
-#ifdef _DEBUG
-#	define VANG_FATAL(message) Vang::Utility::Log::Fatal(message);
-#	define VANG_ERROR(message) Vang::Utility::Log::Error(message);
-#	define VANG_WARN(message) Vang::Utility::Log::Warn(message);
-#	define VANG_INFO(message) Vang::Utility::Log::Info(message);
-#	define VANG_DEBUG(message) Vang::Utility::Log::Debug(message);
-#else
+#ifdef VANG_REMOVE_DEBUG_MESSAGES
 #	define VANG_FATAL(message) Vang::Utility::Log::FatalExceptionOnly(message);
 #	define VANG_ERROR(message)
 #	define VANG_WARN(message)
 #	define VANG_INFO(message)
 #	define VANG_DEBUG(message)
+#else
+#	define VANG_FATAL(message) Vang::Utility::Log::Fatal(message);
+#	define VANG_ERROR(message) Vang::Utility::Log::Error(message);
+#	define VANG_WARN(message) Vang::Utility::Log::Warn(message);
+#	define VANG_INFO(message) Vang::Utility::Log::Info(message);
+#	define VANG_DEBUG(message) Vang::Utility::Log::Debug(message);
 #endif
 
 namespace Vang::Utility {

@@ -11,8 +11,8 @@
 #	define VANG_CURRENT_GRAPHICSAPI Vang::gfx::OpenGL::GraphicsOpenGL
 #endif
 
-#define DEFAULT_WIDTH 1280
-#define DEFAULT_HEIGHT 720
+#define DEFAULT_WIDTH 1920
+#define DEFAULT_HEIGHT 1080
 #define DEFAULT_FULLSCREEN false
 
 #ifdef VANG_WINDOW_GLFW
@@ -36,6 +36,7 @@
 #include "Vang/Utility/Events/MouseEvent.h"
 #include "Vang/Utility/FileIO/FileIO.h"
 #include "Vang/Utility/Layers/LayerStack.h"
+#include "Vang/Utility/Lights/LightManager.h"
 #include "Vang/Utility/Player/Player.h"
 #include "Vang/Utility/Structures/Structure.h"
 #include "Vang/Utility/Time/Time.h"
@@ -44,21 +45,23 @@
 #include "Vang/Window/Window.h"
 
 namespace Vang {
-	void initialize();
-	bool getRunning();
-	void update();
-	void close();
+	extern void initialize();
+	extern bool getRunning();
+	extern void update();
+	extern void close();
 
-	const std::string& getApplicationName();
-	Vang::Windowing::Window& getWindow();
-	Vang::gfx::GraphicsAPI& getGraphicsAPI();
-	Vang::Objects::Player& getPlayer();
-	Vang::Blueprints::BlueprintContainer<Vang::Blueprints::BlockBlueprint>& getBlockManager();
-	Vang::Blueprints::BlueprintContainer<Vang::Blueprints::ItemBlueprint>& getItemManager();
-	Vang::Modding::ModManager& getModManager();
-	Vang::Utility::Layers::LayerStack& getLayerStack();
-	Vang::Utility::Events::EventHandler& getEventHandler();
-	Vang::Input::InputCache& getInputCache();
-	Vang::Voxel::World& getCurrentWorld();
-	Vang::Utility::EntityManager& getEntityManager();
+	extern const std::string& getApplicationName();
+	extern Vang::Windowing::Window& getWindow();
+	extern Vang::gfx::GraphicsAPI& getGraphicsAPI();
+	extern Vang::Objects::Player& getPlayer();
+	extern Vang::Blueprints::BlueprintContainer<Vang::Blueprints::BlockBlueprint>&
+	getBlockManager();
+	extern Vang::Blueprints::BlueprintContainer<Vang::Blueprints::ItemBlueprint>& getItemManager();
+	extern Vang::Modding::ModManager& getModManager();
+	extern Vang::Utility::Layers::LayerStack& getLayerStack();
+	extern Vang::Utility::Events::EventHandler& getEventHandler();
+	extern Vang::Input::InputCache& getInputCache();
+	extern Vang::Voxel::World& getCurrentWorld();
+	extern Vang::Utility::EntityManager& getEntityManager();
+	extern Vang::Utility::LightManager& getLightManager();
 };

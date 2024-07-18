@@ -1,5 +1,7 @@
 #pragma once
 
+#define _USE_MATH_DEFINES
+
 #include <algorithm>
 #include <array>
 #include <concepts>
@@ -9,6 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <math.h>
 #include <memory>
 #include <set>
 #include <source_location>

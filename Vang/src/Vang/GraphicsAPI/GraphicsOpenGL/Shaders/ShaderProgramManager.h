@@ -4,6 +4,7 @@
 
 #include "Vang/GraphicsAPI/GraphicsOpenGL/Buffers/BlockBuffer.h"
 #include "Vang/GraphicsAPI/GraphicsOpenGL/Buffers/EntityBuffer.h"
+#include "Vang/GraphicsAPI/GraphicsOpenGL/Buffers/LightBuffer.h"
 #include "ShaderProgram.h"
 #include "ShaderTexture.h"
 #include "VertexData.h"
@@ -35,6 +36,7 @@ namespace Vang::gfx::OpenGL {
 		ShaderProgram m_computeShaderProgram;
 		ShaderTexture m_screenTexture;
 		EntityBuffer m_entityBuffer;
+		LightBuffer m_lightBuffer;
 		BlockBuffer m_blockBuffer{};
 		VertexData m_vertexData;
 

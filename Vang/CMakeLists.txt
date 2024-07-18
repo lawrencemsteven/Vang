@@ -31,11 +31,19 @@ endif (BAKE_SHADERS)
 
 # OTHER:
 #	VANG_BLOCK_LOGGING_COUT - Block logging cout messages (unit_tests)
+#	VANG_REMOVE_DEBUG_MESSAGES - Remove debugging messages
 target_compile_definitions(Vang
 	PRIVATE
 		VANG_WINDOW_GLFW
 		VANG_GRAPHICSAPI_OPENGL
 )
+
+if(BUILD_PACKAGE)
+	target_compile_definitions(Vang
+		PRIVATE
+			VANG_REMOVE_DEBUG_MESSAGES	
+	)
+endif()
 
 target_link_libraries(Vang
 	PUBLIC
