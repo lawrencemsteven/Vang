@@ -38,6 +38,13 @@ target_compile_definitions(Vang
 		VANG_GRAPHICSAPI_OPENGL
 )
 
+if(BUILD_PACKAGE)
+	target_compile_definitions(Vang
+		PRIVATE
+			VANG_REMOVE_DEBUG_MESSAGES	
+	)
+endif()
+
 target_link_libraries(Vang
 	PUBLIC
 		glad

@@ -7,6 +7,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 option(BAKE_SHADERS "Bake shaders into target" ON)
+option(BUILD_PACKAGE "Build targets as a package" OFF)
 
 if (BAKE_SHADERS)
     find_package(PythonInterp REQUIRED)
