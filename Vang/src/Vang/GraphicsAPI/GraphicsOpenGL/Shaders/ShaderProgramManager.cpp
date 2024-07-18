@@ -73,14 +73,14 @@ namespace Vang::gfx::OpenGL {
 			glm::ivec4{raycastReturn.blockHitPosition, raycastReturn.hit};
 		m_computeShaderProgram.setUniform("selectedBlock", selectedBlock);
 
+		m_blockBuffer.update();
+		m_entityBuffer.update(m_computeShaderProgram);
+		m_lightBuffer.update(m_computeShaderProgram);
+
 		m_computeShaderProgram.use();
 		glDispatchCompute(static_cast<GLuint>(floor(m_screenWidth / 16.0f)),
 						  static_cast<GLuint>(floor(m_screenHeight / 8.0f)), 1);
 		glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
-
-		m_blockBuffer.update();
-		m_entityBuffer.update(m_computeShaderProgram);
-		m_lightBuffer.update(m_computeShaderProgram);
 
 		m_rasterShaderProgram.use();
 		m_vertexData.update();
