@@ -139,9 +139,9 @@ int main() {
 
 	auto& lightManager = Vang::getLightManager();
 	auto light1ID =
-		lightManager.createLight(glm::vec3(5.0, 5.0, 5.0), glm::vec3(1.0, 1.0, 1.0), 20, 1);
+		lightManager.createLight(glm::vec3(5.0, 5.0, 5.0), glm::vec3(1.0, 1.0, 1.0), 50, 1);
 	auto light2ID =
-		lightManager.createLight(glm::vec3(15.0, 5.0, 5.0), glm::vec3(0.0, 2.0, 2.0), 20, 1);
+		lightManager.createLight(glm::vec3(15.0, 5.0, 5.0), glm::vec3(0.0, 2.0, 2.0), 50, 1);
 
 	const float lightRadius = 5.0f;
 	const float spinTime	= 10.0f;
