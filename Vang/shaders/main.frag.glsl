@@ -20,11 +20,10 @@ void main()
 	if (u_drawState == 0) {
 		FragColor = texture(screen, v_UV);
 	} else {
-		//FragColor = v_UV_or_Color;
-		FragColor = vec4(v_UV, 0.0, 1.0);
+		FragColor = v_Color;
 
 		// Fix Color Banding
-		FragColor += mix(-NOISE_GRANULARITY, NOISE_GRANULARITY, random(gl_FragCoord.xy));
+		FragColor.xyz += mix(-NOISE_GRANULARITY, NOISE_GRANULARITY, random(gl_FragCoord.xy));
 	}
 
 }
