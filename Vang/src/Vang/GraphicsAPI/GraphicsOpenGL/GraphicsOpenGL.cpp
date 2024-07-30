@@ -30,7 +30,7 @@ namespace Vang::gfx::OpenGL {
 	}
 
 	void GraphicsOpenGL::update() {
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		m_shaderProgramManager.update();
 	}
 
@@ -68,6 +68,9 @@ namespace Vang::gfx::OpenGL {
 #endif
 
 		glClearColor(0.0f, 0.4f, 0.0f, 1.0f);
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		Vang::Windowing::Window& window = Vang::getWindow();
 		windowResize(window.getWidth(), window.getHeight());

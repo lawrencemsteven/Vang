@@ -22,7 +22,6 @@ namespace Vang::gfx::OpenGL {
 
 		m_bufferLocation = glGetProgramResourceIndex(shaderProgram.getID(), GL_SHADER_STORAGE_BLOCK,
 													 "SSBO_LIGHTS");
-		std::cout << "Buffer Location: " << m_bufferLocation << std::endl;
 		glGenBuffers(1, &m_buffer);
 		glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_buffer);
 		glBufferData(GL_SHADER_STORAGE_BUFFER, MAX_LIGHTS * sizeof(GPULight), NULL,
@@ -42,7 +41,6 @@ namespace Vang::gfx::OpenGL {
 
 		// If LightManager is dirty then update all lights
 		if (lightManager.getDirty()) {
-			std::cout << "Light Count: " << lights.size() << std::endl;
 			shaderProgram.setUniform("LIGHT_COUNT", static_cast<uint32_t>(lights.size()));
 
 			for (uint32_t i = 0; i < lights.size(); i++) {

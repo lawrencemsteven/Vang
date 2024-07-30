@@ -1,23 +1,25 @@
-#include "VertexData.h"
+#include "ColoredPanelBuffer.h"
 
-namespace Vang::gfx::OpenGL {
+namespace Vang::gfx::OpenGL::UI::Buffers {
 
-	VertexData::~VertexData() {
+	ColoredPanelBuffer::~ColoredPanelBuffer() {
 		glDeleteVertexArrays(1, &m_vertexArrayObject);
 		glDeleteBuffers(1, &m_vertexBufferObject);
 	}
 
-	void VertexData::initialize() {
-		// vec3 pos
-		// vec4 uv
-		// clang-format off
-		float vertices[9 * 4] = {
-			-1.0f,  1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,	// Top Left
-			 1.0f,	1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,	// Top Right
-			-1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,	// Bottom Left
-			 1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,	// Bottom Right
-		};
-		// clang-format on
+	void ColoredPanelBuffer::initialize() {
+		// Top Left
+		m_data[0] = Point{glm::vec3{-0.5f, 0.5f, 0.0f}, glm::vec4{1.0f, 1.0f, 1.0f, 0.5f},
+						  glm::vec2{0.0f, 1.0f}};
+		// Top Right
+		m_data[1] = Point{glm::vec3{0.5f, 0.5f, 0.0f}, glm::vec4{0.0f, 1.0f, 0.0f, 0.5f},
+						  glm::vec2{1.0f, 1.0f}};
+		// Bottom Left
+		m_data[2] = Point{glm::vec3{-0.5f, -0.5f, 0.0f}, glm::vec4{0.0f, 0.0f, 1.0f, 0.5f},
+						  glm::vec2{0.0f, 0.0f}};
+		// Bottom Right
+		m_data[3] = Point{glm::vec3{0.5f, -0.5f, 0.0f}, glm::vec4{1.0f, 0.0f, 1.0f, 0.5f},
+						  glm::vec2{1.0f, 0.0f}};
 
 		glGenVertexArrays(1, &m_vertexArrayObject);
 		glGenBuffers(1, &m_vertexBufferObject);
@@ -26,7 +28,7 @@ namespace Vang::gfx::OpenGL {
 		glBindVertexArray(m_vertexArrayObject);
 
 		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferObject);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, m_data.size() * sizeof(Point), m_data.data(), GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
@@ -43,7 +45,7 @@ namespace Vang::gfx::OpenGL {
 		glBindVertexArray(0);
 	}
 
-	void VertexData::update() {
+	void ColoredPanelBuffer::update() {
 		glBindVertexArray(m_vertexArrayObject);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	}

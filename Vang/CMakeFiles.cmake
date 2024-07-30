@@ -74,6 +74,11 @@ set(Vang_FILES
 	"./src/Vang/Modding/ModManager.h"
 	"./src/Vang/Modding/ModManager.cpp"
 
+	"./src/Vang/UI/Menu.h"
+	"./src/Vang/UI/Menu.cpp"
+	"./src/Vang/UI/UIManager.h"
+	"./src/Vang/UI/UIManager.cpp"
+
 	"./src/Vang/Window/Window.h"
 	"./src/Vang/Window/Window.cpp"
 
@@ -107,6 +112,11 @@ set(Vang_FILES
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/ShaderTexture.cpp"
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/VertexData.h"
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/VertexData.cpp"
+
+	"./src/Vang/GraphicsAPI/GraphicsOpenGL/UI/UIBuffers.h"
+	"./src/Vang/GraphicsAPI/GraphicsOpenGL/UI/UIBuffers.cpp"
+	"./src/Vang/GraphicsAPI/GraphicsOpenGL/UI/Buffers/ColoredPanelBuffer.h"
+	"./src/Vang/GraphicsAPI/GraphicsOpenGL/UI/Buffers/ColoredPanelBuffer.cpp"
 
 	"./src/Vang/Voxel/Chunk.h"
 	"./src/Vang/Voxel/Chunk.cpp"
