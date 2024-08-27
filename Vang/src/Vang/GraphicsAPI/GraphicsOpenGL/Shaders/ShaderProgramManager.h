@@ -5,7 +5,6 @@
 #include "Vang/GraphicsAPI/GraphicsOpenGL/Buffers/BlockBuffer.h"
 #include "Vang/GraphicsAPI/GraphicsOpenGL/Buffers/EntityBuffer.h"
 #include "Vang/GraphicsAPI/GraphicsOpenGL/Buffers/LightBuffer.h"
-#include "Vang/GraphicsAPI/GraphicsOpenGL/UI/UIBuffers.h"
 #include "ShaderProgram.h"
 #include "ShaderTexture.h"
 #include "VertexData.h"
@@ -40,7 +39,6 @@ namespace Vang::gfx::OpenGL {
 		LightBuffer m_lightBuffer;
 		BlockBuffer m_blockBuffer{};
 		VertexData m_vertexData;
-		UI::UIBuffers m_UIBuffers;
 
 		// TODO: Remove This
 		void initialize_impl();

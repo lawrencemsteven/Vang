@@ -16,7 +16,6 @@ namespace Vang::gfx::OpenGL {
 		m_screenHeight = height;
 		m_screenTexture.initialize(width, height);
 		m_vertexData.initialize();
-		m_UIBuffers.initialize();
 
 		m_rasterShaderProgram.initialize();
 		m_computeShaderProgram.initialize();
@@ -45,7 +44,6 @@ namespace Vang::gfx::OpenGL {
 		m_screenHeight = height;
 		m_screenTexture.initialize(width, height);
 		m_vertexData.initialize();
-		m_UIBuffers.initialize();
 
 		m_rasterShaderProgram.initialize();
 		m_computeShaderProgram.initialize();
@@ -94,9 +92,6 @@ namespace Vang::gfx::OpenGL {
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		m_rasterShaderProgram.setUniform("u_drawState", 1);
-		m_UIBuffers.update();
-
-		glFlush();
 	}
 
 	void ShaderProgramManager::displayCamera(const Vang::Objects::Camera& camera) {

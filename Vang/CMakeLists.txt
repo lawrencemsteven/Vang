@@ -33,7 +33,7 @@ endif (BAKE_SHADERS)
 #	VANG_BLOCK_LOGGING_COUT - Block logging cout messages (unit_tests)
 #	VANG_REMOVE_DEBUG_MESSAGES - Remove debugging messages
 target_compile_definitions(Vang
-	PRIVATE
+	PUBLIC
 		VANG_WINDOW_GLFW
 		VANG_GRAPHICSAPI_OPENGL
 )

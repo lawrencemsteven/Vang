@@ -15,6 +15,7 @@ namespace Vang::gfx::OpenGL {
 		void initialize() override;
 		void initialize(std::string_view applicationName);
 		void update() override;
+		void endUpdate() override;
 
 		void windowResize(uint32_t width, uint32_t height) override;
 

@@ -16,6 +16,7 @@ namespace Vang {
 	static VANG_CURRENT_WINDOW_INPUT s_inputCache{};
 	static Vang::Utility::EntityManager s_entityManager{};
 	static Vang::Utility::LightManager s_lightManager{};
+	static Vang::UI::UIManager s_uiManager{};
 
 	void cleanup() {
 		s_window.close();
@@ -38,6 +39,8 @@ namespace Vang {
 		s_window.update();
 		s_layerStack.update();
 		s_graphicsAPI.update();
+		s_uiManager.update();
+		s_graphicsAPI.endUpdate();
 
 		if (!s_running) {
 			cleanup();
@@ -89,5 +92,8 @@ namespace Vang {
 	}
 	Vang::Utility::LightManager& getLightManager() {
 		return s_lightManager;
+	}
+	Vang::UI::UIManager& getUIManager() {
+		return s_uiManager;
 	}
 }

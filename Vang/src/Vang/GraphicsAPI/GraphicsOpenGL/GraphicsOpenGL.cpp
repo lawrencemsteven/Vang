@@ -34,6 +34,10 @@ namespace Vang::gfx::OpenGL {
 		m_shaderProgramManager.update();
 	}
 
+	void GraphicsOpenGL::endUpdate() {
+		glFlush();
+	}
+
 	void GraphicsOpenGL::windowResize(uint32_t width, uint32_t height) {
 		glViewport(0, 0, width, height);
 	}

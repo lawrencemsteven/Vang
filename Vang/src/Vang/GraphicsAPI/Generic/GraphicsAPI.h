@@ -14,7 +14,8 @@ namespace Vang::gfx {
 
 		virtual void initialize();
 		virtual void initialize(std::string_view applicationName);
-		virtual void update() = 0;
+		virtual void update()	 = 0;
+		virtual void endUpdate() = 0;
 
 		std::string_view getApplicationName();
 

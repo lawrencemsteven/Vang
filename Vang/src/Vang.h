@@ -29,6 +29,7 @@
 #include "Vang/Items/BlockBlueprint.h"
 #include "Vang/Items/ItemBlueprint.h"
 #include "Vang/Modding/ModManager.h"
+#include "Vang/UI/UIManager.h"
 #include "Vang/Utility/BlueprintContainer/BlueprintContainer.h"
 #include "Vang/Utility/Entities/EntityManager.h"
 #include "Vang/Utility/Events/Event.h"
@@ -64,4 +65,5 @@ namespace Vang {
 	extern Vang::Voxel::World& getCurrentWorld();
 	extern Vang::Utility::EntityManager& getEntityManager();
 	extern Vang::Utility::LightManager& getLightManager();
+	extern Vang::UI::UIManager& getUIManager();
 };

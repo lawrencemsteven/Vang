@@ -1,4 +1,5 @@
 #include <Vang.h>
+#include "glad/glad.h"
 
 class PlayerMovementLayer : public Vang::Utility::Layers::Layer {
 public:
@@ -185,6 +186,15 @@ int main() {
 	const float spinTime	= 10.0f;
 
 	Vang::getPlayer().setPosition(glm::vec3(50.0, 15.0, 50.0));
+
+	auto& m_uiManager = Vang::getUIManager();
+	auto menuID		  = m_uiManager.createMenu();
+	auto& menu		  = m_uiManager.getMenu(menuID);
+
+	menu.addPanel({-0.04f, 0.04f}, {0.04f, -0.04f}, 0.0f, {0.5f, 0.9f, 0.5f, 0.5f});
+	menu.addPanel({0.06f, -0.02f}, {-0.02f, 0.06f}, -0.2f, {0.5f, 0.5f, 0.9f, 0.25f});
+	menu.addPanel({-0.06f, 0.02f}, {0.02f, -0.06f}, 0.2f, {0.9f, 0.5f, 0.5f, 1.0f});
+	menu.addPanel({0.08f, 0.00f}, {0.00f, 0.08f}, -0.4f, {0.9f, 0.9f, 0.9f, 0.25f});
 
 	while (Vang::getRunning()) {
 		Vang::update();
