@@ -45,6 +45,21 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(glm)
 
+FetchContent_Declare(imgui_external
+    imgui
+	GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_TAG v1.91.2-docking
+)
+FetchContent_MakeAvailable(imgui_external)
+add_library(imgui STATIC 
+    ${imgui_external_SOURCE_DIR}/imgui.cpp
+    ${imgui_external_SOURCE_DIR}/imgui_draw.cpp
+    ${imgui_external_SOURCE_DIR}/imgui_tables.cpp
+    ${imgui_external_SOURCE_DIR}/imgui_widgets.cpp
+    ${imgui_external_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+)
+target_include_directories(imgui PUBLIC ${imgui_external_SOURCE_DIR})
+
 project(Vang)
 
 add_subdirectory("Vang")
