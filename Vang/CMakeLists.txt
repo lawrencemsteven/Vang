@@ -50,6 +50,7 @@ target_link_libraries(Vang
 		glad
 		glfw
 		glm::glm
+		imgui
 )
 
 target_include_directories(Vang

@@ -57,8 +57,13 @@ add_library(imgui STATIC
     ${imgui_external_SOURCE_DIR}/imgui_tables.cpp
     ${imgui_external_SOURCE_DIR}/imgui_widgets.cpp
     ${imgui_external_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+    ${imgui_external_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
 )
 target_include_directories(imgui PUBLIC ${imgui_external_SOURCE_DIR})
+target_link_libraries(imgui
+    PUBLIC
+        glfw
+)
 
 project(Vang)
 

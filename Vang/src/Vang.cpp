@@ -26,6 +26,7 @@ namespace Vang {
 		s_running;
 		s_window.initialize(s_applicationName, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_FULLSCREEN);
 		s_graphicsAPI.initialize(s_applicationName);
+		s_uiManager.initialize();
 		s_player.initialize();
 	}
 
@@ -47,7 +48,7 @@ namespace Vang {
 		}
 
 		// TODO: Figure something out for this to not kill framerate
-		std::this_thread::sleep_for(std::chrono::microseconds(100));
+		// std::this_thread::sleep_for(std::chrono::microseconds(100));
 	}
 
 	void close() {

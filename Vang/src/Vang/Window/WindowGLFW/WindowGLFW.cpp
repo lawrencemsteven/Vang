@@ -92,6 +92,7 @@ namespace Vang::Windowing {
 			VANG_FATAL("Failed to create GLFW Window!");
 		}
 
+		// TODO: Make mouse showable / hideable
 		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 		setVSync(m_data.vSync);
