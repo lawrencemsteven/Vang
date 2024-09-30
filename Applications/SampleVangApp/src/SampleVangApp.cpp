@@ -1,5 +1,4 @@
 #include <Vang.h>
-#include "glad/glad.h"
 
 class PlayerMovementLayer : public Vang::Utility::Layers::Layer {
 public:
@@ -210,7 +209,5 @@ int main() {
 			15.0,
 			50.0 + lightRadius * sin(std::fmod(Vang::Utility::Time::timeSinceStart(),
 											   spinTime * 2.0 * M_PI))));
-
-		// std::cout << "FPS: " << (1.0f / Vang::Utility::Time::deltaTime()) << std::endl;
 	}
 }
