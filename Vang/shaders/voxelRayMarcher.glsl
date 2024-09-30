@@ -321,6 +321,11 @@ vec3 marchLights(vec3 surfaceColor, vec3 rayOrigin, vec3 rayDirection, vec3 surf
 	vec3 outColor = vec3(0.0);
 
 	for (int i = 0; i < LIGHT_COUNT; i++) {
+		// Check light distance
+		if (lights[i].positionAndRadius.w < distance(lights[i].positionAndRadius.xyz, rayOrigin)) {
+			continue;
+		}
+
 		// Shadow
 		RaymarchReturn rayInfo = marchToPoint(rayOrigin + (surfaceNormal * 0.0001), lights[i].positionAndRadius.xyz);
 		if (rayInfo.hit) {
