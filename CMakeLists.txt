@@ -53,6 +53,7 @@ FetchContent_Declare(imgui_external
 FetchContent_MakeAvailable(imgui_external)
 add_library(imgui STATIC 
     ${imgui_external_SOURCE_DIR}/imgui.cpp
+    ${imgui_external_SOURCE_DIR}/imgui_demo.cpp
     ${imgui_external_SOURCE_DIR}/imgui_draw.cpp
     ${imgui_external_SOURCE_DIR}/imgui_tables.cpp
     ${imgui_external_SOURCE_DIR}/imgui_widgets.cpp
