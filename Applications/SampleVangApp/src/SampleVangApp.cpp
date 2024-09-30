@@ -12,6 +12,26 @@ public:
 		const auto& inputCache = Vang::getInputCache();
 		auto& player		   = Vang::getPlayer();
 
+		if (m_headlightFollow) {
+			Vang::getLightManager()
+				.getLight(m_headlightID)
+				.setPosition(Vang::getPlayer().getCamera().getPosition());
+		}
+
+		if (inputCache.isKeyPressed(Vang::Input::KEY::ESCAPE)) {
+			if (!m_escapeKeyPressed) {
+				m_escapeKeyPressed = true;
+				Vang::getWindow().setMouseEnabled(!Vang::getWindow().getMouseEnabled());
+			}
+		}
+		else {
+			m_escapeKeyPressed = false;
+		}
+
+		if (Vang::getWindow().getMouseEnabled()) {
+			return;
+		}
+
 		if (inputCache.isKeyPressed(Vang::Input::KEY::LEFT_CONTROL) ||
 			inputCache.isMouseButtonPressed(Vang::Input::MOUSE::BUTTON_5)) {
 			player.setSpeed(20.0f);
@@ -111,12 +131,6 @@ public:
 		else {
 			m_leftClickPressed = false;
 		}
-
-		if (m_headlightFollow) {
-			Vang::getLightManager()
-				.getLight(m_headlightID)
-				.setPosition(Vang::getPlayer().getCamera().getPosition());
-		}
 	}
 
 	void onEvent(Vang::Utility::Events::Event& e) override {
@@ -126,6 +140,10 @@ public:
 	}
 
 	bool mouseMovedHandler(Vang::Utility::Events::MouseMovedEvent& e) {
+		if (Vang::getWindow().getMouseEnabled()) {
+			return false;
+		}
+
 		auto& playerCamera = Vang::getPlayer().getCamera();
 
 		playerCamera.mouseRotate(e.getX(), -e.getY());
@@ -138,6 +156,7 @@ private:
 	bool m_fKeyPressed{false};
 	bool m_gKeyPressed{false};
 	bool m_headlightFollow{true};
+	bool m_escapeKeyPressed{false};
 	Vang::Utility::LightManager::LightID m_headlightID;
 
 	Vang::Voxel::Blocks m_blockToBuild{Vang::Voxel::Blocks::Rainbow};

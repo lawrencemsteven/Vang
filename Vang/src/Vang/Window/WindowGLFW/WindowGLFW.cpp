@@ -60,6 +60,19 @@ namespace Vang::Windowing {
 		m_data.vSync = enabled;
 	}
 
+	void WindowGLFW::setMouseEnabled(bool enabled) {
+		if (enabled) {
+			glfwGetCursorPos(m_window, &m_prevMouseX, &m_prevMouseY);
+			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			glfwSetCursorPos(m_window, m_data.width / 2.0, m_data.height / 2.0);
+		}
+		else {
+			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			glfwSetCursorPos(m_window, m_prevMouseX, m_prevMouseY);
+		}
+		m_data.mouseEnabled = enabled;
+	}
+
 	void* WindowGLFW::getNativeWindow() const {
 		return m_window;
 	}
@@ -92,8 +105,7 @@ namespace Vang::Windowing {
 			VANG_FATAL("Failed to create GLFW Window!");
 		}
 
-		// TODO: Make mouse showable / hideable
-		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		setMouseEnabled(m_data.mouseEnabled);
 
 		setVSync(m_data.vSync);
 		glfwMakeContextCurrent(m_window);

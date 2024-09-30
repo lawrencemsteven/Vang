@@ -27,6 +27,7 @@ namespace Vang::Windowing {
 		void setResolution(uint32_t width, uint32_t height) override;
 		void setFullscreen(bool fullscreen) override;
 		void setVSync(bool enabled) override;
+		void setMouseEnabled(bool enabled) override;
 
 		void* getNativeWindow() const override;
 
@@ -39,6 +40,9 @@ namespace Vang::Windowing {
 		static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 		static void mouseScrollCallback(GLFWwindow* window, double xOffset, double yOffset);
 		static void mouseMoveCallback(GLFWwindow* window, double xOffset, double yOffset);
+
+		double m_prevMouseX{0.0};
+		double m_prevMouseY{0.0};
 
 		GLFWwindow* m_window;
 	};

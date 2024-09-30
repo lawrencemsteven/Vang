@@ -37,4 +37,9 @@ namespace Vang::Windowing {
 	bool Window::getVSync() const {
 		return m_data.vSync;
 	}
+
+	bool Window::getMouseEnabled() const {
+		return m_data.mouseEnabled;
+	}
+
 }

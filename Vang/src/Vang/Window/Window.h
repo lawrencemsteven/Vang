@@ -20,11 +20,13 @@ namespace Vang::Windowing {
 		uint32_t getHeight() const;
 		bool getFullscreen() const;
 		bool getVSync() const;
+		bool getMouseEnabled() const;
 
 		virtual void setTitle(const std::string& title)				= 0;
 		virtual void setResolution(uint32_t width, uint32_t height) = 0;
 		virtual void setFullscreen(bool fullscreen)					= 0;
 		virtual void setVSync(bool enabled)							= 0;
+		virtual void setMouseEnabled(bool enabled)					= 0;
 
 		virtual void* getNativeWindow() const = 0;
 
@@ -35,6 +37,7 @@ namespace Vang::Windowing {
 			uint32_t height{};
 			bool fullscreen{false};
 			bool vSync{false};
+			bool mouseEnabled{false};
 
 			EventCallbackFn eventCallback;
 		};
