@@ -1,4 +1,56 @@
 #include <Vang.h>
+#include <imgui.h>
+
+class DemoMenu : public Vang::UI::Menu {
+public:
+	void draw() override {
+		ImGui::ShowDemoWindow(&m_drawMenu);
+	}
+};
+
+class SampleMenu : public Vang::UI::Menu {
+public:
+	void onAttach() override {
+		demoMenu->setDrawMenu(false);
+		Vang::getUIManager().pushMenu(demoMenu);
+	}
+
+	void onDetach() override {
+		Vang::getUIManager().popMenu(demoMenu);
+	}
+
+	void draw() override {
+		ImGuiIO& io = ImGui::GetIO();
+
+		static float f		= 0.0f;
+		static int counter	= 0;
+		static ImVec4 color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+		ImGui::Begin("Hello, world!"); // Create a window called "Hello, world!" and append into it.
+
+		ImGui::Text("This is some useful text."); // Display some text (you can use a format
+												  // strings too)
+		ImGui::Checkbox("Demo Window", &demoMenu->getDrawMenu());
+
+		ImGui::SliderFloat("float", &f, 0.0f,
+						   1.0f);		   // Edit 1 float using a slider from 0.0f to 1.0f
+		ImGui::ColorEdit3("clear color",
+						  (float*)&color); // Edit 3 floats representing a color
+
+		if (ImGui::Button("Button"))	   // Buttons return true when clicked (most widgets return
+										   // true when edited/activated)
+			counter++;
+		ImGui::SameLine();
+		ImGui::Text("counter = %d", counter);
+
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate,
+					io.Framerate);
+		ImGui::End();
+	}
+
+private:
+	std::shared_ptr<DemoMenu> demoMenu = std::make_shared<DemoMenu>();
+};
 
 class PlayerMovementLayer : public Vang::Utility::Layers::Layer {
 public:
@@ -169,6 +221,8 @@ int main() {
 	Vang::initialize();
 
 	Vang::getLayerStack().pushLayer(new PlayerMovementLayer());
+
+	Vang::getUIManager().pushMenu(std::make_shared<SampleMenu>());
 
 	auto& world = Vang::getCurrentWorld();
 

@@ -87,12 +87,8 @@ set(Vang_FILES
 	"./src/Vang/Window/WindowGLFW/GLFWInputCache.h"
 	"./src/Vang/Window/WindowGLFW/GLFWInputCache.cpp"
 
-	"./src/Vang/GraphicsAPI/Generic/Components.h"
-	"./src/Vang/GraphicsAPI/Generic/Components.cpp"
 	"./src/Vang/GraphicsAPI/Generic/GraphicsAPI.h"
 	"./src/Vang/GraphicsAPI/Generic/GraphicsAPI.cpp"
-
-	"./src/Vang/GraphicsAPI/Generic/Buffers/UI/ColoredPanelBuffer.h"
 
 	"./src/Vang/GraphicsAPI/Generic/Shaders/ShaderProgram.h"
 
@@ -116,9 +112,6 @@ set(Vang_FILES
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/ShaderTexture.cpp"
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/VertexData.h"
 	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Shaders/VertexData.cpp"
-
-	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Buffers/UI/ColoredPanelBuffer.h"
-	"./src/Vang/GraphicsAPI/GraphicsOpenGL/Buffers/UI/ColoredPanelBuffer.cpp"
 
 	"./src/Vang/Voxel/Chunk.h"
 	"./src/Vang/Voxel/Chunk.cpp"

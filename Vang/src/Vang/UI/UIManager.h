@@ -16,15 +16,12 @@ namespace Vang::UI {
 		void initialize();
 		void update();
 
-		Menu& getMenu(std::size_t menuId);
+		std::shared_ptr<Menu> pushMenu(std::shared_ptr<Menu> menu);
 
-		std::size_t createMenu();
-
-		void removeMenu(std::size_t menuId);
+		void popMenu(std::shared_ptr<Menu> menu);
 
 	private:
-		std::unordered_map<std::size_t, Menu> m_menuIds;
-		std::size_t m_menuIdCounter = 0;
+		std::vector<std::shared_ptr<Menu>> m_menus;
 	};
 
 }

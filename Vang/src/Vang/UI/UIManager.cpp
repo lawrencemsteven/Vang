@@ -17,10 +17,10 @@ namespace Vang::UI {
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO();
 		(void)io;
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
-		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;	  // IF using Docking Branch
-		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;	  // Multiple Viewports
+		// io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+		// io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;	// IF using Docking Branch
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Multiple Viewports
 
 		ImGui::StyleColorsDark();
 		// ImGui::StyleColorsLight();
@@ -37,48 +37,47 @@ namespace Vang::UI {
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		static bool show_demo_window	= true;
-		static bool show_another_window = true;
-		static ImVec4 clear_color		= ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+		// static bool show_another_window = true;
+		// static ImVec4 clear_color		= ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-		if (show_demo_window) {
-			ImGui::ShowDemoWindow(&show_demo_window);
-		}
+		// if (show_another_window) {
+		// 	static float f	   = 0.0f;
+		// 	static int counter = 0;
 
-		if (show_another_window) {
-			static float f	   = 0.0f;
-			static int counter = 0;
+		// 	ImGui::Begin(
+		// 		"Hello, world!"); // Create a window called "Hello, world!" and append into it.
 
-			ImGui::Begin(
-				"Hello, world!"); // Create a window called "Hello, world!" and append into it.
+		// 	ImGui::Text("This is some useful text."); // Display some text (you can use a format
+		// 											  // strings too)
+		// 	ImGui::Checkbox("Demo Window", &show_demo_window);
 
-			ImGui::Text("This is some useful text."); // Display some text (you can use a format
-													  // strings too)
-			ImGui::Checkbox("Demo Window", &show_demo_window);
+		// 	ImGui::SliderFloat("float", &f, 0.0f,
+		// 					   1.0f); // Edit 1 float using a slider from 0.0f to 1.0f
+		// 	ImGui::ColorEdit3("clear color",
+		// 					  (float*)&clear_color); // Edit 3 floats representing a color
 
-			ImGui::SliderFloat("float", &f, 0.0f,
-							   1.0f); // Edit 1 float using a slider from 0.0f to 1.0f
-			ImGui::ColorEdit3("clear color",
-							  (float*)&clear_color); // Edit 3 floats representing a color
+		// 	if (ImGui::Button("Button")) // Buttons return true when clicked (most widgets return
+		// 								 // true when edited/activated)
+		// 		counter++;
+		// 	ImGui::SameLine();
+		// 	ImGui::Text("counter = %d", counter);
 
-			if (ImGui::Button("Button")) // Buttons return true when clicked (most widgets return
-										 // true when edited/activated)
-				counter++;
-			ImGui::SameLine();
-			ImGui::Text("counter = %d", counter);
-
-			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate,
-						io.Framerate);
-			ImGui::End();
-		}
-
-		// for (auto& iter : m_menuIds) {
-		// 	iter.second.update();
+		// 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate,
+		// 				io.Framerate);
+		// 	ImGui::End();
 		// }
+
+		// Draw the menu if it is not hidden
+		for (auto& iter : m_menus) {
+			if (iter->getDrawMenu()) {
+				iter->draw();
+			}
+		}
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+		// Update Viewports
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
 			GLFWwindow* backup_current_context = glfwGetCurrentContext();
 			ImGui::UpdatePlatformWindows();
@@ -87,23 +86,16 @@ namespace Vang::UI {
 		}
 	}
 
-	Menu& UIManager::getMenu(std::size_t menuId) {
-		return m_menuIds.at(menuId);
+	std::shared_ptr<Menu> UIManager::pushMenu(std::shared_ptr<Menu> menu) {
+		m_menus.push_back(menu);
+		menu->onAttach();
+		return m_menus.back();
 	}
 
-	std::size_t UIManager::createMenu() {
-		m_menuIds[m_menuIdCounter];
-
-		const auto output = m_menuIdCounter;
-
-		while (m_menuIds.find(m_menuIdCounter) != m_menuIds.end()) {
-			m_menuIdCounter += 1;
+	void UIManager::popMenu(std::shared_ptr<Menu> menu) {
+		auto it = std::find(m_menus.begin(), m_menus.end(), menu);
+		if (it != m_menus.end()) {
+			m_menus.erase(it);
 		}
-
-		return output;
-	}
-
-	void UIManager::removeMenu(std::size_t menuId) {
-		m_menuIds.erase(menuId);
 	}
 }
