@@ -10,11 +10,11 @@ namespace Vang::Windowing {
 	}
 
 	void Window::initialize(const std::string& title, uint32_t width, uint32_t height,
-							bool fullscreen) {
+							DISPLAY_MODE displayMode) {
 		m_data.title		 = title;
 		m_data.width		 = width;
 		m_data.height		 = height;
-		m_data.fullscreen	 = fullscreen;
+		m_data.displayMode	 = displayMode;
 		m_data.eventCallback = &onEvent;
 	}
 
@@ -30,8 +30,8 @@ namespace Vang::Windowing {
 		return m_data.height;
 	}
 
-	bool Window::getFullscreen() const {
-		return m_data.fullscreen;
+	DISPLAY_MODE Window::getDisplayMode() const {
+		return m_data.displayMode;
 	}
 
 	bool Window::getVSync() const {

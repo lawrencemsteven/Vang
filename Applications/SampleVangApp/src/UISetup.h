@@ -85,6 +85,23 @@ public:
 		ImGui::Checkbox("Demo Window", &demoMenu->getDrawMenu());
 		ImGui::Checkbox("FPS Overlay", &fpsOverlay->getDrawMenu());
 
+		const char* displayModes[]	  = {"Windowed", "Borderless", "Fullscreen"};
+		static int currentDisplayMode = 0;
+		if (ImGui::Combo("Display Mode", &currentDisplayMode, displayModes,
+						 IM_ARRAYSIZE(displayModes))) {
+			switch (currentDisplayMode) {
+				case 0:
+					Vang::getWindow().setDisplayMode(Vang::Windowing::DISPLAY_MODE::WINDOWED);
+					break;
+				case 1:
+					Vang::getWindow().setDisplayMode(Vang::Windowing::DISPLAY_MODE::BORDERLESS);
+					break;
+				case 2:
+					Vang::getWindow().setDisplayMode(Vang::Windowing::DISPLAY_MODE::FULLSCREEN);
+					break;
+			}
+		}
+
 		ImGui::End();
 	}
 

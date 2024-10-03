@@ -17,7 +17,7 @@ namespace Vang::Windowing {
 		WindowGLFW& operator=(WindowGLFW&&)		 = delete;
 
 		void initialize(const std::string& title, uint32_t width, uint32_t height,
-						bool fullscreen) override;
+						DISPLAY_MODE displayMode) override;
 		void update() override;
 		void close() override;
 
@@ -25,7 +25,7 @@ namespace Vang::Windowing {
 
 		void setTitle(const std::string& title) override;
 		void setResolution(uint32_t width, uint32_t height) override;
-		void setFullscreen(bool fullscreen) override;
+		void setDisplayMode(DISPLAY_MODE displayMode) override;
 		void setVSync(bool enabled) override;
 		void setMouseEnabled(bool enabled) override;
 

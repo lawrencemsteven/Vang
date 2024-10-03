@@ -4,12 +4,18 @@
 
 namespace Vang::Windowing {
 
+	enum class DISPLAY_MODE {
+		WINDOWED,
+		BORDERLESS,
+		FULLSCREEN,
+	};
+
 	class Window {
 	public:
 		using EventCallbackFn = std::function<void(Vang::Utility::Events::Event&)>;
 
 		virtual void initialize(const std::string& title, uint32_t width, uint32_t height,
-								bool fullscreen);
+								DISPLAY_MODE displayMode);
 		virtual void update() = 0;
 		virtual void close()  = 0;
 
@@ -18,13 +24,13 @@ namespace Vang::Windowing {
 		const std::string& getTitle() const;
 		uint32_t getWidth() const;
 		uint32_t getHeight() const;
-		bool getFullscreen() const;
+		DISPLAY_MODE getDisplayMode() const;
 		bool getVSync() const;
 		bool getMouseEnabled() const;
 
 		virtual void setTitle(const std::string& title)				= 0;
 		virtual void setResolution(uint32_t width, uint32_t height) = 0;
-		virtual void setFullscreen(bool fullscreen)					= 0;
+		virtual void setDisplayMode(DISPLAY_MODE displayMode)		= 0;
 		virtual void setVSync(bool enabled)							= 0;
 		virtual void setMouseEnabled(bool enabled)					= 0;
 
@@ -35,7 +41,7 @@ namespace Vang::Windowing {
 			std::string title{};
 			uint32_t width{};
 			uint32_t height{};
-			bool fullscreen{false};
+			DISPLAY_MODE displayMode{DISPLAY_MODE::WINDOWED};
 			bool vSync{false};
 			bool mouseEnabled{false};
 

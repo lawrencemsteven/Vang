@@ -14,8 +14,8 @@ namespace Vang::Windowing {
 	}
 
 	void WindowGLFW::initialize(const std::string& title, uint32_t width, uint32_t height,
-								bool fullscreen) {
-		Window::initialize(title, width, height, fullscreen);
+								DISPLAY_MODE displayMode) {
+		Window::initialize(title, width, height, displayMode);
 		initializeWindow();
 	}
 
@@ -45,8 +45,34 @@ namespace Vang::Windowing {
 		VANG_FATAL("NOT YET IMPLEMENTED!");
 	}
 
-	void WindowGLFW::setFullscreen(bool fullscreen) {
-		VANG_FATAL("NOT YET IMPLEMENTED!");
+	void WindowGLFW::setDisplayMode(DISPLAY_MODE displayMode) {
+		const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		const int monitorWidth	= mode->width;
+		const int monitorHeight = mode->height;
+
+		const int windowX = (monitorWidth / 2) - (m_data.width / 2);
+		const int windowY = (monitorHeight / 2) - (m_data.height / 2);
+
+		// TODO: GLFW_DONT_CARE should instead be replaced with the refresh rate
+		switch (displayMode) {
+			case DISPLAY_MODE::WINDOWED:
+				glfwSetWindowAttrib(m_window, GLFW_DECORATED, true);
+				glfwSetWindowMonitor(m_window, NULL, windowX, windowY, m_data.width, m_data.height,
+									 GLFW_DONT_CARE);
+				break;
+			case DISPLAY_MODE::BORDERLESS:
+				glfwSetWindowAttrib(m_window, GLFW_DECORATED, false);
+				glfwSetWindowMonitor(m_window, NULL, windowX, windowY, m_data.width, m_data.height,
+									 GLFW_DONT_CARE);
+				break;
+			case DISPLAY_MODE::FULLSCREEN:
+				glfwSetWindowAttrib(m_window, GLFW_DECORATED, false);
+				glfwSetWindowMonitor(m_window, glfwGetPrimaryMonitor(), windowX, windowY,
+									 m_data.width, m_data.height, GLFW_DONT_CARE);
+				break;
+		}
+
+		m_data.displayMode = displayMode;
 	}
 
 	void WindowGLFW::setVSync(bool enabled) {
@@ -92,22 +118,17 @@ namespace Vang::Windowing {
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 		glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE);
 
-		if (m_data.fullscreen) {
-			m_window = glfwCreateWindow(m_data.width, m_data.height, m_data.title.data(),
-										glfwGetPrimaryMonitor(), nullptr);
-		}
-		else {
-			m_window = glfwCreateWindow(m_data.width, m_data.height, m_data.title.data(), nullptr,
-										nullptr);
-		}
+		m_window =
+			glfwCreateWindow(m_data.width, m_data.height, m_data.title.data(), nullptr, nullptr);
 
 		if (m_window == NULL) {
 			VANG_FATAL("Failed to create GLFW Window!");
 		}
 
 		setMouseEnabled(m_data.mouseEnabled);
-
 		setVSync(m_data.vSync);
+		setDisplayMode(m_data.displayMode);
+
 		glfwMakeContextCurrent(m_window);
 
 		glfwSetWindowUserPointer(m_window, &m_data);
