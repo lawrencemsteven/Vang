@@ -14,9 +14,12 @@ namespace Vang::gfx::OpenGL {
 		ShaderTexture& operator=(ShaderTexture&&)	   = delete;
 
 		void initialize(unsigned int width, unsigned int height);
+		void resize(const uint32_t width, const uint32_t height);
 
 	private:
 		GLuint m_texture{};
+
+		void deleteTexture();
 	};
 
 	class ShaderTexture3D {

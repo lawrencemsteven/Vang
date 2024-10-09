@@ -26,6 +26,8 @@ namespace Vang::gfx::OpenGL {
 		void update();
 		void displayCamera(const Vang::Objects::Camera& camera);
 
+		void resizeRenderTexture(const uint32_t width, const uint32_t height);
+
 		ShaderProgram& getRasterShaderProgram();
 		ShaderProgram& getComputeShaderProgram();
 

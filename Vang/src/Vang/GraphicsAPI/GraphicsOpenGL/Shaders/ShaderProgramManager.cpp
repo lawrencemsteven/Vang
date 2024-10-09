@@ -119,6 +119,17 @@ namespace Vang::gfx::OpenGL {
 		m_computeShaderProgram.setUniform("camera.fov", camera.getFOV());
 	}
 
+	void ShaderProgramManager::resizeRenderTexture(const uint32_t width, const uint32_t height) {
+		m_screenWidth  = width;
+		m_screenHeight = height;
+		m_screenTexture.resize(width, height);
+
+		m_computeShaderProgram.setUniform("iResolution", static_cast<int>(width),
+										  static_cast<int>(height));
+
+		std::cout << "Test\n";
+	}
+
 	ShaderProgram& ShaderProgramManager::getRasterShaderProgram() {
 		return m_rasterShaderProgram;
 	}

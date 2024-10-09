@@ -42,6 +42,10 @@ namespace Vang::gfx::OpenGL {
 		glViewport(0, 0, width, height);
 	}
 
+	void GraphicsOpenGL::resizeRenderTexture(const uint32_t width, const uint32_t height) {
+		m_shaderProgramManager.resizeRenderTexture(width, height);
+	}
+
 	void GraphicsOpenGL::displayCamera(const Vang::Objects::Camera& camera) {
 		m_shaderProgramManager.displayCamera(camera);
 	}

@@ -18,6 +18,7 @@ namespace Vang::gfx::OpenGL {
 		void endUpdate() override;
 
 		void windowResize(uint32_t width, uint32_t height) override;
+		void resizeRenderTexture(const uint32_t width, const uint32_t height) override;
 
 		void displayCamera(const Vang::Objects::Camera& camera) override;
 

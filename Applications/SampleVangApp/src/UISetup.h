@@ -80,7 +80,7 @@ public:
 	void draw() override {
 		ImGuiIO& io = ImGui::GetIO();
 
-		ImGui::Begin("Main Menu"); // Create a window called "Hello, world!" and append into it.
+		ImGui::Begin("Main Menu");
 
 		ImGui::Checkbox("Demo Window", &demoMenu->getDrawMenu());
 		ImGui::Checkbox("FPS Overlay", &fpsOverlay->getDrawMenu());
