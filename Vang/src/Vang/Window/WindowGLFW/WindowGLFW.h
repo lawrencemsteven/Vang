@@ -33,6 +33,8 @@ namespace Vang::Windowing {
 
 	private:
 		void initializeWindow();
+		void centerWindow();
+
 		static void resizeCallback(GLFWwindow* window, int width, int height);
 		static void closeCallback(GLFWwindow* window);
 		static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);

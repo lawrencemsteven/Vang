@@ -42,7 +42,14 @@ namespace Vang::Windowing {
 	}
 
 	void WindowGLFW::setResolution(uint32_t width, uint32_t height) {
-		VANG_FATAL("NOT YET IMPLEMENTED!");
+		glfwSetWindowSize(m_window, width, height);
+		Vang::getGraphicsAPI().windowResize(width, height);
+		Vang::getGraphicsAPI().resizeRenderTexture(width, height);
+
+		centerWindow();
+
+		m_data.width  = width;
+		m_data.height = height;
 	}
 
 	void WindowGLFW::setDisplayMode(DISPLAY_MODE displayMode) {
@@ -140,6 +147,17 @@ namespace Vang::Windowing {
 		glfwSetMouseButtonCallback(m_window, mouseButtonCallback);
 		glfwSetScrollCallback(m_window, mouseScrollCallback);
 		glfwSetCursorPosCallback(m_window, mouseMoveCallback);
+	}
+
+	void WindowGLFW::centerWindow() {
+		const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		const int monitorWidth	= mode->width;
+		const int monitorHeight = mode->height;
+
+		const int windowX = (monitorWidth / 2) - (m_data.width / 2);
+		const int windowY = (monitorHeight / 2) - (m_data.height / 2);
+
+		glfwSetWindowPos(m_window, windowX, windowY);
 	}
 
 	void WindowGLFW::resizeCallback(GLFWwindow* window, int width, int height) {

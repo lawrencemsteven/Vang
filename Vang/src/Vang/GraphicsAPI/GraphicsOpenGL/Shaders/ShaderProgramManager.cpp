@@ -67,11 +67,6 @@ namespace Vang::gfx::OpenGL {
 	}
 
 	void ShaderProgramManager::update() {
-		GLenum err{};
-		if ((err = glGetError()) != GL_NO_ERROR) {
-			std::cout << "OpenGL Error Update Start: " << err << std::endl;
-		}
-
 		m_computeShaderProgram.setUniform("iTime", Vang::Utility::Time::timeSinceStart());
 
 		// TODO: Move this somewhere else
@@ -97,10 +92,6 @@ namespace Vang::gfx::OpenGL {
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		m_rasterShaderProgram.setUniform("u_drawState", 1);
-
-		if ((err = glGetError()) != GL_NO_ERROR) {
-			std::cout << "OpenGL Error Update End: " << err << std::endl;
-		}
 	}
 
 	void ShaderProgramManager::displayCamera(const Vang::Objects::Camera& camera) {
@@ -126,8 +117,6 @@ namespace Vang::gfx::OpenGL {
 
 		m_computeShaderProgram.setUniform("iResolution", static_cast<int>(width),
 										  static_cast<int>(height));
-
-		std::cout << "Test\n";
 	}
 
 	ShaderProgram& ShaderProgramManager::getRasterShaderProgram() {

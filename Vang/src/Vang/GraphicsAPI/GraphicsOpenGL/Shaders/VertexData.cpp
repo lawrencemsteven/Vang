@@ -46,10 +46,6 @@ namespace Vang::gfx::OpenGL {
 	void VertexData::update() {
 		glBindVertexArray(m_vertexArrayObject);
 
-		GLenum err{};
-		if ((err = glGetError()) != GL_NO_ERROR) {
-			std::cout << "OpenGL Error Update Mid: " << err << std::endl;
-		}
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	}
 

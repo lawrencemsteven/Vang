@@ -102,6 +102,17 @@ public:
 			}
 		}
 
+		const char* displayResolutions[]	= {"1280x720", "1920x1080", "3440x1440"};
+		static int currentDisplayResolution = 1;
+		if (ImGui::Combo("Display Resolution", &currentDisplayResolution, displayResolutions,
+						 IM_ARRAYSIZE(displayResolutions))) {
+			switch (currentDisplayResolution) {
+				case 0: Vang::getWindow().setResolution(1280, 720); break;
+				case 1: Vang::getWindow().setResolution(1920, 1080); break;
+				case 2: Vang::getWindow().setResolution(3440, 1440); break;
+			}
+		}
+
 		ImGui::End();
 	}
 
