@@ -12,6 +12,10 @@ namespace Vang::gfx {
 		GraphicsAPI& operator=(const GraphicsAPI&) = delete;
 		GraphicsAPI& operator=(GraphicsAPI&&)	   = delete;
 
+		virtual double getRenderTextureScale() const = 0;
+
+		virtual void setRenderTextureScale(const double renderTextureScale) = 0;
+
 		virtual void initialize();
 		virtual void initialize(std::string_view applicationName);
 		virtual void update()	 = 0;
@@ -19,8 +23,8 @@ namespace Vang::gfx {
 
 		std::string_view getApplicationName();
 
-		virtual void windowResize(uint32_t width, uint32_t height)					  = 0;
-		virtual void resizeRenderTexture(const uint32_t width, const uint32_t height) = 0;
+		virtual void windowResize(uint32_t width, uint32_t height) = 0;
+		virtual void resizeRenderTexture()						   = 0;
 
 		virtual void displayCamera(const Vang::Objects::Camera& camera) = 0;
 

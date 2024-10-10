@@ -44,7 +44,7 @@ namespace Vang::Windowing {
 	void WindowGLFW::setResolution(uint32_t width, uint32_t height) {
 		glfwSetWindowSize(m_window, width, height);
 		Vang::getGraphicsAPI().windowResize(width, height);
-		Vang::getGraphicsAPI().resizeRenderTexture(width, height);
+		Vang::getGraphicsAPI().resizeRenderTexture();
 
 		centerWindow();
 

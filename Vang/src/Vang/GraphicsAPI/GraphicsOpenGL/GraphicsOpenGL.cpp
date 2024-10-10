@@ -38,12 +38,20 @@ namespace Vang::gfx::OpenGL {
 		glFlush();
 	}
 
+	double GraphicsOpenGL::getRenderTextureScale() const {
+		return m_shaderProgramManager.getRenderTextureScale();
+	}
+
+	void GraphicsOpenGL::setRenderTextureScale(const double renderTextureScale) {
+		m_shaderProgramManager.setRenderTextureScale(renderTextureScale);
+	}
+
 	void GraphicsOpenGL::windowResize(uint32_t width, uint32_t height) {
 		glViewport(0, 0, width, height);
 	}
 
-	void GraphicsOpenGL::resizeRenderTexture(const uint32_t width, const uint32_t height) {
-		m_shaderProgramManager.resizeRenderTexture(width, height);
+	void GraphicsOpenGL::resizeRenderTexture() {
+		m_shaderProgramManager.resizeRenderTexture();
 	}
 
 	void GraphicsOpenGL::displayCamera(const Vang::Objects::Camera& camera) {
@@ -55,14 +63,12 @@ namespace Vang::gfx::OpenGL {
 #ifdef VANG_BAKED_SHADERS
 		m_shaderProgramManager.initialize(Vang::gfx::Shaders::BakedShaders::GET_MAIN_VERT(),
 										  Vang::gfx::Shaders::BakedShaders::GET_MAIN_FRAG(),
-										  Vang::gfx::Shaders::BakedShaders::GET_VOXELRAYMARCHER(),
-										  window.getWidth(), window.getHeight());
+										  Vang::gfx::Shaders::BakedShaders::GET_VOXELRAYMARCHER());
 #else
 		m_shaderProgramManager.initialize(
 			static_cast<std::filesystem::path>(VANG_SHADERS_FOLDER).append("main.vert.glsl"),
 			static_cast<std::filesystem::path>(VANG_SHADERS_FOLDER).append("main.frag.glsl"),
-			static_cast<std::filesystem::path>(VANG_SHADERS_FOLDER).append("voxelRayMarcher.glsl"),
-			window.getWidth(), window.getHeight());
+			static_cast<std::filesystem::path>(VANG_SHADERS_FOLDER).append("voxelRayMarcher.glsl"));
 #endif
 	}
 

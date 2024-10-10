@@ -113,6 +113,11 @@ public:
 			}
 		}
 
+		static float f1 = static_cast<float>(Vang::getGraphicsAPI().getRenderTextureScale());
+		if (ImGui::SliderFloat("Upscaling Percentage", &f1, 0.0f, 1.0f, "%.1f")) {
+			Vang::getGraphicsAPI().setRenderTextureScale(f1);
+		}
+
 		ImGui::End();
 	}
 

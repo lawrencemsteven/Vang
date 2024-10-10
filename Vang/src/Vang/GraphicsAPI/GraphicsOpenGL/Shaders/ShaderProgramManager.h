@@ -17,23 +17,24 @@ namespace Vang::gfx::OpenGL {
 
 		void initialize(std::filesystem::path vertexShaderFile,
 						std::filesystem::path fragmentShaderFile,
-						std::filesystem::path computeShaderFile, unsigned int width,
-						unsigned int height);
+						std::filesystem::path computeShaderFile);
 		void initialize(const std::string& vertexShaderFile, const std::string& fragmentShaderFile,
-						const std::string& computeShaderFile, unsigned int width,
-						unsigned int height);
+						const std::string& computeShaderFile);
+
+		double getRenderTextureScale() const;
+
+		void setRenderTextureScale(const double renderTextureScale);
 
 		void update();
 		void displayCamera(const Vang::Objects::Camera& camera);
 
-		void resizeRenderTexture(const uint32_t width, const uint32_t height);
+		void resizeRenderTexture();
 
 		ShaderProgram& getRasterShaderProgram();
 		ShaderProgram& getComputeShaderProgram();
 
 	private:
-		unsigned int m_screenWidth{};
-		unsigned int m_screenHeight{};
+		double m_renderTextureScale{1.0};
 		ShaderProgram m_rasterShaderProgram;
 		ShaderProgram m_computeShaderProgram;
 		ShaderTexture m_screenTexture;
@@ -44,6 +45,8 @@ namespace Vang::gfx::OpenGL {
 
 		// TODO: Remove This
 		void initialize_impl();
+
+		const std::pair<uint32_t, uint32_t> getRenderResolution() const;
 	};
 
 }

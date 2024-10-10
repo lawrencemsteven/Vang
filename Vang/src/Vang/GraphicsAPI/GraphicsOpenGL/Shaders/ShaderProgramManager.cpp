@@ -10,11 +10,9 @@ namespace Vang::gfx::OpenGL {
 
 	void ShaderProgramManager::initialize(std::filesystem::path vertexShaderFile,
 										  std::filesystem::path fragmentShaderFile,
-										  std::filesystem::path computeShaderFile,
-										  unsigned int width, unsigned int height) {
-		m_screenWidth  = width;
-		m_screenHeight = height;
-		m_screenTexture.initialize(width, height);
+										  std::filesystem::path computeShaderFile) {
+		const auto res = getRenderResolution();
+		m_screenTexture.initialize(res.first, res.second);
 		m_vertexData.initialize();
 
 		m_rasterShaderProgram.initialize();
@@ -30,19 +28,17 @@ namespace Vang::gfx::OpenGL {
 		m_computeShaderProgram.attachShader(std::move(computeShader));
 		m_computeShaderProgram.linkProgram();
 
-		m_computeShaderProgram.setUniform("iResolution", static_cast<int>(width),
-										  static_cast<int>(height));
+		m_computeShaderProgram.setUniform("iResolution", static_cast<int>(res.first),
+										  static_cast<int>(res.second));
 
 		initialize_impl();
 	}
 
 	void ShaderProgramManager::initialize(const std::string& vertexShaderFile,
 										  const std::string& fragmentShaderFile,
-										  const std::string& computeShaderFile, unsigned int width,
-										  unsigned int height) {
-		m_screenWidth  = width;
-		m_screenHeight = height;
-		m_screenTexture.initialize(width, height);
+										  const std::string& computeShaderFile) {
+		const auto res = getRenderResolution();
+		m_screenTexture.initialize(res.first, res.second);
 		m_vertexData.initialize();
 
 		m_rasterShaderProgram.initialize();
@@ -58,12 +54,21 @@ namespace Vang::gfx::OpenGL {
 		m_computeShaderProgram.attachShader(std::move(computeShader));
 		m_computeShaderProgram.linkProgram();
 
-		m_computeShaderProgram.setUniform("iResolution", static_cast<int>(width),
-										  static_cast<int>(height));
+		m_computeShaderProgram.setUniform("iResolution", static_cast<int>(res.first),
+										  static_cast<int>(res.second));
 
 		m_rasterShaderProgram.setUniform("u_drawState", 0);
 
 		initialize_impl();
+	}
+
+	double ShaderProgramManager::getRenderTextureScale() const {
+		return m_renderTextureScale;
+	}
+
+	void ShaderProgramManager::setRenderTextureScale(const double renderTextureScale) {
+		m_renderTextureScale = renderTextureScale;
+		resizeRenderTexture();
 	}
 
 	void ShaderProgramManager::update() {
@@ -79,9 +84,11 @@ namespace Vang::gfx::OpenGL {
 		m_entityBuffer.update(m_computeShaderProgram);
 		m_lightBuffer.update(m_computeShaderProgram);
 
+		const auto res = getRenderResolution();
+
 		m_computeShaderProgram.use();
-		glDispatchCompute(static_cast<GLuint>(floor(m_screenWidth / 16.0f)),
-						  static_cast<GLuint>(floor(m_screenHeight / 8.0f)), 1);
+		glDispatchCompute(static_cast<GLuint>(floor(res.first / 16.0f)),
+						  static_cast<GLuint>(floor(res.second / 8.0f)), 1);
 		glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 
 		m_rasterShaderProgram.use();
@@ -110,13 +117,13 @@ namespace Vang::gfx::OpenGL {
 		m_computeShaderProgram.setUniform("camera.fov", camera.getFOV());
 	}
 
-	void ShaderProgramManager::resizeRenderTexture(const uint32_t width, const uint32_t height) {
-		m_screenWidth  = width;
-		m_screenHeight = height;
-		m_screenTexture.resize(width, height);
+	void ShaderProgramManager::resizeRenderTexture() {
+		const auto res = getRenderResolution();
 
-		m_computeShaderProgram.setUniform("iResolution", static_cast<int>(width),
-										  static_cast<int>(height));
+		m_screenTexture.resize(res.first, res.second);
+
+		m_computeShaderProgram.setUniform("iResolution", static_cast<int>(res.first),
+										  static_cast<int>(res.second));
 	}
 
 	ShaderProgram& ShaderProgramManager::getRasterShaderProgram() {
@@ -197,5 +204,13 @@ namespace Vang::gfx::OpenGL {
 
 		m_entityBuffer = EntityBuffer{m_computeShaderProgram};
 		m_lightBuffer  = LightBuffer{m_computeShaderProgram};
+	}
+	const std::pair<uint32_t, uint32_t> ShaderProgramManager::getRenderResolution() const {
+		const auto& window = Vang::getWindow();
+
+		const uint32_t width  = static_cast<uint32_t>(window.getWidth() * m_renderTextureScale);
+		const uint32_t height = static_cast<uint32_t>(window.getHeight() * m_renderTextureScale);
+
+		return std::pair<uint32_t, uint32_t>{width, height};
 	}
 }
