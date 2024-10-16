@@ -6,7 +6,7 @@ int main() {
 
 	Vang::getLayerStack().pushLayer(new PlayerMovementLayer());
 
-	Vang::getUIManager().pushMenu(std::make_shared<SampleMenu>());
+	Vang::getUIManager().pushImGuiMenu(std::make_shared<SampleMenu>());
 
 	auto& world = Vang::getCurrentWorld();
 

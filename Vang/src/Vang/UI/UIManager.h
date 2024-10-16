@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Menu.h"
+#include "ImGuiMenu.h"
 
 namespace Vang::UI {
 
@@ -16,12 +16,12 @@ namespace Vang::UI {
 		void initialize();
 		void update();
 
-		std::shared_ptr<Menu> pushMenu(std::shared_ptr<Menu> menu);
+		std::shared_ptr<ImGuiMenu> pushImGuiMenu(std::shared_ptr<ImGuiMenu> menu);
 
-		void popMenu(std::shared_ptr<Menu> menu);
+		void popImGuiMenu(std::shared_ptr<ImGuiMenu> menu);
 
 	private:
-		std::vector<std::shared_ptr<Menu>> m_menus;
+		std::vector<std::shared_ptr<ImGuiMenu>> m_menus;
 	};
 
 }

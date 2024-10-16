@@ -74,8 +74,8 @@ set(Vang_FILES
 	"./src/Vang/Modding/ModManager.h"
 	"./src/Vang/Modding/ModManager.cpp"
 
-	"./src/Vang/UI/Menu.h"
-	"./src/Vang/UI/Menu.cpp"
+	"./src/Vang/UI/ImGuiMenu.h"
+	"./src/Vang/UI/ImGuiMenu.cpp"
 	"./src/Vang/UI/UIManager.h"
 	"./src/Vang/UI/UIManager.cpp"
 

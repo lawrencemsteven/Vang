@@ -56,13 +56,13 @@ namespace Vang::UI {
 		}
 	}
 
-	std::shared_ptr<Menu> UIManager::pushMenu(std::shared_ptr<Menu> menu) {
+	std::shared_ptr<ImGuiMenu> UIManager::pushImGuiMenu(std::shared_ptr<ImGuiMenu> menu) {
 		m_menus.push_back(menu);
 		menu->onAttach();
 		return m_menus.back();
 	}
 
-	void UIManager::popMenu(std::shared_ptr<Menu> menu) {
+	void UIManager::popImGuiMenu(std::shared_ptr<ImGuiMenu> menu) {
 		auto it = std::find(m_menus.begin(), m_menus.end(), menu);
 		if (it != m_menus.end()) {
 			m_menus.erase(it);

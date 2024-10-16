@@ -1,14 +1,14 @@
 #include <Vang.h>
 #include <imgui.h>
 
-class DemoMenu : public Vang::UI::Menu {
+class DemoMenu : public Vang::UI::ImGuiMenu {
 public:
 	void draw() override {
 		ImGui::ShowDemoWindow(&m_drawMenu);
 	}
 };
 
-class FPSOverlay : public Vang::UI::Menu {
+class FPSOverlay : public Vang::UI::ImGuiMenu {
 	void draw() override {
 		static int location = 1;
 		ImGuiIO& io			= ImGui::GetIO();
@@ -64,17 +64,17 @@ class FPSOverlay : public Vang::UI::Menu {
 	}
 };
 
-class SampleMenu : public Vang::UI::Menu {
+class SampleMenu : public Vang::UI::ImGuiMenu {
 public:
 	void onAttach() override {
 		demoMenu->setDrawMenu(false);
-		Vang::getUIManager().pushMenu(demoMenu);
-		Vang::getUIManager().pushMenu(fpsOverlay);
+		Vang::getUIManager().pushImGuiMenu(demoMenu);
+		Vang::getUIManager().pushImGuiMenu(fpsOverlay);
 	}
 
 	void onDetach() override {
-		Vang::getUIManager().popMenu(demoMenu);
-		Vang::getUIManager().pushMenu(fpsOverlay);
+		Vang::getUIManager().popImGuiMenu(demoMenu);
+		Vang::getUIManager().pushImGuiMenu(fpsOverlay);
 	}
 
 	void draw() override {
